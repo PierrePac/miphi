@@ -1,0 +1,37 @@
+<div class="landing-page">
+  <div class="container right-panel-active" #container>
+    <!-- Sign Up -->
+    <div class="container__form container--signup">
+        <form class="form" id="form1" #form1="ngForm" (ngSubmit)="onSubmit(form1)">
+            <h2 class="form__title">Sign Up</h2>
+            <input type="text" placeholder="User" class="input" ngModel name="username" required />
+            <input type="email" placeholder="Email" class="input" ngModel name="email" required />
+            <input type="password" placeholder="Password" class="input" ngModel name="password" required />
+            <button class="btn" type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- Sign In -->
+    <div class="container__form container--signin">
+        <form class="form" id="form2" #form2="ngForm" (ngSubmit)="onSubmit(form2)">
+            <h2 class="form__title">Sign In</h2>
+            <input type="email" placeholder="Email" class="input" ngModel name="email" required />
+            <input type="password" placeholder="Password" class="input" ngModel name="password" required />
+            <a href="#" class="link">Forgot your password?</a>
+            <button class="btn" type="submit">Sign In</button>
+        </form>
+    </div>
+
+    <!-- Overlay -->
+    <div class="container__overlay">
+        <div class="overlay">
+            <div class="overlay__panel overlay--left">
+                <button class="btn" id="signIn" #signInBtn>Sign In</button> <!-- Bouton "Sign In" ici -->
+            </div>
+            <div class="overlay__panel overlay--right">
+                <button class="btn" id="signUp" #signUpBtn>Sign Up</button> <!-- Bouton "Sign Up" ici -->
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
