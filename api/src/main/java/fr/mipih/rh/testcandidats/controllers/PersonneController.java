@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import fr.mipih.rh.testcandidats.dtos.PersonneDTO;
 import fr.mipih.rh.testcandidats.models.enums.ConnexionStatus;
+import fr.mipih.rh.testcandidats.services.AuthService;
 import fr.mipih.rh.testcandidats.services.PersonneService;
 
 @Controller
@@ -17,10 +18,12 @@ import fr.mipih.rh.testcandidats.services.PersonneService;
 public class PersonneController {
 
 	private final PersonneService personneService;
+	private final AuthService authService;
 	
 	@Autowired
-	public PersonneController(PersonneService personneService) {
+	public PersonneController(PersonneService personneService, AuthService authService) {
 		this.personneService = personneService;
+		this.authService = authService;
 	}
 	
 	@PostMapping("/connexion")
@@ -29,7 +32,7 @@ public class PersonneController {
 		String nom = personneDTO.getNom();
 		String motDePasse = personneDTO.getMotDePasse();
 		
-		ConnexionStatus status = personneService.verifierMotDePasse(nom, motDePasse);
+		ConnexionStatus status = authService.verifierMotDePasseAdmin(nom, motDePasse);
 		return ResponseEntity.ok(status);
 	}
 	

@@ -1,6 +1,8 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginService } from 'src/app/core/services/login.service';
+
+
 
 @Component({
   selector: 'app-landing-page',
@@ -8,48 +10,49 @@ import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
   styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit {
-  public userForm!: FormGroup;
+  public candidatForm!: FormGroup;
   public adminForm!: FormGroup;
-  @ViewChild('signInBtn', { static: false }) signInBtn!: ElementRef;
-  @ViewChild('signUpBtn', {static: false}) signUpBtn!: ElementRef;
-  @ViewChild('form1', {static: false}) firstForm!: NgForm;
-  @ViewChild('form2', {static: false}) secondForm!: NgForm;
+  @ViewChild('adminBtn', { static: false }) adminBtn!: ElementRef;
+  @ViewChild('candidatBtn', {static: false}) candidatBtn!: ElementRef;
   @ViewChild('container', {static: false}) container!: ElementRef;
-  
-  
- 
 
-  constructor( private formBuilder: FormBuilder ) {}
+  constructor( private formBuilder: FormBuilder,
+              private loginService: LoginService
+              ) {}
 
   ngOnInit(): void {
-    this.userForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+    this.candidatForm = this.formBuilder.group({
+      prenom: ['', Validators.required],
+      nom: ['', Validators.required]
     });
 
     this.adminForm = this.formBuilder.group ({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      password: ['', Validators.required]
+      nom: ['', Validators.required],
+      motDePasse: ['', Validators.required]
     });
   }
 
   ngAfterViewInit(): void {
-    this.signInBtn.nativeElement.addEventListener('click', () => {
+    this.adminBtn.nativeElement.addEventListener('click', () => {
       this.container.nativeElement.classList.remove('right-panel-active');
     });
-  
-    this.signUpBtn.nativeElement.addEventListener('click', () => {
+
+    this.candidatBtn.nativeElement.addEventListener('click', () => {
       this.container.nativeElement.classList.add('right-panel-active');
     });
-  
-    this.firstForm.ngSubmit.subscribe((event) => event.preventDefault());
-    this.secondForm.ngSubmit.subscribe((event) => event.preventDefault());
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit(form: FormGroup) {
     if (form.valid) {
-      console.log(form.value);
+      if ( form === this.adminForm ) {
+        this.loginService.loginAdmin(form.value.nom, form.value.motDePasse).subscribe(response => {
+          console.log(response);
+        });
+      } else if (form === this.candidatForm) {
+        this.loginService.loginCandidat(form.value.nom, form.value.prenom).subscribe(response => {
+          console.log(response);
+        })
+      }
     }
   }
 }

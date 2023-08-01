@@ -34,6 +34,9 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "motDePasse")
+	private String motDePasse;
+	
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "personne_id", referencedColumnName = "id")
 	Personne personne;
