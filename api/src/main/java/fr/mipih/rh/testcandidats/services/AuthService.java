@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import fr.mipih.rh.testcandidats.dtos.PersonneDTO;
 import fr.mipih.rh.testcandidats.models.Admin;
 import fr.mipih.rh.testcandidats.models.Personne;
 import fr.mipih.rh.testcandidats.models.enums.ConnexionStatus;
@@ -54,7 +55,6 @@ public class AuthService implements UserDetailsService {
 		} else {
 			return new User(personne.getNom(), personne.getPrenom(), autorities);
 		}
-		
 	}
 
 	public ConnexionStatus verifierMotDePasseAdmin(String nom, String motDePasse) {
@@ -72,7 +72,36 @@ public class AuthService implements UserDetailsService {
 			}
 		}
 		return ConnexionStatus.UTILISATEUR_INCONNU;
+	}
+	
+	public PersonneDTO personneInfo(String nom) {
+		Personne personne = personneRepository.findByNom(nom);
+		if(personne == null || !"ADMIN".equals(personne.getRole().toString()) || !"CANDIDAT".equals(personne.getRole().toString())) {
+			return null;
+		}
+		if("CANDIDAT".equals(personne.getRole().toString()) && personne.getCandidat().getTestId() == null) {
+			return null;
+		}
+		PersonneDTO personneDTO = new PersonneDTO();
+		personneDTO.setId(personne.getId());
+		personneDTO.setNom(personne.getNom());
+		personneDTO.setPrenom(personne.getPrenom());
+		personneDTO.setRole(personne.getRole());
+		if("CANDIDAT".equals(personne.getRole().toString())) {
+			personneDTO.setTest_id(personne.getCandidat().getTestId());
+		}
 		
+		if (personneDTO == null) {
+		    System.out.println("personneDTO est null");
+		} else if (personneDTO.getId() == null && 
+		           personneDTO.getNom() == null && 
+		           personneDTO.getPrenom() == null && 
+		           personneDTO.getRole() == null) {
+		    System.out.println("personneDTO est vide");
+		} else {
+		    System.out.println("personneDTO n'est pas vide");
+		}
+		return personneDTO;
 	}
 	
 	public ConnexionStatus verifierCandidat(String nom, String prenom) {
@@ -81,6 +110,5 @@ public class AuthService implements UserDetailsService {
 			return ConnexionStatus.UTILISATEUR_INCONNU;
 		}
 		return ConnexionStatus.CANDIDAT;
-		
 	}
 }

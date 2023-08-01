@@ -1,29 +1,24 @@
 package fr.mipih.rh.testcandidats.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import fr.mipih.rh.testcandidats.models.enums.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -33,6 +28,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "PERSONNE")
 @Data
+@ToString(exclude={"admin", "candidat"})
 public class Personne {
 
 	@Id
@@ -51,9 +47,11 @@ public class Personne {
 	private Role role;
 	
 	@OneToOne(mappedBy = "personne", cascade = CascadeType.PERSIST)
+	@EqualsAndHashCode.Exclude
 	private Admin admin;
 	
 	@OneToOne(mappedBy = "personne", cascade = CascadeType.PERSIST)
+	@EqualsAndHashCode.Exclude
 	private Candidat candidat;
 
 	

@@ -19,4 +19,6 @@ public class PersonneDTO {
 	private String prenom;
 	private String motDePasse;
 	private Role role;
+	private Long test_id;
+	
 }
