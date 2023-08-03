@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { LandingPageModule } from './landing-page/landing-page.module';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from './core/core.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 @NgModule({
   declarations: [
@@ -16,7 +19,8 @@ import { CoreModule } from './core/core.module';
     LandingPageModule,
     RouterModule,
     CoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -28,8 +28,8 @@ public class AuthController {
 		ConnexionStatus status = authService.verifierMotDePasseAdmin(nom, motDePasse);
 		if(status.equals(ConnexionStatus.ADMIN)) {
 			PersonneDTO admin = authService.personneInfo(nom);
-			//System.out.println(admin);
-			return new ResponseEntity<>(admin, HttpStatus.OK);
+			String roles = authService.checkRoles();
+			return new ResponseEntity<>(roles, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(status, HttpStatus.UNAUTHORIZED);
 		}
@@ -42,10 +42,11 @@ public class AuthController {
 		ConnexionStatus status = authService.verifierCandidat(nom, prenom);
 		if(status.equals(ConnexionStatus.CANDIDAT)) {
 			PersonneDTO candidat = authService.personneInfo(nom);
-			//System.out.println(candidat);
-			return new ResponseEntity<>(candidat, HttpStatus.OK);
+			String roles = authService.checkRoles();
+			return new ResponseEntity<>(roles, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(status, HttpStatus.UNAUTHORIZED);
 		}
 	}
+	
 }

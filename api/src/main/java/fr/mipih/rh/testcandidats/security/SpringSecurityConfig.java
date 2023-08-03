@@ -6,16 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.filter.CorsFilter;
 
+import fr.mipih.rh.testcandidats.services.AuthService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,18 +28,32 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SpringSecurityConfig {
 
 	@Autowired
-	private SecurityUserDetailService userDetailsService;
+	private AuthService authService;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+	
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		//auth.userDetailsService(authService).passwordEncoder(passwordEncoder);
+		auth.authenticationProvider(authenticationProvider());
+
+	}
+	
+	@Autowired
+	private CorsFilter corsFilter;
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
+		.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
 		.cors(cors -> cors.disable())
 		.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(
 						authorize -> authorize
 							.requestMatchers("/login/admin", "/login/candidat").permitAll()
+							.requestMatchers("/api/questions").hasRole("ADMIN")
 							.requestMatchers("/admin").hasRole("ADMIN")
-							.requestMatchers("/user").hasRole("USER")
+							.requestMatchers("/candidat").hasRole("CANDIDAT")
 							.anyRequest().authenticated())
 				.formLogin(
 						form -> form
@@ -72,15 +89,8 @@ public class SpringSecurityConfig {
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setPasswordEncoder(passwordEncoder());
+		authProvider.setUserDetailsService(authService);
+		authProvider.setPasswordEncoder(passwordEncoder);
 		return authProvider;
 	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	
 }

@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
+import {ToastModule} from 'primeng/toast';
+import {InputNumberModule} from 'primeng/inputnumber';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [],
@@ -15,7 +16,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     CardModule,
     ButtonModule,
-    BrowserAnimationsModule,
+    ToastModule,
+    InputNumberModule,
+    InputTextareaModule,
+    DropdownModule,
   ],
   exports: [
     CommonModule,
@@ -23,7 +27,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     CardModule,
     ButtonModule,
-    BrowserAnimationsModule,
+    ToastModule,
+    InputNumberModule,
+    InputTextareaModule,
+    DropdownModule,
   ]
 })
 export class ShareModule { }

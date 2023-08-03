@@ -1,14 +1,13 @@
 package fr.mipih.rh.testcandidats.models;
 
-import fr.mipih.rh.testcandidats.models.enums.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "PERSONNE")
 @Data
-@ToString(exclude={"admin", "candidat"})
+@ToString(exclude={"admin", "candidat", "role"})
 public class Personne {
 
 	@Id
@@ -42,9 +41,7 @@ public class Personne {
 	@Column(name = "prenom")
 	private String prenom;
 	
-	@Column(name = "role")
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	private boolean enabled;
 	
 	@OneToOne(mappedBy = "personne", cascade = CascadeType.PERSIST)
 	@EqualsAndHashCode.Exclude
@@ -54,5 +51,7 @@ public class Personne {
 	@EqualsAndHashCode.Exclude
 	private Candidat candidat;
 
-	
+	@ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id") 
+    private Role role;
 }

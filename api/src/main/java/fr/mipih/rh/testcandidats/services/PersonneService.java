@@ -8,7 +8,7 @@ import fr.mipih.rh.testcandidats.dtos.PersonneDTO;
 import fr.mipih.rh.testcandidats.models.Admin;
 import fr.mipih.rh.testcandidats.models.Candidat;
 import fr.mipih.rh.testcandidats.models.Personne;
-import fr.mipih.rh.testcandidats.models.enums.Role;
+import fr.mipih.rh.testcandidats.models.enums.ERole;
 import fr.mipih.rh.testcandidats.repositories.PersonneRepository;
 
 @Service
@@ -26,10 +26,10 @@ public class PersonneService {
 	public boolean enregistrerPersonne(PersonneDTO personneDTO) {
 		Personne personne = convertirDTOenEntite(personneDTO);
 
-		if (Role.CANDIDAT.equals(personne.getRole())) {
+		if (ERole.CANDIDAT.equals(personne.getRole())) {
 			Candidat candidat = creerCandidat(personne);
 			personne.setCandidat(candidat);
-		} else if (Role.ADMIN.equals(personne.getRole())) {
+		} else if (ERole.ADMIN.equals(personne.getRole())) {
 			Admin admin = creerAdmin(personne, personneDTO.getMotDePasse());
 			personne.setAdmin(admin);
 		}

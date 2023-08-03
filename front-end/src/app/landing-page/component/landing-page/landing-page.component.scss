@@ -14,7 +14,6 @@ $max-height: 420px;
 
 .landing-page {
   align-items: center;
-  background-color: $white;
   background: url("../../../../assets/media/bg_mipih_amiens.jpg");
   background-attachment: fixed;
   background-position: center;
@@ -73,10 +72,6 @@ $max-height: 420px;
     width: 50%;
     z-index: 100;
   }
-}
-
-.container {
-  // ... (autres styles)
 
   &.right-panel-active {
     .container--signin {
@@ -141,7 +136,6 @@ $max-height: 420px;
 
 
 .overlay {
-  background-color: $lightblue;
   background: url("../../../../assets/media/bg_code.jpg");
   background-attachment: fixed;
   background-position: center;
@@ -222,6 +216,13 @@ $max-height: 420px;
   padding: 0.9rem 0.9rem;
   margin: 0.5rem 0;
   width: 100%;
+}
+
+.msg-error{
+  top: 20vh !important;
+  left: 65%;
+  transform: translateX(-50%) !important;
+  position: fixed !important;
 }
 
 @keyframes show {

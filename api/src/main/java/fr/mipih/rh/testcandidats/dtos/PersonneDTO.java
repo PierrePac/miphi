@@ -1,6 +1,6 @@
 package fr.mipih.rh.testcandidats.dtos;
 
-import fr.mipih.rh.testcandidats.models.enums.Role;
+import fr.mipih.rh.testcandidats.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
