@@ -43,7 +43,6 @@ export class ViewQuestionComponent implements OnInit {
       };
       this.questionService.addQuestion(newQuestion).subscribe(
         (data) => {
-          //add the question to the question list Observable
           console.log("Question ajouté avec succés");
           this.form.reset();
         },

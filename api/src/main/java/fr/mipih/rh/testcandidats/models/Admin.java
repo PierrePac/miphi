@@ -3,6 +3,8 @@ package fr.mipih.rh.testcandidats.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +42,7 @@ public class Admin {
 	@Column(name = "motDePasse")
 	private String motDePasse;
 	
+	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "personne_id", referencedColumnName = "id")
 	@EqualsAndHashCode.Exclude

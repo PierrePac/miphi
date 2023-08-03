@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import fr.mipih.rh.testcandidats.dtos.PersonneDTO;
+import fr.mipih.rh.testcandidats.dtos.AdminDTO;
+import fr.mipih.rh.testcandidats.dtos.CandidatDTO;
+import fr.mipih.rh.testcandidats.models.Admin;
+import fr.mipih.rh.testcandidats.models.Candidat;
 import fr.mipih.rh.testcandidats.models.enums.ConnexionStatus;
 import fr.mipih.rh.testcandidats.services.AuthService;
 
@@ -27,9 +30,14 @@ public class AuthController {
 		String motDePasse = loginInfo.get("motDePasse");
 		ConnexionStatus status = authService.verifierMotDePasseAdmin(nom, motDePasse);
 		if(status.equals(ConnexionStatus.ADMIN)) {
-			PersonneDTO admin = authService.personneInfo(nom);
-			String roles = authService.checkRoles();
-			return new ResponseEntity<>(roles, HttpStatus.OK);
+			Admin admin = authService.adminInfo(nom);
+			AdminDTO adminDto = AdminDTO.builder()
+					.id(admin.getPersonne().getId())
+					.nom(admin.getPersonne().getNom())
+					.prenom(admin.getPersonne().getPrenom())
+					.role(admin.getPersonne().getRoles().iterator().next().getName()) 
+					.build();
+			return new ResponseEntity<>(adminDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(status, HttpStatus.UNAUTHORIZED);
 		}
@@ -41,9 +49,15 @@ public class AuthController {
 		String prenom = loginInfo.get("prenom");
 		ConnexionStatus status = authService.verifierCandidat(nom, prenom);
 		if(status.equals(ConnexionStatus.CANDIDAT)) {
-			PersonneDTO candidat = authService.personneInfo(nom);
-			String roles = authService.checkRoles();
-			return new ResponseEntity<>(roles, HttpStatus.OK);
+			Candidat candidat = authService.candidatInfo(nom);
+			CandidatDTO candidatDto = CandidatDTO.builder()
+					.id(candidat.getPersonne().getId())
+					.nom(candidat.getPersonne().getNom())
+					.prenom(candidat.getPersonne().getPrenom())
+					.role(candidat.getPersonne().getRoles().iterator().next().getName())
+					.test_id(candidat.getPersonne().getCandidat().getTestId()) 
+					.build();
+			return new ResponseEntity<>(candidatDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(status, HttpStatus.UNAUTHORIZED);
 		}

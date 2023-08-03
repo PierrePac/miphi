@@ -55,7 +55,7 @@ export class LandingPageComponent implements OnInit {
           next: (response) => {
             const personne = <Personne>response;
               sessionStorage.setItem('personne', JSON.stringify(personne));
-              if (personne.role === 'ADMIN') {
+              if (personne.role === 'ROLE_ADMIN') {
                 this.router.navigate(['/admin']);
               }
           },
@@ -68,7 +68,7 @@ export class LandingPageComponent implements OnInit {
           next: (response) => {
             const personne = <Personne>response;
             sessionStorage.setItem('personne', JSON.stringify(personne));
-            if (personne.role === 'CANDIDAT') {
+            if (personne.role === 'ROLE_CANDIDAT') {
               this.router.navigate(['/candidat']);
             }
           },

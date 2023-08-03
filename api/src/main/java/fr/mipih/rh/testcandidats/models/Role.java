@@ -2,6 +2,9 @@ package fr.mipih.rh.testcandidats.models;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +30,9 @@ import lombok.ToString;
 @Table(name = "ROLE")
 @Data
 @ToString(exclude={"personnes", "privileges"})
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "id")
 public class Role {
  
 	@Id
@@ -36,7 +41,7 @@ public class Role {
 
     private String name;
     
-    @OneToMany(mappedBy = "role")
+    @ManyToMany(mappedBy = "roles")
     private Collection<Personne> personnes;
 
     @ManyToMany

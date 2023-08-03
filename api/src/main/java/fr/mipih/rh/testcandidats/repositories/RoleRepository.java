@@ -8,5 +8,6 @@ import fr.mipih.rh.testcandidats.models.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>{
 
-	Role findByName(String name);
+	Role findByName(String string);
+
 }

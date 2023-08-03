@@ -7,8 +7,8 @@ import { RoleGuard } from '../core/guards/role.guard';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'candidat', component: CandidatComponent, canActivate: [RoleGuard], data: { expectedRole: 'CANDIDAT' } }
+  { path: 'admin', component: AdminComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
+  { path: 'candidat', component: CandidatComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_CANDIDAT' } }
 ];
 
 @NgModule({

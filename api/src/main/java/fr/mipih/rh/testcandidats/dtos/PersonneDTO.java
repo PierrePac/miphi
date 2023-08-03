@@ -1,5 +1,7 @@
 package fr.mipih.rh.testcandidats.dtos;
 
+import java.util.Collection;
+
 import fr.mipih.rh.testcandidats.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +20,7 @@ public class PersonneDTO {
 	private String nom;
 	private String prenom;
 	private String motDePasse;
-	private Role role;
+	private Collection<Role> roles;
 	private Long test_id;
 	
 }

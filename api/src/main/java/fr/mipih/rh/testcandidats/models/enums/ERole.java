@@ -1,6 +1,6 @@
 package fr.mipih.rh.testcandidats.models.enums;
 
 public enum ERole {
-	ADMIN,
-	CANDIDAT
+	ROLE_ADMIN,
+	ROLE_CANDIDAT
 }

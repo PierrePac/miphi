@@ -8,10 +8,10 @@ import { RoleGuard } from '../core/guards/role.guard';
 
 
 const routes: Routes = [
-  { path: 'create-qcm', component: CreateQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'view-qcm', component: ViewQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'view-candidats', component: ViewCandidatsComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'view-question', component: ViewQuestionComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } }
+  { path: 'create-qcm', component: CreateQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
+  { path: 'view-qcm', component: ViewQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
+  { path: 'view-candidats', component: ViewCandidatsComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
+  { path: 'view-question', component: ViewQuestionComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } }
 ];
 
 @NgModule({

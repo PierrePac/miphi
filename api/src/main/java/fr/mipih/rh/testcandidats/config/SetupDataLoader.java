@@ -66,7 +66,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			adminPersonne.setNom("pac");
 			adminPersonne.setPrenom("pierre");
 			adminPersonne.setEnabled(true);
-			adminPersonne.setRole(adminRole);
+			adminPersonne.getRoles().add(adminRole);
 			Admin admin = new Admin();
 			admin.setMotDePasse(passwordEncoder.encode("admin"));
 			admin.setPersonne(adminPersonne);
@@ -83,7 +83,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			candidatPersonne.setNom("dupond");
 			candidatPersonne.setPrenom("toto");
 			candidatPersonne.setEnabled(true);
-			candidatPersonne.setRole(candidateRole);
+			candidatPersonne.getRoles().add(candidateRole);
 
 			Candidat candidat = new Candidat();
 			candidat.setPersonne(candidatPersonne);

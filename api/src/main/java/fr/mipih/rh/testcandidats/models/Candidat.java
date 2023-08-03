@@ -2,6 +2,8 @@ package fr.mipih.rh.testcandidats.models;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +40,7 @@ public class Candidat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "personne_id", referencedColumnName = "id")
 	@EqualsAndHashCode.Exclude
