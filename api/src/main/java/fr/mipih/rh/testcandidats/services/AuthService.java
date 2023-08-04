@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -81,6 +82,8 @@ public class AuthService implements UserDetailsService {
 			if(!passwordEncoder.matches(motDePasse, motDePasseEnregistre)) {
 				return ConnexionStatus.MOT_DE_PASSE_INCORRECT;
 			} else {
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(authentication);
 				return ConnexionStatus.ADMIN;
 			}
 		}
@@ -108,6 +111,8 @@ public class AuthService implements UserDetailsService {
 		if(userDetails == null || userDetails.getAuthorities().stream().noneMatch(role -> role.getAuthority().contains("ROLE_CANDIDAT"))) {
 			return ConnexionStatus.UTILISATEUR_INCONNU;
 		}
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		return ConnexionStatus.CANDIDAT;
 	}
 	

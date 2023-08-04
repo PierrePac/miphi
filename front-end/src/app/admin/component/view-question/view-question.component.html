@@ -29,5 +29,9 @@
 
 
 <section class="list-question">
-
+  <ul>
+    <li *ngFor="let question of questions">
+      {{question.question}}
+    </li>
+  </ul>
 </section>

@@ -17,10 +17,13 @@ export class ViewQuestionComponent implements OnInit {
   technologies = Object.values(Technologie);
   niveaux = Object.values(Niveau);
 
+  questions: Question[] = [];
+
   constructor(private formbuilder: FormBuilder,
               private questionService: QuestionService,) {}
 
   ngOnInit(): void {
+    this.getAllQuestions();
     this.form = this.formbuilder.group({
       temps: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
       points: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -29,6 +32,11 @@ export class ViewQuestionComponent implements OnInit {
       technologie: [null, [Validators.required]],
       niveau: [null, [Validators.required]],
     });
+  }
+
+  getAllQuestions(): void {
+    this.questionService.getAllquestions()
+      .subscribe(questions => this.questions = questions)
   }
 
   onSubmit() {

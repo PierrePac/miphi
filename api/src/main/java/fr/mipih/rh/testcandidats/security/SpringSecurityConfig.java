@@ -9,6 +9,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,9 @@ public class SpringSecurityConfig {
 	
 	@Autowired
     private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private SessionSecurityContextRepository securityContextRepository;
 	
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		//auth.userDetailsService(authService).passwordEncoder(passwordEncoder);
@@ -60,7 +64,11 @@ public class SpringSecurityConfig {
 							.loginPage("http://localHost:4200")
 							.successHandler(myAuthenticationSuccessHandler())
 							.failureHandler(myAuthenticationFailureHandler())
-							.permitAll());
+							.permitAll())
+				.securityContext(context -> context
+						.securityContextRepository(securityContextRepository))
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
 		return http.build();
 	}
 
