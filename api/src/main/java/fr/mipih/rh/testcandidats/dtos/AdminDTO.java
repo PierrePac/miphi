@@ -1,21 +1,18 @@
 package fr.mipih.rh.testcandidats.dtos;
 
+import fr.mipih.rh.testcandidats.models.Personne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class AdminDTO {
+@NoArgsConstructor
+@Builder
+public class AdminDto {
 
 	private Long id;
-	private String nom;
-	private String prenom;
+	private Personne personne;
 	private String motDePasse;
-	private String role;
 }

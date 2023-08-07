@@ -5,13 +5,15 @@ import { ViewQcmComponent } from './component/view-qcm/view-qcm.component';
 import { ViewCandidatsComponent } from './component/view-candidats/view-candidats.component';
 import { ViewQuestionComponent } from './component/view-question/view-question.component';
 import { RoleGuard } from '../core/guards/role.guard';
+import { AddAdminComponent } from './component/add-admin/add-admin.component';
 
 
 const routes: Routes = [
-  { path: 'create-qcm', component: CreateQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
-  { path: 'view-qcm', component: ViewQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
-  { path: 'view-candidats', component: ViewCandidatsComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } },
-  { path: 'view-question', component: ViewQuestionComponent, canActivate: [RoleGuard], data: { expectedRole: 'ROLE_ADMIN' } }
+  { path: 'create-qcm', component: CreateQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'view-qcm', component: ViewQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'view-candidats', component: ViewCandidatsComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'view-question', component: ViewQuestionComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'add-admin', component: AddAdminComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } }
 ];
 
 @NgModule({

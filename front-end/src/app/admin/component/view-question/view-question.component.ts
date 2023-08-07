@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { QuestionService } from 'src/app/core/services/question/question.service';
+import { AxiosService } from 'src/app/core/services/axios/axios.service';
+
 import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
@@ -19,11 +20,20 @@ export class ViewQuestionComponent implements OnInit {
 
   questions: Question[] = [];
 
+
   constructor(private formbuilder: FormBuilder,
-              private questionService: QuestionService,) {}
+              private axiosService: AxiosService
+              ) {}
 
   ngOnInit(): void {
-    this.getAllQuestions();
+    this.axiosService.request(
+      "GET",
+      "/api/questions",
+      {}
+    ).then(
+      (response) => this.questions = response.data
+    );
+
     this.form = this.formbuilder.group({
       temps: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
       points: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -34,10 +44,7 @@ export class ViewQuestionComponent implements OnInit {
     });
   }
 
-  getAllQuestions(): void {
-    this.questionService.getAllquestions()
-      .subscribe(questions => this.questions = questions)
-  }
+
 
   onSubmit() {
     if (this.form.valid) {
@@ -49,15 +56,8 @@ export class ViewQuestionComponent implements OnInit {
         technologie: this.form.get('technologie')?.value,
         niveau: this.form.get('niveau')?.value
       };
-      this.questionService.addQuestion(newQuestion).subscribe(
-        (data) => {
-          console.log("Question ajouté avec succés");
-          this.form.reset();
-        },
-        (error) => {
-          console.error("Erreur dans l'ajout de la question")
-        }
-      )
+
+
     }
   }
 }

@@ -13,7 +13,8 @@ export class AdminComponent implements OnInit {
     { title: 'Créer un QCM', route: 'admin/create-qcm', image: 'assets/media/create_qcm.jpg' },
     { title: 'Visualiser les QCMs', route: 'admin/view-qcm', image:'assets/media/list_qcm.jpg' },
     { title: 'Visualiser les candidats', route:'admin/view-candidats', image:'assets/media/candidats.jpg' },
-    { title:'Visualiser les questions', route:'admin/view-question', image:'assets/media/add_question.jpg' }
+    { title:'Visualiser les questions', route:'admin/view-question', image:'assets/media/add_question.jpg' },
+    { title:'Ajouter un admin', route:'admin/add-admin', image:'assets/media/add_admin.jpg' }
   ]
 
   constructor(private router: Router) {}

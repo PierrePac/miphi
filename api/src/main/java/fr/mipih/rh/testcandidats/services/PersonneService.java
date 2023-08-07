@@ -1,74 +1,108 @@
 package fr.mipih.rh.testcandidats.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.nio.CharBuffer;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import fr.mipih.rh.testcandidats.dtos.PersonneDTO;
+import fr.mipih.rh.testcandidats.dtos.CredentialsAdminDto;
+import fr.mipih.rh.testcandidats.dtos.CredentialsCandidatDto;
+import fr.mipih.rh.testcandidats.dtos.NewAdminDto;
+import fr.mipih.rh.testcandidats.dtos.PersonneDto;
+import fr.mipih.rh.testcandidats.exceptions.AppException;
+import fr.mipih.rh.testcandidats.mappers.AdminMapper;
+import fr.mipih.rh.testcandidats.mappers.PersonneMapper;
 import fr.mipih.rh.testcandidats.models.Admin;
-import fr.mipih.rh.testcandidats.models.Candidat;
 import fr.mipih.rh.testcandidats.models.Personne;
-import fr.mipih.rh.testcandidats.models.Role;
-import fr.mipih.rh.testcandidats.models.enums.ERole;
+import fr.mipih.rh.testcandidats.models.enums.Role;
+import fr.mipih.rh.testcandidats.repositories.AdminRepository;
 import fr.mipih.rh.testcandidats.repositories.PersonneRepository;
-import fr.mipih.rh.testcandidats.repositories.RoleRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class PersonneService {
 
 	private final PersonneRepository personneRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final RoleRepository roleRepository;
-
-	@Autowired
-	public PersonneService(PersonneRepository personneRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
-		this.personneRepository = personneRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.roleRepository = roleRepository;
-	}
-
-	public boolean enregistrerPersonne(PersonneDTO personneDTO) {
-		Personne personne = convertirDTOenEntite(personneDTO);
-
-		if (personneDTO.getRoles().contains(ERole.ROLE_CANDIDAT)) {
-			Candidat candidat = creerCandidat(personne);
-			personne.setCandidat(candidat);
-		} else if (personneDTO.getRoles().contains(ERole.ROLE_ADMIN)) {
-			Admin admin = creerAdmin(personne, personneDTO.getMotDePasse());
-			personne.setAdmin(admin);
+	private final PersonneMapper personneMapper;
+	private final AdminMapper adminMapper;
+	private final AdminRepository adminRepository;
+	
+	public PersonneDto loginAdmin(CredentialsAdminDto credentialsDto) {
+		Personne admin = personneRepository.findByNom(credentialsDto.nom())
+			.orElseThrow(() -> new AppException("Personne Inconnu", HttpStatus.NOT_FOUND));
+		
+		if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.motDePasse()), admin.getAdmin().getMotDePasse())) {
+			return personneMapper.toPersonneDto(admin);
 		}
-
-		Personne personneEnregistree = personneRepository.save(personne);
-		return personneEnregistree != null;
+		throw new AppException("Mot de passe incorrect", HttpStatus.BAD_REQUEST);
 	}
-
-	private Personne convertirDTOenEntite(PersonneDTO personneDTO) {
-		Personne personne = new Personne();
-		personne.setNom(personneDTO.getNom());
-		personne.setPrenom(personneDTO.getPrenom());
-		for (Role role : personneDTO.getRoles() ) {
-			Role r = roleRepository.findByName(role.getName());
-			if(r==null) {
-				r = new Role();
-				r.setName(role.getName());
-				roleRepository.save(r);
+	
+	public PersonneDto loginCandidat(CredentialsCandidatDto credentialsDto) {
+		Personne candidat = personneRepository.findByNom(credentialsDto.nom())
+				.orElseThrow(() -> new AppException("Personne Inconnu", HttpStatus.NOT_FOUND));
+		if(candidat.getPrenom().equals(credentialsDto.prenom())) {
+			if(candidat.getCandidat().getTestId() != null) {
+				return personneMapper.toPersonneDto(candidat);
 			}
-			personne.getRoles().add(r);
-			r.getPersonnes().add(personne);
+			throw new AppException("Pas de test associé à ce candidat", HttpStatus.BAD_REQUEST);
 		}
-		return personne;
+		throw new AppException("Candidat inconnu", HttpStatus.BAD_REQUEST);
 	}
-
-	private Candidat creerCandidat(Personne personne) {
-		Candidat candidat = new Candidat();
-		candidat.setPersonne(personne);
-		return candidat;
-	}
-
-	private Admin creerAdmin(Personne personne, String motDePasse) {
-		Admin admin = new Admin();
+	
+	public PersonneDto ajoutAdmin(NewAdminDto newAdminDto) {
+		Optional<Personne> p = personneRepository.findByNomAndPrenom(newAdminDto.nom(), newAdminDto.prenom());
+		
+		if (p.isPresent()) {
+			throw new AppException("Admin déjà existant", HttpStatus.BAD_REQUEST);
+		}
+		
+		Personne personne = personneMapper.ajouterAdmin(newAdminDto);
+		personne.setRole(Role.ADMIN);
+		
+		Admin admin = adminMapper.ajouterAdmin(newAdminDto);
 		admin.setPersonne(personne);
-		admin.setMotDePasse(passwordEncoder.encode(motDePasse));
-		return admin;
+		admin.setMotDePasse(passwordEncoder.encode(CharBuffer.wrap(newAdminDto.motDePasse())));
+		
+		Personne enregistrerPresonne = personneRepository.save(personne);
+		adminRepository.save(admin);
+		return personneMapper.toPersonneDto(enregistrerPresonne);
 	}
+	
+	public PersonneDto findByNom(String nom) {
+        Personne user = personneRepository.findByNom(nom)
+                .orElseThrow(() -> new AppException("personne inconnu", HttpStatus.NOT_FOUND));
+        return personneMapper.toPersonneDto(user);
+    }
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

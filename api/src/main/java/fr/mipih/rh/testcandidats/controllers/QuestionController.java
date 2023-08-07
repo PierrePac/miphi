@@ -18,7 +18,7 @@ import fr.mipih.rh.testcandidats.models.Question;
 import fr.mipih.rh.testcandidats.services.QuestionService;
 
 @Controller
-@RequestMapping("/api/questions")
+@RequestMapping("/api")
 public class QuestionController {
 
 	private final QuestionService questionService;
@@ -33,7 +33,7 @@ public class QuestionController {
 		return new ResponseEntity<>(questionService.saveQuestion(question), HttpStatus.CREATED);
 	}
 	
-	@GetMapping
+	@GetMapping("/all-questions")
 	public ResponseEntity<List<Question>> getAllQuestions() {
 		return new ResponseEntity<>(questionService.getAllQuestions(), HttpStatus.OK);
 	}

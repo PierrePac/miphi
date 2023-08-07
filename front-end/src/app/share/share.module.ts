@@ -7,6 +7,7 @@ import {ToastModule} from 'primeng/toast';
 import {InputNumberModule} from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [],
@@ -20,6 +21,7 @@ import { DropdownModule } from 'primeng/dropdown';
     InputNumberModule,
     InputTextareaModule,
     DropdownModule,
+    InputTextModule,
   ],
   exports: [
     CommonModule,
@@ -31,6 +33,7 @@ import { DropdownModule } from 'primeng/dropdown';
     InputNumberModule,
     InputTextareaModule,
     DropdownModule,
+    InputTextModule,
   ]
 })
 export class ShareModule { }

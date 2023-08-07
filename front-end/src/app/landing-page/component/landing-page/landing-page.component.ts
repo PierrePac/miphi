@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { LoginService } from 'src/app/core/services/login/login.service';
+import { AxiosService } from 'src/app/core/services/axios/axios.service';
 import { Personne } from 'src/app/share/models/personne/personne.model';
 
 
@@ -21,9 +21,8 @@ export class LandingPageComponent implements OnInit {
   @ViewChild('container', {static: false}) container!: ElementRef;
 
   constructor( private formBuilder: FormBuilder,
-              private loginService: LoginService,
               private router: Router,
-              private messageService: MessageService,
+              private axiosService: AxiosService,
               ) {}
 
   ngOnInit(): void {
@@ -49,34 +48,46 @@ export class LandingPageComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
+    if(this.axiosService.getAuthToken != null) {
+      window.localStorage.removeItem("auth_token");
+    }
     if (form.valid) {
-      if ( form === this.adminForm ) {
-        this.loginService.loginAdmin(form.value.nom.toLowerCase(), form.value.motDePasse.toLowerCase()).subscribe({
-          next: (response) => {
-            const personne = <Personne>response;
-              sessionStorage.setItem('personne', JSON.stringify(personne));
-              if (personne.role === 'ROLE_ADMIN') {
-                this.router.navigate(['/admin']);
-              }
-          },
-          error: (err) => {
-            this.messageService.add({severity:'error', summary:'Erreur', detail:'Nom ou mot de passe incorrect'});
+      let requestPromise;
+      if (form === this.adminForm) {
+        requestPromise = this.axiosService.request(
+          "POST",
+          "/login/admin",
+          {
+            nom: form.value.nom.toLowerCase(),
+            motDePasse: form.value.motDePasse.toLowerCase()
+          }
+        ).then(response => {
+          this.axiosService.setAuthToken(response.data.token);
+          const personne = <Personne>response.data
+          sessionStorage.setItem('personne', JSON.stringify(personne));
+          if (personne.role === 'ADMIN') {
+            this.router.navigate(['/admin']);
           }
         });
       } else if (form === this.candidatForm) {
-        this.loginService.loginCandidat(form.value.nom.toLowerCase(), form.value.prenom.toLowerCase()).subscribe({
-          next: (response) => {
-            const personne = <Personne>response;
-            sessionStorage.setItem('personne', JSON.stringify(personne));
-            if (personne.role === 'ROLE_CANDIDAT') {
-              this.router.navigate(['/candidat']);
-            }
-          },
-          error: (err) =>  {
-            this.messageService.add({severity:'error', summary:'Erreur', detail:'Nom ou prénom incorrect'});
+        requestPromise = this.axiosService.request(
+          "POST",
+          "/login/candidat",
+          {
+            nom: form.value.nom.toLowerCase(),
+            prenom: form.value.prenom.toLowerCase()
           }
-        })
+        ).then(response => {
+          this.axiosService.setAuthToken(response.data.token);
+          this.axiosService.setAuthToken(response.data.token);
+          const personne = <Personne>response.data
+          sessionStorage.setItem('personne', JSON.stringify(personne));
+          if (personne.role === 'CANDIDAT') {
+            this.router.navigate(['/candidat']);
+          }
+        });
       }
     }
   }
 }
+
