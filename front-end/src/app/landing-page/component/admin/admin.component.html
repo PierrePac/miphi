@@ -1,0 +1,11 @@
+  <div class="card">
+    <div class="flex flex-row flex-wrap card-container justify-content-evenly">
+      <div class="p-card" *ngFor="let item of cards">
+        <p-card header="{{ item.title }}" [style]="{ width: '360px' }" (click)="navigateTo(item.route)">
+          <ng-template pTemplate="header">
+            <img alt="{{ item.title }}" src="{{ item.image }}" />
+          </ng-template>
+        </p-card>
+      </div>
+      </div>
+</div>

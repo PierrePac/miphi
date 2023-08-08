@@ -1,0 +1,37 @@
+<section class="add-question">
+  <h1>Rajouter une question</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="row">
+      <p-dropdown formControlName="categorie" [options]="categories" placeholder="categorie"></p-dropdown>
+      <p-dropdown formControlName="technologie" [options]="technologies" placeholder="technologie"></p-dropdown>
+      <p-dropdown formControlName="niveau" [options]="niveaux" placeholder="niveau"></p-dropdown>
+    </div>
+
+    <textarea rows="5" cols="30" pInputTextarea formControlName="question" placeholder="question" required></textarea>
+
+    <div class="row">
+      <div class="input-number">
+        <label for="temps">Temps</label>
+        <p-inputNumber id="temps" formControlName="temps" [min]="0" mode="decimal" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" placeholder="Temps"
+        decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+      </div>
+      <div class="input-number">
+        <label for="points">Points</label>
+        <p-inputNumber id="points" formControlName="points" [min]="0" mode="decimal" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" placeholder="Points"
+        decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+      </div>
+    </div>
+
+    <button class="btn" type="submit">Enregistrer</button>
+  </form>
+</section>
+
+
+<section class="list-question">
+  <ul>
+    <li *ngFor="let question of questions">
+      {{question.question}}
+    </li>
+  </ul>
+</section>
