@@ -1,0 +1,36 @@
+<div class="landing-page">
+  <p-toast class="msg-error"></p-toast>
+  <div class="container right-panel-active" #container>
+    <!-- Sign Up -->
+    <div class="container__form container--candidat">
+        <form class="form" id="form1" [formGroup]="candidatForm" (ngSubmit)="onSubmit(candidatForm)">
+            <h2 class="form__title">Candidat</h2>
+            <input type="text" placeholder="Prénom" class="input" formControlName="prenom" required pattern="[a-zA-Z]*" />
+            <input type="text" placeholder="Nom" class="input" formControlName="nom" required pattern="[a-zA-Z]*" />
+            <button class="btn" type="submit">Se connecter</button>
+        </form>
+    </div>
+
+    <!-- Sign In -->
+    <div class="container__form container--admin">
+        <form class="form" id="form2" [formGroup]="adminForm" (ngSubmit)="onSubmit(adminForm)">
+            <h2 class="form__title">Administrateur</h2>
+            <input type="text" placeholder="Nom" class="input" formControlName="nom" required pattern="[a-zA-Z]*" />
+            <input type="password" placeholder="Mot de passe" class="input" formControlName="motDePasse" required />
+            <button class="btn" type="submit">Se connecter</button>
+        </form>
+    </div>
+
+    <!-- Overlay -->
+    <div class="container__overlay">
+        <div class="overlay">
+            <div class="overlay__panel overlay--left">
+                <button class="btn" id="admin" #adminBtn>Administrateur</button>
+            </div>
+            <div class="overlay__panel overlay--right">
+                <button class="btn" id="candidat" #candidatBtn>Candidat</button>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
