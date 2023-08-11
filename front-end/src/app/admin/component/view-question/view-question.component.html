@@ -1,0 +1,7 @@
+<!-- view-question-component.html -->
+<app-share-question mode="edit" (onSave)="handleSave($event)"></app-share-question>
+
+<ng-container *ngFor="let question of question$ | async">
+  <app-share-question [questionDto]="question" [mode]="'display'"></app-share-question>
+</ng-container>
+

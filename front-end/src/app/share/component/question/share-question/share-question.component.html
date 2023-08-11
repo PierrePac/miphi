@@ -1,0 +1,75 @@
+<!-- share-question-component.html -->
+
+<div *ngIf="mode === 'edit'">
+  <section class="add-question">
+    <h1>Rajouter une question</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+
+      <div class="row">
+        <p-dropdown formControlName="categorie" [options]="categories" placeholder="Categorie"></p-dropdown>
+        <p-dropdown formControlName="technologie" [options]="technologies" placeholder="Technologie"></p-dropdown>
+        <p-dropdown formControlName="niveau" [options]="niveaux" placeholder="Niveau"></p-dropdown>
+      </div>
+
+      <div class="row">
+        <div class="input-number">
+          <label for="temps">Temps</label>
+          <p-inputNumber id="temps" formControlName="temps" [min]="0" mode="decimal" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" placeholder="Temps"
+          decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+        </div>
+        <div class="input-number">
+          <label for="points">Points</label>
+          <p-inputNumber id="points" formControlName="points" [min]="0" mode="decimal" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" placeholder="Points"
+          decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
+        </div>
+      </div>
+
+      <textarea rows="5" cols="30" pInputTextarea formControlName="question" placeholder="Question" required></textarea>
+
+      <div class="list-reponses" formArrayName="reponses">
+        <ng-container *ngFor="let reponseFormGroup of reponses.controls; let i = index">
+          <div [formGroupName]="i" *ngIf="i === 0 || (reponses.at(i-1)?.get('reponse')?.value)" class="inputt-reponse">
+            <span class="p-float-label">
+              <input pInputText formControlName="reponse" placeholder="Réponse {{ i + 1 }}" />
+              <label>Réponse {{ i + 1 }}</label>
+            </span>
+            <div class="flex justify-content-center flex-wrap">
+              <label for="correct{{ i }}" >Correct</label>
+              <p-selectButton formControlName="correct" [options]="correctOptions" ></p-selectButton>
+          </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <button class="btn" >Enregistrer</button>
+    </form>
+  </section>
+</div>
+
+<div *ngIf="mode === 'display'">
+  <section class="list-question">
+    <h1>Liste des questions</h1>
+        <p-fieldset legend="{{questionDto.technologie}}: {{questionDto.question}}"  [toggleable]="true" [collapsed]="true">
+          <div class="icon">
+            <i class="pi pi-cog" style="font-size: 2rem" (click)="toggleMode()"></i>
+          </div>
+          <p-fieldset legend="Les paramètres" [toggleable]="true" [collapsed]="true">
+            <div class="details-question">
+              <p>niveau : {{questionDto.niveau | lowercase}}</p>
+              <p>Catégorie : {{questionDto.categorie | lowercase}}</p>
+
+              <p>nombre de point : {{questionDto.point}} points</p>
+
+              <p>Temps : {{questionDto.temps}} secondes</p>
+              <p>Technologie : {{questionDto.technologie}}</p>
+            </div>
+        </p-fieldset>
+        <p-fieldset legend="Les propositions" [toggleable]="true" [collapsed]="true">
+          <div class="reponses" *ngFor="let reponse of questionDto.reponses">
+            <p *ngIf="reponse.reponse" [ngClass]="{ 'classe-true': reponse.correct, 'classe-false': !reponse.correct }">{{reponse.reponse}}</p>
+          </div>
+      </p-fieldset>
+        </p-fieldset>
+  </section>
+</div>

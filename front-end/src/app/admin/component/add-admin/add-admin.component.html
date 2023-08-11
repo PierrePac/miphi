@@ -1,0 +1,24 @@
+
+
+<section class="add-admin">
+  <h1>Rajouter un admin</h1>
+  <form [formGroup]="addAdminForm" (ngSubmit)="onSubmit()">
+
+    <span class="p-float-label">
+      <input pInputText id="nom" formControlName="nom"/>
+      <label htmlFor="nom">nom</label>
+    </span>
+
+    <span class="p-float-label">
+      <input pInputText id="prenom" formControlName="prenom"/>
+      <label htmlFor="prenom">prenom</label>
+    </span>
+
+    <span class="p-float-label">
+      <input pInputText id="motDePasse" type="password" formControlName="motDePasse"/>
+      <label htmlFor="motDePasse">Mot de passe</label>
+    </span>
+
+    <button type="submit" class="btn">Submit</button>
+  </form>
+</section>
