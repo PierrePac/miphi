@@ -38,7 +38,19 @@ public class QcmService {
 	}
 	
 	public QcmDto saveQcm(QcmDto qcmDto) {
-		return qcmMapper.toDto(qcmRepository.save(qcmMapper.toEntity(qcmDto)));
+		//return qcmMapper.toDto(qcmRepository.save(qcmMapper.toEntity(qcmDto)));
+		System.out.println("Avant conversion en entité: " + qcmDto.getNom());
+
+		Qcm qcmEntity = qcmMapper.toEntity(qcmDto);
+		System.out.println("Après conversion en entité: " + qcmEntity.getNom());
+
+		Qcm savedQcmEntity = qcmRepository.save(qcmEntity);
+		System.out.println("Après sauvegarde dans la BD: " + savedQcmEntity.getNom());
+
+		QcmDto resultDto = qcmMapper.toDto(savedQcmEntity);
+		System.out.println("Après conversion en DTO: " + resultDto.getNom());
+
+		return resultDto;
 	}
 
 	@Transactional

@@ -48,10 +48,10 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
 
   private adminRoutes = [
-    { label: 'Créer un QCM', routerLink: 'admin/create-qcm' },
-    { label: 'Visualiser les QCMs', routerLink: 'admin/view-qcm' },
-    { label: 'Visualiser les candidats', routerLink: 'admin/view-candidats' },
-    { label: 'Visualiser les questions', routerLink: 'admin/view-question' },
+    { label: 'Gérer les QCM', routerLink: 'admin/qcm' },
+    //{ label: 'Visualiser les QCMs', routerLink: 'admin/view-qcm' },
+    { label: 'Gérer les candidats', routerLink: 'admin/candidats' },
+    { label: 'Gérer les questions', routerLink: 'admin/question' },
     { label: 'Ajouter un admin', routerLink: 'admin/add-admin' },
     { label: 'Se déconnecter', command: (event: any) => this.logout() }
   ];

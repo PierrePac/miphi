@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class QcmDto {
 	private Long id;
+	private String nom;
 	private int point;
 	private int temps;
 

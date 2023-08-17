@@ -1,0 +1,46 @@
+<section class="create-qcm mt-8">
+    <p-fieldset legend="Créer un nouveau Qcm">
+      <form [formGroup]="qcmFrom">
+        <span class="p-float-label">
+          <input pInputText id="qcmName" formControlName="nom" />
+          <label htmlFor="qcmName">Nom du Qcm</label>
+        </span>
+        <div formArrayName="rows" *ngFor="let row of rows.controls; let i = index">
+          <div *ngIf="qcmFrom.get('rows')?.hasError('duplicateRows')">
+            Une combinaison de filtres est dupliquée!
+          </div>
+          <div [formGroupName]="i" class="flex align-items-center justify-content-evenly m-4">
+            <span class="p-float-label">
+              <p-dropdown formControlName="categorie" [options]="categories"  optionLabel="name" inputId="categories" placeholder="Sélectionner une catégorie" [style]="{'width':'100%'}"></p-dropdown>
+              <label for="categories">Selectionner une catégorie</label>
+            </span>
+            <span class="p-float-label">
+              <p-dropdown formControlName="technologie" [options]="technologies" optionLabel="name" inputId="technologie" placeholder="Sélectionner une technologie" [style]="{'width':'100%'}"></p-dropdown>
+              <label for="technologie">Selectionner une technologie</label>
+            </span>
+              <span class="p-float-label">
+              <p-dropdown formControlName="niveau" [options]="niveaux" optionLabel="name" inputId="niveau" placeholder="Sélectionner un niveau" [style]="{'width':'100%'}"></p-dropdown>
+              <label for="niveau">Selectionner un niveau</label>
+            </span>
+              <span class="p-float-label">
+              <p-dropdown formControlName="nbreQuestion" [options]="nbreQuestion" optionLabel="name" inputId="nbreQuestion" placeholder="Choisir un nombre de question" [style]="{'width':'100%'}"></p-dropdown>
+              <label for="nbreQuestion">Choisir un nombre de question</label>
+            </span>
+          </div>
+        </div>
+        <div class="card flex justify-content-between">
+          <button pButton pRipple class="p-button-success" (click)="addRow()">
+            <i class="pi pi-plus" style="font-size: 2rem"></i>
+          </button>
+          <button pButton pRipple class="p-button-danger" (click)="subRow()">
+            <i class="pi pi-minus" style="font-size: 2rem"></i>
+          </button>
+      </div>
+      <div class="card flex justify-content-center">
+        <button type="submit" class="btn" (click)="submitQcm()">Créer QCM</button>
+    </div>
+      </form>
+    </p-fieldset>
+  </section>
+  
+  

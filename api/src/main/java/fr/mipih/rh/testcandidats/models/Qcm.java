@@ -33,6 +33,9 @@ public class Qcm {
 	@Column(name = "id", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "nom")
+	private String nom;
 	
 	@Column(name = "temps")
 	private int temps;
@@ -47,7 +50,5 @@ public class Qcm {
 	@ManyToMany(mappedBy = "qcms")
 	@JsonIgnore
 	Set<Question> questions = new HashSet<>();
-
-
 
 }

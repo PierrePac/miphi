@@ -1,15 +1,15 @@
 <!-- view-question-component.html -->
 <div class="card flex justify-content-end mt-4 mr-4">
-  <button pButton pRipple class="p-button-success" *ngIf="!showAddQuestion" (click)="showAddQuestion = true">
+  <button pButton pRipple class="p-button-success" *ngIf="!toggleAddQuestion" (click)="toggleAddQuestion = true">
     <span>Ajouter une question</span>
     <i class="pi pi-plus ml-2"></i>
   </button>
-  <button pButton pRipple class="p-button-danger" *ngIf="showAddQuestion" (click)="showAddQuestion = false">
+  <button pButton pRipple class="p-button-danger" *ngIf="toggleAddQuestion" (click)="toggleAddQuestion = false">
     <span>Cacher le formulaire</span>
     <i class="pi pi-minus ml-2"></i>
   </button>
 </div>
-<app-share-question mode="edit" *ngIf="showAddQuestion" (onSave)="handleSave($event)"></app-share-question>
+<app-share-question mode="edit" *ngIf="toggleAddQuestion" (onSave)="handleSave($event)"></app-share-question>
 
 <p-divider></p-divider>
 <div class="list-question">

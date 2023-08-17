@@ -9,10 +9,10 @@ import { AddAdminComponent } from './component/add-admin/add-admin.component';
 
 
 const routes: Routes = [
-  { path: 'create-qcm', component: QcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'view-qcm', component: ViewQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'view-candidats', component: CandidatsComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
-  { path: 'view-question', component: QuestionComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'qcm', component: QcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  //{ path: 'qcm', component: ViewQcmComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'candidats', component: CandidatsComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
+  { path: 'question', component: QuestionComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } },
   { path: 'add-admin', component: AddAdminComponent, canActivate: [RoleGuard], data: { expectedRole: 'ADMIN' } }
 ];
 

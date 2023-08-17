@@ -9,6 +9,8 @@ import { QuestionComponent } from './component/question/question.component';
 import { ShareModule } from '../share/share.module';
 import { AddAdminComponent } from './component/add-admin/add-admin.component';
 
+import { CreateQcmComponent } from './component/create-qcm/create-qcm.component';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import { AddAdminComponent } from './component/add-admin/add-admin.component';
     ViewQcmComponent,
     CandidatsComponent,
     QuestionComponent,
-    AddAdminComponent
+    AddAdminComponent,
+    CreateQcmComponent
   ],
   imports: [
     AdminRoutingModule,

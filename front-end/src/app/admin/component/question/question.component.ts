@@ -21,7 +21,7 @@ export class QuestionComponent implements OnInit {
   categories = Object.values(Categorie).map(cat => ({ name: this.formatEnumValue(cat) }));
   technologies = Object.values(Technologie).map(tech => ({ name: tech }));
   niveaux = Object.values(Niveau).map(niv => ({ name: this.formatEnumValue(niv) }));
-  showAddQuestion: boolean = false;
+  toggleAddQuestion: boolean = false;
 
   formatEnumValue(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();

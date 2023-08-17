@@ -10,6 +10,12 @@ public interface QcmMapper {
 	
 	QcmDto toDto(Qcm qcm);
 	
-	Qcm toEntity(QcmDto qcmDto);
+	default Qcm toEntity(QcmDto qcmDto) {
+		Qcm qcm = new Qcm();
+		qcm.setNom(qcmDto.getNom());
+		qcm.setTemps(qcmDto.getTemps());
+		qcm.setPoint(qcmDto.getPoint());
+		return qcm;
+	}
 
 }
