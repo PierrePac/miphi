@@ -1,5 +1,16 @@
 <!-- view-question-component.html -->
-<app-share-question mode="edit" (onSave)="handleSave($event)"></app-share-question>
+<div class="card flex justify-content-end mt-4 mr-4">
+  <button pButton pRipple class="p-button-success" *ngIf="!showAddQuestion" (click)="showAddQuestion = true">
+    <span>Ajouter une question</span>
+    <i class="pi pi-plus ml-2"></i>
+  </button>
+  <button pButton pRipple class="p-button-danger" *ngIf="showAddQuestion" (click)="showAddQuestion = false">
+    <span>Cacher le formulaire</span>
+    <i class="pi pi-minus ml-2"></i>
+  </button>
+</div>
+<app-share-question mode="edit" *ngIf="showAddQuestion" (onSave)="handleSave($event)"></app-share-question>
+
 <p-divider></p-divider>
 <div class="list-question">
   <h1 class="card flex justify-content-center">Liste des questions</h1>

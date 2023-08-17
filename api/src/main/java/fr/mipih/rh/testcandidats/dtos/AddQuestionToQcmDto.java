@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddQuestionToQcmRequest {
+public class AddQuestionToQcmDto {
 	
 	private Long qcmId;
     private Long questionId;

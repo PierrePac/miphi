@@ -1,5 +1,6 @@
 package fr.mipih.rh.testcandidats.controllers;
 
+import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
 import fr.mipih.rh.testcandidats.services.QcmService;
 
@@ -30,5 +30,11 @@ public class QcmController {
 	public ResponseEntity<QcmDto> createQcm(@RequestBody QcmDto qcmDto) {
 		QcmDto savedQcmDto = qcmService.saveQcm(qcmDto);
 		return new ResponseEntity<>(savedQcmDto, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/add-question")
+	public ResponseEntity<Void> addQuestionToQcm(@RequestBody AddQuestionToQcmDto request) {
+		qcmService.addQuestionToQcm(request.getQcmId(), request.getQuestionId());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

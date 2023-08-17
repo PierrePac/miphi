@@ -4,6 +4,8 @@ package fr.mipih.rh.testcandidats.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -22,11 +24,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
@@ -35,6 +32,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "QUESTION")
 @Data
+@EqualsAndHashCode(exclude = "qcms")
 public class Question {
 
 	@Id
@@ -64,6 +62,7 @@ public class Question {
 	private Technologie technologie;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonIgnore
 	@JoinTable(
 			name = "question_qcm",
 			joinColumns = @JoinColumn(

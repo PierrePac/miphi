@@ -12,11 +12,11 @@ import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
 
 @Component({
-  selector: 'app-create-qcm',
-  templateUrl: './create-qcm.component.html',
-  styleUrls: ['./create-qcm.component.scss']
+  selector: 'app-qcm',
+  templateUrl: './qcm.component.html',
+  styleUrls: ['./qcm.component.scss']
 })
-export class CreateQcmComponent implements OnInit, OnDestroy {
+export class QcmComponent implements OnInit, OnDestroy {
   allQuestions$: Observable<QuestionDto[]>;
   qcmFrom!: FormGroup;
   subscriptions: Subscription[] = [];
@@ -141,7 +141,6 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       const selectedQuestions = suffledQuestions.slice(0, Number(row.nbreQuestion.name));
       const totalTime = selectedQuestions.reduce((acc, question) => acc + question.temps, 0);
       const totalpoint = selectedQuestions.reduce((acc, question) => acc + question.point, 0);
-      //allFilteredQuestion.push(suffledQuestions.slice(0, Number(row.nbreQuestion.name)));
 
       grandTotalPoints += totalTime;
       grandTotalTime += totalpoint;
@@ -157,23 +156,30 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       point: grandTotalPoints
     }
     this.qcmService.addQcm(qcmData).subscribe( (response: QcmDto) => {
-      const newQcmId = response.id;
-      allFilteredQuestion.forEach(question => {
-        this.qcmService.addQuestionToQcm(newQcmId, question.id).subscribe(
-          resp => {
-            console.log('Question ajoutée avec succès:', resp);
-          },
-          error => {
-            console.error('Erreur lors de l\'ajout de la question:', error);
+       const newQcmId = response.id;
+          if (typeof newQcmId === 'number'){
+            console.log(typeof newQcmId === 'number');
+            allFilteredQuestion.forEach(data => {
+              data.questions.forEach(question => {
+                if (question.id){
+                  this.qcmService.addQuestionToQcm(newQcmId, question.id).subscribe(
+                    resp => {
+                      console.log('Question ajoutée avec succès:', resp);
+                    },
+                    error => {
+                      console.error('Erreur lors de l\'ajout de la question:', error);
+                    }
+                  )
+                }
+              });
+          });
           }
-        );
-      });
-      console.log('Données du QCM envoyées avec succès!', response);
-    },
-    error => {
-      console.error('Erreur lors de l\'envoi des données du QCM', error);
+       console.log('Données du QCM envoyées avec succès!', response);
+     },
+     error => {
+       console.error('Erreur lors de l\'envoi des données du QCM', error);
       }
-    ),
+    )
   }
 
   shuffleArray(array: any[]): any[] {
@@ -188,7 +194,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
     const rows = controlArray.value as Array<any>;
     const uniqueSet = new Set(
       rows.map(row => `${row.categorie.name}-${row.technologie.name}-${row.niveau.name}`)
-    );
+    )
     if(uniqueSet.size !== rows.length)
       return { duplicateRows: true };
     return null;

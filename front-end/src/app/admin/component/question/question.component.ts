@@ -10,17 +10,18 @@ import { Technologie } from 'src/app/share/enums/technologie.enum';
 
 
 @Component({
-  selector: 'app-view-question',
-  templateUrl: './view-question.component.html',
-  styleUrls: ['./view-question.component.scss']
+  selector: 'app-question',
+  templateUrl: './question.component.html',
+  styleUrls: ['./question.component.scss']
 })
-export class ViewQuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit {
   allQuestions$: Observable<QuestionDto[]>;
   filteredQuestions$!: Observable<QuestionDto[]>;
   private originalQuestionsCache: QuestionDto[] = [];
   categories = Object.values(Categorie).map(cat => ({ name: this.formatEnumValue(cat) }));
   technologies = Object.values(Technologie).map(tech => ({ name: tech }));
   niveaux = Object.values(Niveau).map(niv => ({ name: this.formatEnumValue(niv) }));
+  showAddQuestion: boolean = false;
 
   formatEnumValue(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();

@@ -2,20 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { CreateQcmComponent } from './component/create-qcm/create-qcm.component';
+import { QcmComponent } from './component/qcm/qcm.component';
 import { ViewQcmComponent } from './component/view-qcm/view-qcm.component';
-import { ViewCandidatsComponent } from './component/view-candidats/view-candidats.component';
-import { ViewQuestionComponent } from './component/view-question/view-question.component';
+import { CandidatsComponent } from './component/candidats/candidats.component';
+import { QuestionComponent } from './component/question/question.component';
 import { ShareModule } from '../share/share.module';
 import { AddAdminComponent } from './component/add-admin/add-admin.component';
 
 
 @NgModule({
   declarations: [
-    CreateQcmComponent,
+    QcmComponent,
     ViewQcmComponent,
-    ViewCandidatsComponent,
-    ViewQuestionComponent,
+    CandidatsComponent,
+    QuestionComponent,
     AddAdminComponent
   ],
   imports: [
