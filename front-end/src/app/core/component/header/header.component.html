@@ -1,3 +1,8 @@
 <header class="header">
     <img src="assets/media/logo_mipih.jpg" alt="logo_mipih" class="logo">
+    <div class="link">
+      <div class="card" *ngIf="showMenu">
+        <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
+    </div>
+    </div>
 </header>

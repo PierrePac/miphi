@@ -1,9 +1,9 @@
 export enum Technologie {
-  JAVA = 'Java',
+  JAVA = 'JAVA',
 	SQL = 'SQL',
-	HIBERNATE = 'Hibernate',
-	JENKINS = 'jenkins',
-	GIT = 'Git',
-	ANGULAR = 'Angular',
+	HIBERNATE = 'HIBERNATE',
+	JENKINS = 'JENKINS',
+	GIT = 'GIT',
+	ANGULAR = 'ANGULAR',
 	GWT = 'GWT',
 }

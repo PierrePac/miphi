@@ -4,6 +4,9 @@ package fr.mipih.rh.testcandidats.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import fr.mipih.rh.testcandidats.models.enums.Categorie;
 import fr.mipih.rh.testcandidats.models.enums.Niveau;
 import fr.mipih.rh.testcandidats.models.enums.Technologie;
@@ -13,8 +16,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -38,7 +39,7 @@ public class Question {
 
 	@Id
 	@Column(name = "id", columnDefinition = "serial")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Generated(GenerationTime.INSERT)
 	private Long id;
 	
 	@Column(name = "question")
@@ -74,7 +75,7 @@ public class Question {
 	)
 	Set<Qcm> qcms = new HashSet<>();
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "question")
 	Set<Reponse> reponses = new HashSet<>();
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

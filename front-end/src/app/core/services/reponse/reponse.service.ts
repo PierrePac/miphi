@@ -14,4 +14,9 @@ export class ReponseService {
   addReponse(newReponse: ReponseDto): Observable<ReponseDto> {
     return this.httpClient.post<ReponseDto>(environment.addReponse, newReponse);
   }
+
+  modifyReponse(reponseId: number, reponse: ReponseDto): Observable<ReponseDto> {
+    console.log(reponse)
+    return this.httpClient.put<ReponseDto>(`${environment.modifyReponse}${reponseId}`, reponse);
+  }
 }

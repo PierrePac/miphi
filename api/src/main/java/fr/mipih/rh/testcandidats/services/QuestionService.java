@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.mipih.rh.testcandidats.dtos.QuestionDto;
+import fr.mipih.rh.testcandidats.mappers.QuestionMapper;
 import fr.mipih.rh.testcandidats.models.Question;
 import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
 
@@ -12,18 +14,20 @@ import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
 public class QuestionService {
 	
 	private final QuestionRepository questionRepository;
+	private final QuestionMapper questionMapper;
 	
 	@Autowired
-	public QuestionService(QuestionRepository questionRepository) {
+	public QuestionService(QuestionRepository questionRepository, QuestionMapper questionMapper) {
 		this.questionRepository = questionRepository;
+		this.questionMapper = questionMapper;
 	}
 	
-	public Question saveQuestion(Question question) {
-		return questionRepository.save(question);
+	public QuestionDto saveQuestion(QuestionDto questionDto) {
+		return questionMapper.toDto(questionRepository.save(questionMapper.toEntity(questionDto)));
 	}
 	
-	public List<Question> getAllQuestions() {
-		return questionRepository.findAll();
+	public List<QuestionDto> getAllQuestions() {
+		return questionMapper.toDtoList(questionRepository.findAll());
 	}
 
 	public void deleteQuestion(Long id) {

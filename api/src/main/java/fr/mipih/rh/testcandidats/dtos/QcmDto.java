@@ -1,6 +1,5 @@
 package fr.mipih.rh.testcandidats.dtos;
 
-import fr.mipih.rh.testcandidats.models.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReponseDto {
-
+public class QcmDto {
 	private Long id;
-	private Long question_id;
-	private Question question;
-	private String reponse;
-	private boolean correct;
+	private int point;
+	private int temps;
+
 }

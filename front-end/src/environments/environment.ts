@@ -16,4 +16,8 @@ const environment = {
   addReponse: 'http://localhost:8080/reponse/add',
   deleteReponse: 'http://localhost:8080/reponse/delete/',
   modifyReponse: 'http://localhost:8080/reponse/modify/',
+
+  addQcm: 'http://localhost:8080/qcm/add',
+  deleteQcm: 'http://localhost:8080/qcm/delete/',
+  addQuestionToQcm:'http://localhost:8080/qcm/add-question',
 }

@@ -138,4 +138,23 @@ section {
 .icon {
   display: flex;
   justify-content: flex-end;
+
+  i{
+    margin-right: 15px;
+  }
+}
+
+.list-question {
+  margin-bottom: 25px;
+}
+
+.icon-edit{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  width: 100%;
+
+  i{
+    margin-right: 15px;
+  }
 }

@@ -1,10 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AdminDto } from 'src/app/share/dtos/admin/admin-dto';
 import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
-import { TokenDto } from 'src/app/share/dtos/token/token-dto';
+
 
 import { environment } from 'src/environments/environment';
 
@@ -13,12 +12,18 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthenticationService {
 
-  constructor(private httpClient: HttpClient,
-              private router: Router) { }
+  constructor(private httpClient: HttpClient) { }
+
+  checkIfLoggedIn(): boolean {
+    const user = window.localStorage.getItem('auth_token');
+    return !!user;
+  }
 
   getAuthToken(): string | null {
     return window.localStorage.getItem("auth_token");
   }
+
+  isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.checkIfLoggedIn());
 
   setAuthToken(token: string | null, refreshToken: string | null): void {
     if (token !== null && refreshToken !==null) {
@@ -36,5 +41,4 @@ export class AuthenticationService {
   authenticateCandidat(data: { nom: string, prenom: string }): Observable<CandidatDto> {
     return this.httpClient.post<CandidatDto>(environment.candidatConnexionUrl, data);
   }
-
 }

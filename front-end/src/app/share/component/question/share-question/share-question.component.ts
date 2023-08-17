@@ -15,6 +15,7 @@ export class ShareQuestionComponent implements OnInit {
   @Input() mode:'edit' | 'display' = 'display';
   @Input() questionDto!: QuestionDto;
   @Output() onSave: EventEmitter<any> = new EventEmitter();
+  @Output() onDelete: EventEmitter<any> = new EventEmitter();
 
   form!: FormGroup;
   categories = Object.keys(Categorie).map(key => ({ label: Categorie[key as keyof typeof Categorie], value: key }));
@@ -42,9 +43,9 @@ export class ShareQuestionComponent implements OnInit {
 
   initForm() {
     this.form = this.formbuilder.group({
-      question_id: [this.questionDto?.id],
-      temps: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      points: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      id: [this.questionDto?.id],
+      temps: [1, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      point: [1, [Validators.required, Validators.pattern('^[0-9]*$')]],
       question: [null, [Validators.required]],
       categorie: [null, [Validators.required]],
       technologie: [null, [Validators.required]],
@@ -74,7 +75,7 @@ export class ShareQuestionComponent implements OnInit {
     const formData = {
       id: question.id,
       temps: question.temps,
-      points: question.point,
+      point: question.point,
       question: question.question,
       categorie: question.categorie,
       technologie: question.technologie,
@@ -88,6 +89,7 @@ export class ShareQuestionComponent implements OnInit {
 
     const reponseFgs: FormGroup[] = question.reponses
       ? question.reponses.map(reponse => this.formbuilder.group({
+        id: reponse.id,
         reponse: reponse.reponse,
         correct: reponse.correct
       })) : [];
@@ -104,7 +106,11 @@ export class ShareQuestionComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.onSave.emit(this.form.value);
+      this.form.reset();
     }
+  }
+  onDeleteQuestion(): void {
+    this.onDelete.emit(this.questionDto);
   }
 
   static minRequiredReponses(min = 1): ValidatorFn {
@@ -121,6 +127,7 @@ export class ShareQuestionComponent implements OnInit {
 
   createReponse(): FormGroup {
     return this.formbuilder.group({
+      id: null,
       reponse: null,
       correct: false
     });
@@ -142,5 +149,7 @@ export class ShareQuestionComponent implements OnInit {
       this.addReponseChangeListener(newReponse);
     }
   }
+
+
 
 }

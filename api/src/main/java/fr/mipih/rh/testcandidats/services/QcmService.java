@@ -1,0 +1,38 @@
+package fr.mipih.rh.testcandidats.services;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import fr.mipih.rh.testcandidats.dtos.QcmDto;
+import fr.mipih.rh.testcandidats.dtos.QuestionDto;
+import fr.mipih.rh.testcandidats.mappers.QcmMapper;
+import fr.mipih.rh.testcandidats.models.Qcm;
+import fr.mipih.rh.testcandidats.repositories.QcmRepository;
+
+@Service
+public class QcmService {
+	
+	private final QcmRepository qcmRepository;
+	private final QcmMapper qcmMapper;
+	
+	@Autowired
+	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper) {
+		this.qcmRepository = qcmRepository;
+		this.qcmMapper = qcmMapper;
+	}
+	
+	public List<QcmDto> getAllQcm(){
+		List<Qcm> qcmList = qcmRepository.findAll();
+		return qcmList.stream()
+				.map(qcmMapper::toDto)
+				.collect(Collectors.toList());
+	}
+	
+	public QcmDto saveQcm(QcmDto qcmDto) {
+		return qcmMapper.toDto(qcmRepository.save(qcmMapper.toEntity(qcmDto)));
+	}
+
+}

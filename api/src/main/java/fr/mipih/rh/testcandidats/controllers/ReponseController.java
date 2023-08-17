@@ -25,45 +25,39 @@ import jakarta.transaction.Transactional;
 @RequestMapping("/reponse")
 public class ReponseController {
 	
-	private ReponseService reponseService;
-	private final ReponseMapper reponseMapper;
+	private final ReponseService reponseService;
 	private final QuestionRepository questionRepository;
 	
 	@Autowired
-	public ReponseController(ReponseService reponseService, ReponseMapper reponseMapper, QuestionRepository questionRepository) {
+	public ReponseController(ReponseService reponseService, QuestionRepository questionRepository) {
 		this.reponseService = reponseService;
-		this.reponseMapper = reponseMapper;
 		this.questionRepository = questionRepository;
 	}
 	
 	@PostMapping("/add")
 	@Transactional
 	public ResponseEntity<ReponseDto> addReponse(@RequestBody ReponseDto reponseDto) {
-	    Reponse reponse = reponseMapper.toEntity(reponseDto);
-
-	    Optional<Question> optionalQuestion = questionRepository.findById(reponseDto.getQuestion_id());
+		Optional<Question> optionalQuestion = questionRepository.findById(reponseDto.getQuestion_id());
+	    
 	    if (!optionalQuestion.isPresent()) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 
-	    reponse.setQuestion(optionalQuestion.get());
-	    Reponse savedReponse = reponseService.addReponse(reponse);
-	    ReponseDto savedReponseDto = reponseMapper.toDto(savedReponse);
+	    reponseDto.setQuestion(optionalQuestion.get());
+	    ReponseDto savedReponseDto = reponseService.addReponse(reponseDto);
 	    return new ResponseEntity<>(savedReponseDto, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/modify/{id}")
 	public ResponseEntity<ReponseDto> modifyQuestion(@RequestBody ReponseDto reponseDto) {
-		Reponse reponse = reponseMapper.toEntity(reponseDto);
-
 	    Optional<Question> optionalQuestion = questionRepository.findById(reponseDto.getQuestion_id());
+	    
 	    if (!optionalQuestion.isPresent()) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
-
-	    reponse.setQuestion(optionalQuestion.get());
-	    Reponse savedReponse = reponseService.addReponse(reponse);
-	    ReponseDto savedReponseDto = reponseMapper.toDto(savedReponse);
+	    
+	    reponseDto.setQuestion(optionalQuestion.get());
+	    ReponseDto savedReponseDto = reponseService.addReponse(reponseDto);
 	    return new ResponseEntity<>(savedReponseDto, HttpStatus.CREATED);
 	}
 	

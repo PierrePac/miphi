@@ -75,6 +75,7 @@ export class LandingPageComponent implements OnInit {
   handleLoginResponse(reponse: AdminDto | CandidatDto) {
     this.authService.setAuthToken(reponse.token, reponse.refreshToken);
     sessionStorage.setItem("personne", JSON.stringify(reponse));
+    this.authService.isLoggedIn.next(true);
     if(reponse.role === 'ADMIN') {
       this.router.navigate(['/admin']);
     } else if(reponse.role === 'CANDIDAT') {

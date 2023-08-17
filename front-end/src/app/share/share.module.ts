@@ -12,10 +12,14 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ShareQuestionComponent } from './component/question/share-question/share-question.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormatEnumPipe } from './pipes/FormatEnum/format-enum-pipe';
+import { DividerModule } from 'primeng/divider';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @NgModule({
   declarations: [
-    ShareQuestionComponent
+    ShareQuestionComponent,
+    FormatEnumPipe,
   ],
   imports: [
     CommonModule,
@@ -31,6 +35,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     FieldsetModule,
     CheckboxModule,
     SelectButtonModule,
+    DividerModule,
+    TabMenuModule,
   ],
   exports: [
     CommonModule,
@@ -47,6 +53,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     CheckboxModule,
     ShareQuestionComponent,
     SelectButtonModule,
+    DividerModule,
+    TabMenuModule,
   ]
 })
 export class ShareModule { }

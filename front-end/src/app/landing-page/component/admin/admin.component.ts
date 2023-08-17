@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { QuestionService } from 'src/app/core/services/question/question.service';
+import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 
 
 @Component({
@@ -8,6 +11,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  allQuestion$: Observable<QuestionDto[]> = this.questionService.questions$;
+  filteredQuestions$!: Observable<QuestionDto[]>;
 
   cards = [
     { title: 'Créer un QCM', route: 'admin/create-qcm', image: 'assets/media/create_qcm.jpg' },
@@ -17,9 +22,12 @@ export class AdminComponent implements OnInit {
     { title:'Ajouter un admin', route:'admin/add-admin', image:'assets/media/add_admin.jpg' }
   ]
 
-  constructor(private router: Router) {}
+  constructor(private questionService: QuestionService,
+              private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.questionService.loadAllQuestions();
+  }
 
   navigateTo(route: string) {
     this.router.navigate([route]);
