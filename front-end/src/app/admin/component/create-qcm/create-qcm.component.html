@@ -8,14 +8,13 @@
         </span>
         <div formArrayName="rows" *ngFor="let row of rows.controls; let i = index">
           <div [formGroupName]="i" class="flex align-items-center justify-content-evenly m-4">
-
             <span class="p-float-label">
               <p-dropdown formControlName="technologie" [options]="optionsTechnoNiveau" optionLabel="technologie" inputId="technologie" placeholder="Sélectionner une technologie" [style]="{'width':'100%'}" (onChange)="onTechnologieChange($event)"></p-dropdown>
               <label for="technologie">Selectionner une technologie</label>
             </span>
             <div [style]="{'width':'250px'}">
               <span class="p-float-label"  *ngIf="row.get('technologie')?.value">
-                <p-dropdown formControlName="niveau" [options]="niveauxPourTechnologieChoisie" inputId="niveau" placeholder="Sélectionner un niveau" [style]="{'width':'100%'}"></p-dropdown>
+                <p-dropdown formControlName="niveau" [options]="getNiveauxOptions(i, row.get('technologie')?.value)" inputId="niveau" placeholder="Sélectionner un niveau" [style]="{'width':'100%'}"></p-dropdown>
                 <label for="niveau">Selectionner un niveau</label>
               </span>
             </div>

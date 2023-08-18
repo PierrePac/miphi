@@ -25,6 +25,5 @@ export class QcmComponent implements OnInit {
   ngOnInit(): void {
     this.qcms$ = this.qcmService.qcms$;
     this.qcmService.getQcms();
-    console.log(this.qcms$);
   }
 }

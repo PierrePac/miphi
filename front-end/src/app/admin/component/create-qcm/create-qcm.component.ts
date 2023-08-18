@@ -26,6 +26,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
   qcmNameExists$!: Observable<boolean>;
   optionsTechnoNiveau: OptionDto[] = [];
   niveauxPourTechnologieChoisie: { label: string, value: string }[] = [];
+  optionsNiveauArray: any[] = [];
 
   categories = Object.values(Categorie).map(cat => ({ name: cat }));
   technologies = Object.values(Technologie).map(tech => ({ name: tech }));
@@ -41,7 +42,8 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.optionsTechnoNiveau = this.createTechnoNiveauOptions();
-    console.log(this.optionsTechnoNiveau);
+    this.optionsNiveauArray.push([...this.optionsTechnoNiveau]);
+    console.log(this.optionsNiveauArray)
     if (!localStorage.getItem('questions_cache')) {
       this.subscriptions.push(this.questionService.loadAllQuestions().subscribe());
     }
@@ -67,29 +69,28 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       ),
       startWith(false)
     );
+    
   }
 
   createTechnoNiveauOptions(): OptionDto[] {
     const options: OptionDto[] = [];
-
     for (let tech of Object.values(Technologie)) {
       options.push({
         technologie: tech,
-        niveaux: Object.values(Niveau)
+        niveaux: Object.values(Niveau).map(niv => ({ label: niv, value: niv }))
       });
     }
-
     return options;
   }
 
   onTechnologieChange(event: any) {
     const technologieObj = event.value;
     if (technologieObj && technologieObj.niveaux) {
-      this.niveauxPourTechnologieChoisie = technologieObj.niveaux.map((niveau: any) => ({ label: niveau, value: niveau }));
+      this.niveauxPourTechnologieChoisie = technologieObj.niveaux;
     } else {
         this.niveauxPourTechnologieChoisie = [];
     }
-}
+  }
 
   ecouterChangements(indiceLigne: number): void {
     const ligne = this.rows.at(indiceLigne) as FormGroup;
@@ -142,22 +143,33 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
     const technologieObj  = lastGroup.get('technologie')?.value;
     const niveauValue = lastGroup.get('niveau')?.value;
     const nbreQuestion = lastGroup.get('nbreQuestion')?.value
+
     if(technologieObj && niveauValue && nbreQuestion ) {
       const technologieValue = technologieObj.technologie;
-      console.log('Technologie du dernier row:', technologieValue);
-      console.log('Niveau du dernier row:', niveauValue);
 
-      const techObj = this.optionsTechnoNiveau.find(tech => tech.technologie === technologieValue);
+      // Clonez optionsTechnoNiveau profondément
+      const clonedOptions = JSON.parse(JSON.stringify(this.optionsTechnoNiveau));
+
+      // Trouvez la technologie dans la copie clonée et supprimez le niveau
+      const techObj = clonedOptions.find((tech: any) => tech.technologie === technologieValue);
       if (techObj) {
-          const index = techObj.niveaux.indexOf(niveauValue);
+          const index = techObj.niveaux.findIndex((niveau: any) => niveau.value === niveauValue);
           if (index > -1) {
               techObj.niveaux.splice(index, 1);
           }
       }
-
+      // Ajoutez la copie modifiée à optionsNiveauArray
+      this.optionsNiveauArray.push(clonedOptions);
+        
+      // Ajoutez un nouveau formulaire de groupe à la liste de lignes
       this.rows.push(this.createRow());
       this.ecouterChangements(this.rows.length - 1);
     }
+  }
+
+  getNiveauxOptions(index: number, technologie: any): any[] {
+    const techOption = this.optionsNiveauArray[index]?.find((tech: any) => tech.technologie === technologie?.technologie);
+    return techOption?.niveaux || [];
   }
 
   subRow(): void {
@@ -172,7 +184,6 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       return;
     }
     const formData = this.qcmForm.value;
-    console.log(formData);
     const allFilteredQuestion: FilteredQuestionsData[] = [];
     let grandTotalPoints  = 0;
     let grandTotalTime  = 0;
@@ -209,7 +220,6 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
     this.qcmService.addQcm(qcmData).subscribe( (response: QcmDto) => {
        const newQcmId = response.id;
           if (typeof newQcmId === 'number'){
-            console.log(typeof newQcmId === 'number');
             const allQuestionIds: number[] = [];
             allFilteredQuestion.forEach(data => {
               data.questions.forEach(question => {
