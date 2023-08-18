@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
+import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 
 
@@ -23,6 +25,7 @@ export class AdminComponent implements OnInit {
   ]
 
   constructor(private questionService: QuestionService,
+              private qcmService: QcmService,
               private router: Router) { }
 
   ngOnInit(): void {

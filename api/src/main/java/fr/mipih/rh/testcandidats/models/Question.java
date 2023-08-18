@@ -2,12 +2,14 @@ package fr.mipih.rh.testcandidats.models;
 
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import fr.mipih.rh.testcandidats.models.enums.Categorie;
 import fr.mipih.rh.testcandidats.models.enums.Niveau;
@@ -24,15 +26,18 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "QUESTION")
-@Data
-@EqualsAndHashCode(exclude = "qcms")
 public class Question {
 
 	@Id
@@ -62,7 +67,6 @@ public class Question {
 	private Technologie technologie;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnore
 	@JoinTable(
 			name = "question_qcm",
 			joinColumns = @JoinColumn(
@@ -80,5 +84,20 @@ public class Question {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "question_id", referencedColumnName = "id")
 	Set<ReponseCandidat> reponseCandidats = new HashSet<>();
+	
+	@Override
+    public int hashCode() {
+        return Objects.hash(id, question, point, temps, categorie, niveau, technologie);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Question other = (Question) obj;
+        return Objects.equals(id, other.id);
+    }
 	
 }

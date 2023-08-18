@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subscription, of, } from 'rxjs';
+import { Observable, Subscription, of} from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { FilteredQuestionsData } from 'src/app/share/dtos/qcm/filtered-questions-data';
+import { OptionDto } from 'src/app/share/dtos/qcm/option-dto';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { Categorie } from 'src/app/share/enums/categorie.enum';
@@ -17,10 +18,14 @@ import { Technologie } from 'src/app/share/enums/technologie.enum';
   styleUrls: ['./create-qcm.component.scss']
 })
 export class CreateQcmComponent implements OnInit, OnDestroy {
+  @Input() qcms$!: Observable<QcmDto[]>;
   allQuestions$: Observable<QuestionDto[]>;
-  qcmFrom!: FormGroup;
+  qcmForm!: FormGroup;
   subscriptions: Subscription[] = [];
   latestQuestions: QuestionDto[] = [];
+  qcmNameExists$!: Observable<boolean>;
+  optionsTechnoNiveau: OptionDto[] = [];
+  niveauxPourTechnologieChoisie: { label: string, value: string }[] = [];
 
   categories = Object.values(Categorie).map(cat => ({ name: cat }));
   technologies = Object.values(Technologie).map(tech => ({ name: tech }));
@@ -31,32 +36,60 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
               private formBuilder: FormBuilder,
               private qcmService: QcmService) {
     const cachedQuestions = localStorage.getItem('questions_cache');
-    if (cachedQuestions) {
-      this.allQuestions$ = of(JSON.parse(cachedQuestions));
-    } else {
-      this.allQuestions$ = this.questionService.questions$;
-    }
+    this.allQuestions$ = cachedQuestions ? of(JSON.parse(cachedQuestions)) : this.questionService.questions$;
    }
 
   ngOnInit(): void {
-    const cachedQuestions = localStorage.getItem('questions_cache');
-    if (!cachedQuestions) {
-      const loadSubscription = this.questionService.loadAllQuestions().subscribe();
-      this.subscriptions.push(loadSubscription);
+    this.optionsTechnoNiveau = this.createTechnoNiveauOptions();
+    console.log(this.optionsTechnoNiveau);
+    if (!localStorage.getItem('questions_cache')) {
+      this.subscriptions.push(this.questionService.loadAllQuestions().subscribe());
     }
 
-    this.qcmFrom = this.formBuilder.group({
+    this.qcmForm = this.formBuilder.group({
       nom: ['', Validators.required],
-      rows: this.formBuilder.array([this.createRow()], this.hasDuplicateRows)
+      rows: this.formBuilder.array([this.createRow()])
     });
 
     this.rows.controls.forEach((control: AbstractControl, index: number) => {
       this.ecouterChangements(index);
     });
+
     this.allQuestions$.subscribe(questions => {
       this.latestQuestions = questions;
     });
+
+    this.qcmNameExists$ = this.qcmForm.get('nom')!.valueChanges.pipe(
+      switchMap(name =>
+        this.qcms$.pipe(
+          map(qcms => qcms.some(qcm => qcm.nom === name))
+        )
+      ),
+      startWith(false)
+    );
   }
+
+  createTechnoNiveauOptions(): OptionDto[] {
+    const options: OptionDto[] = [];
+
+    for (let tech of Object.values(Technologie)) {
+      options.push({
+        technologie: tech,
+        niveaux: Object.values(Niveau)
+      });
+    }
+
+    return options;
+  }
+
+  onTechnologieChange(event: any) {
+    const technologieObj = event.value;
+    if (technologieObj && technologieObj.niveaux) {
+      this.niveauxPourTechnologieChoisie = technologieObj.niveaux.map((niveau: any) => ({ label: niveau, value: niveau }));
+    } else {
+        this.niveauxPourTechnologieChoisie = [];
+    }
+}
 
   ecouterChangements(indiceLigne: number): void {
     const ligne = this.rows.at(indiceLigne) as FormGroup;
@@ -91,12 +124,12 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
   }
 
   get rows(): FormArray {
-      return this.qcmFrom.get('rows') as FormArray;
+      return this.qcmForm.get('rows') as FormArray;
   }
 
   createRow(): FormGroup {
     return this.formBuilder.group({
-      categorie: ['', Validators.required],
+      categorie: [''],
       technologie: ['', Validators.required],
       niveau: ['', Validators.required],
       nbreQuestion: ['', Validators.required]
@@ -104,11 +137,26 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
   }
 
   addRow(): void {
-    if(!this.qcmFrom.get('rows')?.hasError('duplicateRows')) {
+    const rows = this.qcmForm.get('rows') as FormArray;
+    const lastGroup = rows.at(rows.length - 1) as FormGroup;
+    const technologieObj  = lastGroup.get('technologie')?.value;
+    const niveauValue = lastGroup.get('niveau')?.value;
+    const nbreQuestion = lastGroup.get('nbreQuestion')?.value
+    if(technologieObj && niveauValue && nbreQuestion ) {
+      const technologieValue = technologieObj.technologie;
+      console.log('Technologie du dernier row:', technologieValue);
+      console.log('Niveau du dernier row:', niveauValue);
+
+      const techObj = this.optionsTechnoNiveau.find(tech => tech.technologie === technologieValue);
+      if (techObj) {
+          const index = techObj.niveaux.indexOf(niveauValue);
+          if (index > -1) {
+              techObj.niveaux.splice(index, 1);
+          }
+      }
+
       this.rows.push(this.createRow());
       this.ecouterChangements(this.rows.length - 1);
-    } else {
-      console.error('Combinaison de filtre déjà existante');
     }
   }
 
@@ -119,11 +167,11 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
   }
 
   submitQcm(): void {
-    if(this.qcmFrom.get('rows')?.hasError('duplicateRows')) {
+    if(this.qcmForm.get('rows')?.hasError('duplicateRows')) {
       console.error('Combinaison de filtre déjà existante');
       return;
     }
-    const formData = this.qcmFrom.value;
+    const formData = this.qcmForm.value;
     console.log(formData);
     const allFilteredQuestion: FilteredQuestionsData[] = [];
     let grandTotalPoints  = 0;
@@ -162,20 +210,20 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
        const newQcmId = response.id;
           if (typeof newQcmId === 'number'){
             console.log(typeof newQcmId === 'number');
+            const allQuestionIds: number[] = [];
             allFilteredQuestion.forEach(data => {
               data.questions.forEach(question => {
                 if (question.id){
-                  this.qcmService.addQuestionToQcm(newQcmId, question.id).subscribe(
-                    resp => {
-                      console.log('Question ajoutée avec succès:', resp);
-                    },
-                    error => {
-                      console.error('Erreur lors de l\'ajout de la question:', error);
-                    }
-                  )
+                  allQuestionIds.push(question.id);
                 }
               });
           });
+          this.qcmService.addQuestionToQcm(newQcmId, allQuestionIds).subscribe((resp: any) => {
+            console.log('Questions ajoutées avec sucés: ', resp);
+          },
+          (error: any) => {
+            console.error('Erreur lors de l\'ajout des questions:', error)
+          })
           }
        console.log('Données du QCM envoyées avec succès!', response);
      },
@@ -191,16 +239,6 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-  }
-
-  hasDuplicateRows(controlArray: AbstractControl): {[s: string]: boolean} | null {
-    const rows = controlArray.value as Array<any>;
-    const uniqueSet = new Set(
-      rows.map(row => `${row.categorie.name}-${row.technologie.name}-${row.niveau.name}`)
-    )
-    if(uniqueSet.size !== rows.length)
-      return { duplicateRows: true };
-    return null;
   }
 
   ngOnDestroy(): void {

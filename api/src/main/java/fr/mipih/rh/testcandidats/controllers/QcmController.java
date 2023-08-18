@@ -1,14 +1,17 @@
 package fr.mipih.rh.testcandidats.controllers;
 
-import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
 import fr.mipih.rh.testcandidats.services.QcmService;
@@ -34,7 +37,16 @@ public class QcmController {
 
 	@PostMapping("/add-question")
 	public ResponseEntity<Void> addQuestionToQcm(@RequestBody AddQuestionToQcmDto request) {
-		qcmService.addQuestionToQcm(request.getQcmId(), request.getQuestionId());
+		Long qcmId = request.getQcmId();
+		for(Long questionId: request.getQuestionIds()) {
+			qcmService.addQuestionToQcm(qcmId, questionId);			
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/all")
+	public ResponseEntity<List<QcmDto>> getAllQcm() {
+		List<QcmDto> qcms = qcmService.getAllQcms();
+		return new ResponseEntity<>(qcms, HttpStatus.OK);
 	}
 }

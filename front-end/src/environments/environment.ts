@@ -20,4 +20,5 @@ const environment = {
   addQcm: 'http://localhost:8080/qcm/add',
   deleteQcm: 'http://localhost:8080/qcm/delete/',
   addQuestionToQcm:'http://localhost:8080/qcm/add-question',
+  getAllQcms: 'http://localhost:8080/qcm/all',
 }

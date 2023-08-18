@@ -1,31 +1,36 @@
 <section class="create-qcm mt-8">
     <p-fieldset legend="Créer un nouveau Qcm">
-      <form [formGroup]="qcmFrom">
+      <form [formGroup]="qcmForm">
         <span class="p-float-label">
-          <input pInputText id="qcmName" formControlName="nom" />
+          <input pInputText id="qcmName" formControlName="nom" [class.ng-invalid]="qcmNameExists$ | async" [class.ng-dirty]="qcmNameExists$ | async"/>
+          <div *ngIf="qcmNameExists$ | async" class="error">Ce nom existe déjà</div>
           <label htmlFor="qcmName">Nom du Qcm</label>
         </span>
         <div formArrayName="rows" *ngFor="let row of rows.controls; let i = index">
-          <div *ngIf="qcmFrom.get('rows')?.hasError('duplicateRows')">
-            Une combinaison de filtres est dupliquée!
-          </div>
           <div [formGroupName]="i" class="flex align-items-center justify-content-evenly m-4">
+
             <span class="p-float-label">
-              <p-dropdown formControlName="categorie" [options]="categories"  optionLabel="name" inputId="categories" placeholder="Sélectionner une catégorie" [style]="{'width':'100%'}"></p-dropdown>
-              <label for="categories">Selectionner une catégorie</label>
-            </span>
-            <span class="p-float-label">
-              <p-dropdown formControlName="technologie" [options]="technologies" optionLabel="name" inputId="technologie" placeholder="Sélectionner une technologie" [style]="{'width':'100%'}"></p-dropdown>
+              <p-dropdown formControlName="technologie" [options]="optionsTechnoNiveau" optionLabel="technologie" inputId="technologie" placeholder="Sélectionner une technologie" [style]="{'width':'100%'}" (onChange)="onTechnologieChange($event)"></p-dropdown>
               <label for="technologie">Selectionner une technologie</label>
             </span>
-              <span class="p-float-label">
-              <p-dropdown formControlName="niveau" [options]="niveaux" optionLabel="name" inputId="niveau" placeholder="Sélectionner un niveau" [style]="{'width':'100%'}"></p-dropdown>
-              <label for="niveau">Selectionner un niveau</label>
-            </span>
-              <span class="p-float-label">
-              <p-dropdown formControlName="nbreQuestion" [options]="nbreQuestion" optionLabel="name" inputId="nbreQuestion" placeholder="Choisir un nombre de question" [style]="{'width':'100%'}"></p-dropdown>
-              <label for="nbreQuestion">Choisir un nombre de question</label>
-            </span>
+            <div [style]="{'width':'250px'}">
+              <span class="p-float-label"  *ngIf="row.get('technologie')?.value">
+                <p-dropdown formControlName="niveau" [options]="niveauxPourTechnologieChoisie" inputId="niveau" placeholder="Sélectionner un niveau" [style]="{'width':'100%'}"></p-dropdown>
+                <label for="niveau">Selectionner un niveau</label>
+              </span>
+            </div>
+            <div [style]="{'width':'250px'}">
+            <span class="p-float-label" *ngIf="row.get('technologie')?.value && row.get('niveau')?.value">
+                <p-dropdown formControlName="categorie" [options]="categories"  optionLabel="name" inputId="categories" placeholder="Sélectionner une catégorie" [style]="{'width':'100%'}"></p-dropdown>
+                <label for="categories">Selectionner une catégorie</label>
+              </span>
+            </div>
+            <div [style]="{'width':'250px'}">
+            <span class="p-float-label" *ngIf="row.get('technologie')?.value && row.get('niveau')?.value">
+                <p-dropdown formControlName="nbreQuestion" [options]="nbreQuestion" optionLabel="name" inputId="nbreQuestion" placeholder="Choisir un nombre de question" [style]="{'width':'100%'}"></p-dropdown>
+                <label for="nbreQuestion">Choisir un nombre de question</label>
+              </span>
+            </div>
           </div>
         </div>
         <div class="card flex justify-content-between">
@@ -42,5 +47,4 @@
       </form>
     </p-fieldset>
   </section>
-  
-  
+

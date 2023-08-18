@@ -15,6 +15,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormatEnumPipe } from './pipes/FormatEnum/format-enum-pipe';
 import { DividerModule } from 'primeng/divider';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
     SelectButtonModule,
     DividerModule,
     TabMenuModule,
+    SidebarModule,
   ],
   exports: [
     CommonModule,
@@ -55,6 +57,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
     SelectButtonModule,
     DividerModule,
     TabMenuModule,
+    SidebarModule,
   ]
 })
 export class ShareModule { }

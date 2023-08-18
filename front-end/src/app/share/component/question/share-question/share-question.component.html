@@ -62,13 +62,13 @@
           </div>
           <h3>Les paramètres :</h3>
           <div class="details-question">
-            <p>niveau : {{questionDto.niveau | formatEnum}}</p>
-            <p>Catégorie : {{questionDto.categorie | formatEnum}}</p>
+            <p *ngIf="questionDto.niveau">niveau : {{questionDto.niveau | formatEnum}}</p>
+            <p *ngIf="questionDto.categorie">Catégorie : {{questionDto.categorie | formatEnum}}</p>
 
             <p>nombre de point : {{questionDto.point}} points</p>
 
             <p>Temps : {{questionDto.temps}} secondes</p>
-            <p>Technologie : {{questionDto.technologie | formatEnum}}</p>
+            <p *ngIf="questionDto.technologie">Technologie : {{questionDto.technologie | formatEnum}}</p>
           </div>
           <h3>Les réponses :</h3>
         <div class="reponses" *ngFor="let reponse of questionDto.reponses">

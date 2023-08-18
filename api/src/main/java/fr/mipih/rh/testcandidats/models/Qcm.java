@@ -1,9 +1,11 @@
 package fr.mipih.rh.testcandidats.models;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,17 +18,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "QCM")
-@Data
-@EqualsAndHashCode(exclude = "questions")
-
 public class Qcm {
 
 	@Id
@@ -48,7 +51,20 @@ public class Qcm {
 	Set<Entretien> entretiens = new HashSet<>();
 	
 	@ManyToMany(mappedBy = "qcms")
-	@JsonIgnore
 	Set<Question> questions = new HashSet<>();
 
+	@Override
+    public int hashCode() {
+        return Objects.hash(id, nom, temps, point);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Qcm other = (Qcm) obj;
+        return Objects.equals(id, other.id);
+    }
 }

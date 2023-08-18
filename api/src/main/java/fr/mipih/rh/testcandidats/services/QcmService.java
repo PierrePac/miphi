@@ -1,32 +1,35 @@
 package fr.mipih.rh.testcandidats.services;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
-import fr.mipih.rh.testcandidats.models.Question;
-import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
+import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import fr.mipih.rh.testcandidats.mappers.QcmMapper;
+import fr.mipih.rh.testcandidats.mappers.QuestionMapper;
 import fr.mipih.rh.testcandidats.models.Qcm;
+import fr.mipih.rh.testcandidats.models.Question;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
+import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
 
 @Service
 public class QcmService {
 	
 	private final QcmRepository qcmRepository;
 	private final QcmMapper qcmMapper;
-
+	private final QuestionMapper questionMapper;
 	private final QuestionRepository questionRepository;
 	
 	@Autowired
-	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper, QuestionRepository questionRepository) {
+	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper, QuestionMapper questionMapper, QuestionRepository questionRepository) {
 		this.qcmRepository = qcmRepository;
 		this.qcmMapper = qcmMapper;
+		this.questionMapper = questionMapper;
 		this.questionRepository = questionRepository;
 	}
 	
@@ -63,6 +66,21 @@ public class QcmService {
 		qcm.getQuestions().add(question);
 		question.getQcms().add(qcm);
 		qcmRepository.save(qcm);
+	}
+	
+	public List<QcmDto> getAllQcms() {
+		List<Qcm> qcmList = qcmRepository.findAll();
+		return qcmList.stream()
+				.map(qcm -> {
+					QcmDto qcmDto = qcmMapper.toDto(qcm);
+					Set<Question> questions = qcm.getQuestions();
+					qcmDto.setQuestions(questions.stream().map(q -> {
+						QuestionDto questionDto = new QuestionDto();
+						questionDto.setId(q.getId());
+						return questionDto;
+					}).collect(Collectors.toList()));
+					return qcmDto;
+				}).collect(Collectors.toList());
 	}
 
 }

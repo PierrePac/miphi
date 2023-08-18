@@ -1,1 +1,14 @@
-<p>view-qcm works!</p>
+<div class="grid">
+  <div class="col-fixed" style="min-width:20vw">
+    <h1>Liste des Qcm</h1>
+    <ul>
+      <li *ngFor="let qcm of qcms" (click)="selectQcm(qcm)">
+        {{ qcm }}
+      </li>
+    </ul>
+  </div>
+  <div class="col qcm-content">
+    <h1>Detail Qcm</h1>
+    {{ selectedQcm }}
+  </div>
+</div>

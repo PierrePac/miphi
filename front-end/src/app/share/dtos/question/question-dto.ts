@@ -4,9 +4,9 @@ export interface QuestionDto {
   id?: number;
   temps: number;
   point: number;
-  question: string;
-  categorie: string;
-  technologie: string;
-  niveau: string;
+  question?: string;
+  categorie?: string;
+  technologie?: string;
+  niveau?: string;
   reponses?: ReponseDto[];
 }
