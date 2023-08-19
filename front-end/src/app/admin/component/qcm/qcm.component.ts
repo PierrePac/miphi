@@ -14,16 +14,16 @@ import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 export class QcmComponent implements OnInit {
   allQuestions$: Observable<QuestionDto[]>;
   toggleAddQcm: boolean = false;
-  qcms$!: Observable<QcmDto[]>;
+  allQcms$!: Observable<QcmDto[]>;
 
 
   constructor(private questionService: QuestionService,
               private qcmService: QcmService ) {
     this.allQuestions$ = this.questionService.questions$;
+    this.allQcms$ = this.qcmService.qcms$;
   }
   
   ngOnInit(): void {
-    this.qcms$ = this.qcmService.qcms$;
-    this.qcmService.getQcms();
+    this.qcmService.getQcms().subscribe();
   }
 }

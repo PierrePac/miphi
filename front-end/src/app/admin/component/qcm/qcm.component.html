@@ -1,13 +1,14 @@
 <div class="card flex justify-content-end mt-4 mr-4">
-    <button pButton pRipple class="p-button-success" *ngIf="!toggleAddQcm" (click)="toggleAddQcm = true">
-      <span>Ajouter un Qcm</span>
-      <i class="pi pi-plus ml-2"></i>
-    </button>
-    <button pButton pRipple class="p-button-danger" *ngIf="toggleAddQcm" (click)="toggleAddQcm = false">
-      <span>Voir les Qcm</span>
-      <i class="pi pi-minus ml-2"></i>
-    </button>
-  </div>
+  <button pButton pRipple class="p-button-success" *ngIf="!toggleAddQcm" (click)="toggleAddQcm = true">
+    <span>Ajouter un Qcm</span>
+    <i class="pi pi-plus ml-2"></i>
+  </button>
+  <button pButton pRipple class="p-button-danger" *ngIf="toggleAddQcm" (click)="toggleAddQcm = false">
+    <span>Voir les Qcm</span>
+    <i class="pi pi-minus ml-2"></i>
+  </button>
+</div>
 
-<app-create-qcm *ngIf="toggleAddQcm" [qcms$]="qcms$"></app-create-qcm>
-<app-view-qcm *ngIf="!toggleAddQcm"></app-view-qcm>
+
+<app-create-qcm *ngIf="toggleAddQcm" [qcms$]="allQcms$"></app-create-qcm>
+<app-view-qcm *ngIf="!toggleAddQcm" [qcms$]="allQcms$"></app-view-qcm>

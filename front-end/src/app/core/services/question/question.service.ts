@@ -35,7 +35,7 @@ export class QuestionService {
 
   getAllQuestions(): Observable<QuestionDto[]> {
     const sortQuestions = (questions: QuestionDto[]) =>
-    questions.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+      questions.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
 
     return this.httpClient.get<QuestionDto[]>(environment.GetAllQuestionUrl).pipe(
       map(questions => sortQuestions(questions)),

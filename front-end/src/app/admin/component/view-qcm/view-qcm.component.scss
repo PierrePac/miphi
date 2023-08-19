@@ -1,0 +1,8 @@
+.qcm-list {
+    
+}
+:host ::ng-deep {
+    .qcm-list .p-orderlist-controls{
+      display: none;
+    }
+  }

@@ -43,7 +43,6 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.optionsTechnoNiveau = this.createTechnoNiveauOptions();
     this.optionsNiveauArray.push([...this.optionsTechnoNiveau]);
-    console.log(this.optionsNiveauArray)
     if (!localStorage.getItem('questions_cache')) {
       this.subscriptions.push(this.questionService.loadAllQuestions().subscribe());
     }

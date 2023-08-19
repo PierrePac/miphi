@@ -16,11 +16,16 @@ import { FormatEnumPipe } from './pipes/FormatEnum/format-enum-pipe';
 import { DividerModule } from 'primeng/divider';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SidebarModule } from 'primeng/sidebar';
+import { OrderListModule } from 'primeng/orderlist';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SecondsToTimePipe } from './pipes/secondsToTime/seconds-to-time.pipe';
+
 
 @NgModule({
   declarations: [
     ShareQuestionComponent,
     FormatEnumPipe,
+    SecondsToTimePipe,
   ],
   imports: [
     CommonModule,
@@ -39,6 +44,8 @@ import { SidebarModule } from 'primeng/sidebar';
     DividerModule,
     TabMenuModule,
     SidebarModule,
+    OrderListModule,
+    DragDropModule,
   ],
   exports: [
     CommonModule,
@@ -58,6 +65,9 @@ import { SidebarModule } from 'primeng/sidebar';
     DividerModule,
     TabMenuModule,
     SidebarModule,
+    OrderListModule,
+    DragDropModule,
+    SecondsToTimePipe,
   ]
 })
 export class ShareModule { }
