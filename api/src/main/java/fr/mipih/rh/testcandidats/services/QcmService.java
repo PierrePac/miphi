@@ -1,9 +1,13 @@
 package fr.mipih.rh.testcandidats.services;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
+import fr.mipih.rh.testcandidats.models.QuestionQcm;
+import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +28,15 @@ public class QcmService {
 	private final QcmMapper qcmMapper;
 	private final QuestionMapper questionMapper;
 	private final QuestionRepository questionRepository;
+	private final QuestionQcmRepository questionQcmRepository;
 	
 	@Autowired
-	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper, QuestionMapper questionMapper, QuestionRepository questionRepository) {
+	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper, QuestionMapper questionMapper, QuestionRepository questionRepository, QuestionQcmRepository questionQcmRepository) {
 		this.qcmRepository = qcmRepository;
 		this.qcmMapper = qcmMapper;
 		this.questionMapper = questionMapper;
 		this.questionRepository = questionRepository;
+		this.questionQcmRepository = questionQcmRepository;
 	}
 	
 	public List<QcmDto> getAllQcm(){
@@ -57,15 +63,17 @@ public class QcmService {
 	}
 
 	@Transactional
-	public void addQuestionToQcm(Long qcmId, Long questionId) {
+	public void addQuestionToQcm(Long qcmId, Long questionId, int ordre) {
 		Qcm qcm = qcmRepository.findById(qcmId)
 				.orElseThrow(() -> new RuntimeException("Qcm not found with id: " + qcmId));
 		Question question = questionRepository.findById(questionId)
 				.orElseThrow(() -> new RuntimeException("Question not found with id: " + questionId));
 
-		qcm.getQuestions().add(question);
-		question.getQcms().add(qcm);
-		qcmRepository.save(qcm);
+		QuestionQcm questionQcm = new QuestionQcm();
+		questionQcm.setQcm(qcm);
+		questionQcm.setQuestion(question);
+		questionQcm.setOrdre(ordre);
+		questionQcmRepository.save(questionQcm);
 	}
 	
 	public List<QcmDto> getAllQcms() {
@@ -73,11 +81,13 @@ public class QcmService {
 		return qcmList.stream()
 				.map(qcm -> {
 					QcmDto qcmDto = qcmMapper.toDto(qcm);
-					Set<Question> questions = qcm.getQuestions();
-					qcmDto.setQuestions(questions.stream().map(q -> {
-						QuestionDto questionDto = new QuestionDto();
-						questionDto.setId(q.getId());
-						return questionDto;
+					Set<QuestionQcm> questionQcms = qcm.getQuestionQcms();
+					qcmDto.setQuestionQcms(questionQcms.stream().map(q -> {
+						QuestionQcmDto questionQcmDto = new QuestionQcmDto();
+						questionQcmDto.setQcmId(q.getQcm().getId());
+						questionQcmDto.setQuestionIds(Collections.singletonList(q.getQuestion().getId()));
+						questionQcmDto.setOrdre(q.getOrdre());
+						return questionQcmDto;
 					}).collect(Collectors.toList()));
 					return qcmDto;
 				}).collect(Collectors.toList());

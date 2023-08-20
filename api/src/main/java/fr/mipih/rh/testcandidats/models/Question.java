@@ -66,18 +66,22 @@ public class Question {
 	@Column(name = "technologie")
 	private Technologie technologie;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "question_qcm",
-			joinColumns = @JoinColumn(
-				name = "question_id", referencedColumnName = "id"
-			),
-			inverseJoinColumns = @JoinColumn(
-				name = "qcm_id", referencedColumnName = "id"
-			)
-	)
-	Set<Qcm> qcms = new HashSet<>();
-	
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JoinTable(
+//			name = "question_qcm",
+//			joinColumns = @JoinColumn(
+//				name = "question_id", referencedColumnName = "id"
+//			),
+//			inverseJoinColumns = @JoinColumn(
+//				name = "qcm_id", referencedColumnName = "id"
+//			)
+//	)
+//	Set<Qcm> qcms = new HashSet<>();
+
+	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<QuestionQcm> questionQcms = new HashSet<>();
+
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "question")
 	Set<Reponse> reponses = new HashSet<>();
 	

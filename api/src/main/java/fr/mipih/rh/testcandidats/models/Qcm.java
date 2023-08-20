@@ -50,8 +50,11 @@ public class Qcm {
 	@JoinColumn(name = "qcm_id", referencedColumnName = "id")
 	Set<Entretien> entretiens = new HashSet<>();
 	
-	@ManyToMany(mappedBy = "qcms")
-	Set<Question> questions = new HashSet<>();
+//	@ManyToMany(mappedBy = "qcms")
+//	Set<Question> questions = new HashSet<>();
+
+	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<QuestionQcm> questionQcms = new HashSet<>();
 
 	@Override
     public int hashCode() {
