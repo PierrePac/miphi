@@ -16,6 +16,6 @@ public class QcmDto {
 	private String nom;
 	private int point;
 	private int temps;
-	private List<QuestionQcmDto> questionQcms;
+	private List<QuestionQcmDto> questions;
 
 }

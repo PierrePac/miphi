@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, map } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
+import { QcmQuestionDto } from 'src/app/share/dtos/qcm/qcm-question-dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,7 +20,7 @@ export class QcmService {
     this.qcms$.subscribe(data => {
       this.qcms = data;
     });
-   }
+  }
 
   addQcm(qcmData: QcmDto): Observable<QcmDto> {
     return this.httpClient.post<QcmDto>(environment.addQcm, qcmData).pipe(
@@ -35,7 +36,7 @@ export class QcmService {
   getQcms(): Observable<QcmDto[]> {
     const sortQcm = (qcms: QcmDto[]) =>
     qcms.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
-    
+
     return this.httpClient.get<QcmDto[]>(environment.getAllQcms).pipe(
       map(qcms => sortQcm(qcms)),
       tap(sortedQcms => {
@@ -46,5 +47,9 @@ export class QcmService {
 
   getCurrentQcms(): QcmDto[] {
     return this.qcms;
+  }
+
+  updateQuestionsOrder(question: QcmQuestionDto[]): Observable<any> {
+    return this.httpClient.post(environment.updateOrdreQcmQuestion, question);
   }
 }

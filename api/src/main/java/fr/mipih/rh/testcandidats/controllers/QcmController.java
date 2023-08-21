@@ -1,8 +1,8 @@
 package fr.mipih.rh.testcandidats.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
+import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
 import fr.mipih.rh.testcandidats.services.QcmService;
 
@@ -36,7 +38,7 @@ public class QcmController {
 	}
 
 	@PostMapping("/add-question")
-	public ResponseEntity<Void> addQuestionToQcm(@RequestBody QuestionQcmDto request) {
+	public ResponseEntity<Void> addQuestionToQcm(@RequestBody AddQuestionToQcmDto request) {
 		Long qcmId = request.getQcmId();
 		int ordre = 0;
 		for(Long questionId: request.getQuestionIds()) {
@@ -50,5 +52,15 @@ public class QcmController {
 	public ResponseEntity<List<QcmDto>> getAllQcm() {
 		List<QcmDto> qcms = qcmService.getAllQcms();
 		return new ResponseEntity<>(qcms, HttpStatus.OK);
+	}
+	
+	@PostMapping("/update-order")
+	public ResponseEntity<List<QuestionQcmDto>> updateOrder(@RequestBody List<QuestionQcmDto> questionQcmDtos) {
+		List<QuestionQcmDto> updatedQuestions  = new ArrayList<>();
+		for(QuestionQcmDto questionQcmDto: questionQcmDtos) {
+			QuestionQcmDto updatedQuestion = qcmService.updateOrder(questionQcmDto);
+			updatedQuestions.add(updatedQuestion);
+		}
+		return new ResponseEntity<>(updatedQuestions, HttpStatus.OK);
 	}
 }

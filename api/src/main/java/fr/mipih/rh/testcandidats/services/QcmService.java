@@ -1,25 +1,26 @@
 package fr.mipih.rh.testcandidats.services;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
-import fr.mipih.rh.testcandidats.models.QuestionQcm;
-import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionDto;
+import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.mappers.QcmMapper;
 import fr.mipih.rh.testcandidats.mappers.QuestionMapper;
+import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
 import fr.mipih.rh.testcandidats.models.Qcm;
 import fr.mipih.rh.testcandidats.models.Question;
+import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
+import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class QcmService {
@@ -29,14 +30,16 @@ public class QcmService {
 	private final QuestionMapper questionMapper;
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
+	private final QuestionQcmMapper questionQcmMapper;
 	
 	@Autowired
-	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper, QuestionMapper questionMapper, QuestionRepository questionRepository, QuestionQcmRepository questionQcmRepository) {
+	public QcmService(QcmRepository qcmRepository, QcmMapper qcmMapper, QuestionMapper questionMapper, QuestionRepository questionRepository, QuestionQcmRepository questionQcmRepository, QuestionQcmMapper questionQcmMapper) {
 		this.qcmRepository = qcmRepository;
 		this.qcmMapper = qcmMapper;
 		this.questionMapper = questionMapper;
 		this.questionRepository = questionRepository;
 		this.questionQcmRepository = questionQcmRepository;
+		this.questionQcmMapper = questionQcmMapper;
 	}
 	
 	public List<QcmDto> getAllQcm(){
@@ -47,19 +50,24 @@ public class QcmService {
 	}
 	
 	public QcmDto saveQcm(QcmDto qcmDto) {
-		//return qcmMapper.toDto(qcmRepository.save(qcmMapper.toEntity(qcmDto)));
-		System.out.println("Avant conversion en entité: " + qcmDto.getNom());
-
 		Qcm qcmEntity = qcmMapper.toEntity(qcmDto);
-		System.out.println("Après conversion en entité: " + qcmEntity.getNom());
-
 		Qcm savedQcmEntity = qcmRepository.save(qcmEntity);
-		System.out.println("Après sauvegarde dans la BD: " + savedQcmEntity.getNom());
-
 		QcmDto resultDto = qcmMapper.toDto(savedQcmEntity);
-		System.out.println("Après conversion en DTO: " + resultDto.getNom());
-
 		return resultDto;
+	}
+	
+	public QuestionQcmDto updateOrder(QuestionQcmDto questionQcmDto) {
+	    Optional<QuestionQcm> questionQcmOpt = questionQcmRepository.findById(questionQcmDto.getId());
+	    
+	    if (questionQcmOpt.isPresent()) {
+	        QuestionQcm questionQcm = questionQcmOpt.get();
+	        questionQcm.setOrdre(questionQcmDto.getOrdre());
+	        questionQcmRepository.save(questionQcm);
+
+	        return questionQcmMapper.toDto(questionQcm);
+	    } else {
+	        throw new EntityNotFoundException("No QuestionQcm found with id: " + questionQcmDto.getId());
+	    }
 	}
 
 	@Transactional
@@ -81,11 +89,12 @@ public class QcmService {
 		return qcmList.stream()
 				.map(qcm -> {
 					QcmDto qcmDto = qcmMapper.toDto(qcm);
-					Set<QuestionQcm> questionQcms = qcm.getQuestionQcms();
-					qcmDto.setQuestionQcms(questionQcms.stream().map(q -> {
+					Set<QuestionQcm> questionQcms = qcm.getQuestions();
+					qcmDto.setQuestions(questionQcms.stream().map(q -> {
 						QuestionQcmDto questionQcmDto = new QuestionQcmDto();
+						questionQcmDto.setId(q.getId());
 						questionQcmDto.setQcmId(q.getQcm().getId());
-						questionQcmDto.setQuestionIds(Collections.singletonList(q.getQuestion().getId()));
+						questionQcmDto.setQuestionIds(q.getQuestion().getId());
 						questionQcmDto.setOrdre(q.getOrdre());
 						return questionQcmDto;
 					}).collect(Collectors.toList()));

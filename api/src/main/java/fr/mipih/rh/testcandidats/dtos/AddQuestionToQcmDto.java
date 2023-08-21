@@ -1,5 +1,7 @@
 package fr.mipih.rh.testcandidats.dtos;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuestionQcmDto {
+public class AddQuestionToQcmDto {
 	
-	private Long id;
-    private Long qcmId;
-    private Long questionIds;
-    private int ordre;
+	  private Long qcmId;
+	  private List<Long> questionIds;
+	  private int ordre;
+
 }

@@ -54,7 +54,7 @@ public class Qcm {
 //	Set<Question> questions = new HashSet<>();
 
 	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<QuestionQcm> questionQcms = new HashSet<>();
+	private Set<QuestionQcm> questions = new HashSet<>();
 
 	@Override
     public int hashCode() {

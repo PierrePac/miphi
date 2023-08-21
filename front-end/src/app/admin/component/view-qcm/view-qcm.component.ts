@@ -4,6 +4,9 @@ import { Observable, Subscription, combineLatest } from 'rxjs';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
+import { QuestionQcmDto } from 'src/app/share/dtos/question/question-qcm-dto';
+import { QcmQuestionDto } from 'src/app/share/dtos/qcm/qcm-question-dto';
+import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 
 @Component({
   selector: 'app-view-qcm',
@@ -14,14 +17,16 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
   @Input() qcms$!: Observable<QcmDto[]>;
   allQuestions$: Observable<QuestionDto[]>;
   qcms: QcmDto[] = [];
-  //selectedQcm: string | null = null;
   sidebarVisible: boolean = true;
   selectedQcm!: QcmDto;
   selectedQcmQuestions!: QuestionDto[];
+  questionsWithOrder: QuestionQcmDto[] = [];
+
 
   private subscription: Subscription = new Subscription();
 
-  constructor(private questionService: QuestionService,) {
+  constructor(private questionService: QuestionService,
+              private qcmService: QcmService) {
     this.allQuestions$ = this.questionService.questions$;
   }
 
@@ -30,12 +35,7 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
       this.qcms = data;
     });
     this.questionService.loadAllQuestions().subscribe();
-    console.log(this.allQuestions$)
   }
-
-  // selectQcm(qcm: string) {
-  //   this.selectedQcm = qcm;
-  // }
 
   loadQuestionsForQcm(qcm: any) {
     this.selectedQcm = qcm;
@@ -44,33 +44,44 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
 
   loadQuestions() {
     combineLatest([this.allQuestions$, this.qcms$])
-    .pipe(
-      map(([questions, qcms]) => {
-        const currentQcm = qcms.find(qcm => qcm.id === this.selectedQcm.id);
-        if (!currentQcm || !currentQcm.questions) return [];
-
-        const filteredQuestions = currentQcm.questions
-          .map(q => questions.find(ques => ques.id === q.id))
-          .filter(Boolean) as QuestionDto[];
-
-          filteredQuestions.sort((a, b) => {
-            if(a.technologie !== b.technologie && a.technologie && b.technologie) {
-              return a.technologie.localeCompare(b.technologie);
-            } 
-            if  (a.niveau !== b.niveau && a.niveau && b.niveau) {
-              return a.niveau.localeCompare(b.niveau);
-            } 
-            if (a.categorie && b.categorie) {
-              return a.categorie.localeCompare(b.categorie);
-            }
-            return 0;
+      .pipe(
+        map(([questions, qcms]) => {
+          const currentQcm = qcms.find(qcm => qcm.id === this.selectedQcm.id);
+          if (!currentQcm || !currentQcm.questions) return [];
+          const questionsWithOrder: QuestionQcmDto[] = (currentQcm.questions as unknown as QcmQuestionDto[])
+              .map(q => {
+                const matchingQuestion = questions.find(ques => ques.id === q.questionIds);
+                if (matchingQuestion) {
+                  return {
+                    id: q.id,
+                    ordre: q.ordre,
+                    question: matchingQuestion
+                  };
+                }
+                return null;
+              })
+            .filter(Boolean) as QuestionQcmDto[];
+              questionsWithOrder.sort((a, b) => a.ordre - b.ordre);
+              console.group(questionsWithOrder)
+            return questionsWithOrder;
           })
+        )
+        .subscribe(questionsWithOrder => {
+            this.questionsWithOrder = questionsWithOrder;
+        });
+  }
 
-        return filteredQuestions;
-        })
-    ).subscribe(questions => {
-      this.selectedQcmQuestions = questions || [];
-      console.log(this.selectedQcmQuestions);
+  onQuestionsReordered() {
+    this.questionsWithOrder.forEach((question, index) => {
+      question.ordre = index;
+    });
+
+    console.log(this.questionsWithOrder);
+
+    this.qcmService.updateQuestionsOrder(this.questionsWithOrder).subscribe(resp => {
+      console.log('ordres de questions mise à jour');
+    }, error => {
+      console.error('Erreur dans la mise à jour de l\'ordre des questions')
     });
   }
 

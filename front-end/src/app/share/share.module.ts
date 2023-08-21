@@ -19,7 +19,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { OrderListModule } from 'primeng/orderlist';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SecondsToTimePipe } from './pipes/secondsToTime/seconds-to-time.pipe';
-
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   declarations: [
@@ -46,6 +46,7 @@ import { SecondsToTimePipe } from './pipes/secondsToTime/seconds-to-time.pipe';
     SidebarModule,
     OrderListModule,
     DragDropModule,
+    InputSwitchModule,
   ],
   exports: [
     CommonModule,
@@ -68,6 +69,7 @@ import { SecondsToTimePipe } from './pipes/secondsToTime/seconds-to-time.pipe';
     OrderListModule,
     DragDropModule,
     SecondsToTimePipe,
+    InputSwitchModule,
   ]
 })
 export class ShareModule { }

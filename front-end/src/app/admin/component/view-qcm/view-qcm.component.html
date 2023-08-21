@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col-fixed" style="min-width:20vw">
     <div class="card flex justify-content-center">
-      <p-orderList class="qcm-list" [listStyle]="{ 'height': '100%' }" header="Liste des Qcm" filterBy="nom" filterPlaceholder="Filter by nom" [value]="qcms">
+      <p-orderList class="qcm-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Qcm" filterBy="nom" filterPlaceholder="Filter by nom" [value]="qcms">
           <ng-template let-qcm pTemplate="item">
               <div class="flex flex-column justify-content-center flex-wrap" (click)="loadQuestionsForQcm(qcm)">
                   <h3 class="mt-0 mb-0 flex align-items-center justify-content-center">{{ qcm.nom }}</h3>
@@ -9,21 +9,36 @@
                   <p class="mt-0 mb-0 flex align-items-center justify-content-center">point: {{ qcm.point }}</p>
               </div>
               <p-divider></p-divider>
-          </ng-template>
+            </ng-template>
       </p-orderList>
     </div>
   </div>
 
 
   <div class="col qcm-content">
-    <p-orderList [value]="selectedQcmQuestions" [listStyle]="{ 'max-height': '30rem' }" header="Products" [dragdrop]="true">
+    <p-orderList [value]="questionsWithOrder" [listStyle]="{ 'height': '100%' }" header="Questions" [dragdrop]="true" (onReorder)="onQuestionsReordered()">
       <ng-template let-question pTemplate="item">
         <div class="question-details">
-          <p>ID: {{question.id}}</p>
-          <p>Categorie: {{question.categorie}}</p>
-          <p>Technologie: {{question.technologie}}</p>
+          <div class="question">
+            <p>{{question?.question?.question}}</p>
+            
+          </div>
+          <p-fieldset legend="Details" [toggleable]="true" [collapsed]="true">
+            <div class="details flex flex-row justify-content-evenly flex-wrap">
+              <p *ngIf="question?.question?.niveau">niveau : {{ question?.question?.niveau }}</p>
+              <p *ngIf="question?.question?.categorie">Catégorie : {{ question?.question?.categorie }}</p>
+              <p>nombre de point : {{ question?.question?.point}} points</p>
+              <p>Temps : {{ question?.question?.temps}} secondes</p>
+              <p *ngIf="question?.question?.technologie">Technologie : {{ question?.question?.technologie }}</p>
+            </div>
+            <div class="reponses" *ngFor="let reponse of question?.question?.reponses">
+              <p *ngIf="reponse?.reponse" [ngClass]="{ 'classe-true': reponse?.correct, 'classe-false': !reponse?.correct }">{{reponse?.reponse}}</p>
+            </div>
+          </p-fieldset>
        </div>
-      </ng-template>
+       <p-divider></p-divider>
+    </ng-template>
+
     </p-orderList>
   </div>
 </div>
