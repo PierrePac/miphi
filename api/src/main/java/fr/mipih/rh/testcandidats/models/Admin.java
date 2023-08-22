@@ -22,13 +22,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @ToString
 public class Admin extends Personne {
-	
+
 	@Column(name = "motDePasse")
 	private String motDePasse;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "test_id", referencedColumnName = "id")
-	Set<Entretien> entretiens = new HashSet<>();
+	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Entretien> entretiens = new HashSet<>();
 
 	public Admin() {}
 }

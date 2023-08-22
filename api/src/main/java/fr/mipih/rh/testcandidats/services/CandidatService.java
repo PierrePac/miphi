@@ -1,5 +1,6 @@
 package fr.mipih.rh.testcandidats.services;
 
+import fr.mipih.rh.testcandidats.dtos.NewCandidatDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import fr.mipih.rh.testcandidats.models.Admin;
 import fr.mipih.rh.testcandidats.models.Candidat;
 import fr.mipih.rh.testcandidats.repositories.CandidatRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +57,17 @@ public class CandidatService {
 		candidatDto.setToken(null);
 		candidatDto.setRefreshToken(null);
 		save(candidatDto);
+	}
+
+	public CandidatDto ajoutCandidat(NewCandidatDto newCandidatDto) {
+		Optional<Candidat> doublon = candidatRepository.findByNomAndPrenom(newCandidatDto.getNom(), newCandidatDto.getPrenom());
+		if(doublon.isPresent()) {
+			throw new AppException("Candidat déjà présent", HttpStatus.BAD_REQUEST);
+		}
+
+		Candidat candidat = candidatMapper.ajouterCandidat(newCandidatDto);
+
+		candidatRepository.save(candidat);
+		return candidatMapper.toCandidatDto(candidat);
 	}
 }

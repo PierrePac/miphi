@@ -22,7 +22,7 @@ public class Candidat extends Personne {
 
 	@Column(name = "entretien_id")
 	Long entretienId;
-	
+
 	@OneToMany(mappedBy = "candidat", fetch = FetchType.EAGER)
 	private Set<ReponseCandidat> reponseCandidats;
 

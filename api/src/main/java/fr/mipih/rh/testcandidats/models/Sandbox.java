@@ -37,20 +37,19 @@ public class Sandbox {
 	@Column(name = "id", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "scr")
 	private String src;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "niveau")
 	private Niveau niveau;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "technologie")
 	private Technologie technologie;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "sandbox_id", referencedColumnName = "id")
-	Set<Entretien> entretiens = new HashSet<>();
+	@OneToMany(mappedBy = "sandbox", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Entretien> entretiens = new HashSet<>();
 
 }

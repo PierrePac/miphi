@@ -39,35 +39,31 @@ public class Qcm {
 
 	@Column(name = "nom")
 	private String nom;
-	
+
 	@Column(name = "temps")
 	private int temps;
-	
+
 	@Column(name = "point")
 	private int point;
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "qcm_id", referencedColumnName = "id")
-	Set<Entretien> entretiens = new HashSet<>();
-	
-//	@ManyToMany(mappedBy = "qcms")
-//	Set<Question> questions = new HashSet<>();
+
+	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Entretien> entretiens = new HashSet<>();
 
 	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<QuestionQcm> questions = new HashSet<>();
 
 	@Override
-    public int hashCode() {
-        return Objects.hash(id, nom, temps, point);
-    }
+	public int hashCode() {
+		return Objects.hash(id, nom, temps, point);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        Qcm other = (Qcm) obj;
-        return Objects.equals(id, other.id);
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Qcm other = (Qcm) obj;
+		return Objects.equals(id, other.id);
+	}
 }

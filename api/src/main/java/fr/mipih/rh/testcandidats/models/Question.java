@@ -44,39 +44,27 @@ public class Question {
 	@Column(name = "id", columnDefinition = "serial")
 	@Generated(GenerationTime.INSERT)
 	private Long id;
-	
+
 	@Column(name = "question")
 	private String question;
-	
+
 	@Column(name = "point")
 	private int point;
-	
+
 	@Column(name = "temps")
 	private int temps;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "categorie")
 	private Categorie categorie;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "niveau")
 	private Niveau niveau;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "technologie")
 	private Technologie technologie;
-	
-//	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JoinTable(
-//			name = "question_qcm",
-//			joinColumns = @JoinColumn(
-//				name = "question_id", referencedColumnName = "id"
-//			),
-//			inverseJoinColumns = @JoinColumn(
-//				name = "qcm_id", referencedColumnName = "id"
-//			)
-//	)
-//	Set<Qcm> qcms = new HashSet<>();
 
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<QuestionQcm> questionQcms = new HashSet<>();
@@ -84,24 +72,24 @@ public class Question {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "question")
 	Set<Reponse> reponses = new HashSet<>();
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "question_id", referencedColumnName = "id")
 	Set<ReponseCandidat> reponseCandidats = new HashSet<>();
-	
-	@Override
-    public int hashCode() {
-        return Objects.hash(id, question, point, temps, categorie, niveau, technologie);
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        Question other = (Question) obj;
-        return Objects.equals(id, other.id);
-    }
-	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, question, point, temps, categorie, niveau, technologie);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		Question other = (Question) obj;
+		return Objects.equals(id, other.id);
+	}
+
 }

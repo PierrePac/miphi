@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CandidatDto {
-	private Long id;
-	private String nom;
-	private String prenom;
-	private String role;
-	private String token;
-	private String refreshToken;
-	private Long entretienId;
+public class SandboxDto {
+
+    private Long id;
+    private String src;
+    private String categorie;
+    private String niveau;
+    private String technologie;
+
 }
