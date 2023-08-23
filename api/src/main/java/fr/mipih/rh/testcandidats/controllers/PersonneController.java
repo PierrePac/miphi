@@ -1,12 +1,11 @@
 package fr.mipih.rh.testcandidats.controllers;
 
 import java.net.URI;
+import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import fr.mipih.rh.testcandidats.config.UserAuthProvider;
 import fr.mipih.rh.testcandidats.dtos.AdminDto;
@@ -36,6 +35,12 @@ public class PersonneController {
     public ResponseEntity<CandidatDto> ajoutCandidat(@RequestBody NewCandidatDto newCandidatDto) {
         CandidatDto candidatDto = candidatService.ajoutCandidat(newCandidatDto);
         return ResponseEntity.created(URI.create("/personne/" + candidatDto.getId())).body(candidatDto);
+    }
+
+    @GetMapping("get-candidat")
+    public ResponseEntity<List<CandidatDto>> getAllCandidat() {
+        List<CandidatDto> candidatDtos = candidatService.getAllCandidats();
+        return new ResponseEntity<>(candidatDtos, HttpStatus.OK);
     }
 
 

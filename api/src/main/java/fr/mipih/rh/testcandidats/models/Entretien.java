@@ -31,9 +31,8 @@ public class Entretien {
 	@Column(name = "dateEnd")
 	private Date dateEnd;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "entretien_id", referencedColumnName = "id")
-	Set<Candidat> candidats = new HashSet<>();
+	@OneToMany(mappedBy = "entretien", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Candidat> candidats = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "admin_id")

@@ -78,6 +78,11 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
 
     console.log(this.questionsWithOrder);
 
+    const transformedQuestions = this.questionsWithOrder.map(question => ({
+      id: question.id,
+      ordre: question.ordre
+    }));
+
     this.qcmService.updateQuestionsOrder(this.questionsWithOrder).subscribe(resp => {
       console.log('ordres de questions mise à jour');
     }, error => {

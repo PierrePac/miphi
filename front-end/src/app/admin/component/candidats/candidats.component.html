@@ -19,8 +19,8 @@
       <label htmlFor="prenom">prénom du candidat</label>
     </span>
     <div class="switch mt-4 flex">
-      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === false">Clické pour sélectionner un test</p>
-      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === true">Clické pour créer un test</p>
+      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === false">Clickez pour sélectionner un test</p>
+      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === true">Clickez pour créer un test</p>
       <p-inputSwitch (click)="EntretienToggle()" class="flex align-items-center justify-content-center"></p-inputSwitch>
     </div>
     <ng-container *ngIf="entretienSwitch === false">

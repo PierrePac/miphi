@@ -1,12 +1,11 @@
 package fr.mipih.rh.testcandidats.services;
 
-import fr.mipih.rh.testcandidats.dtos.NewCandidatDto;
+import fr.mipih.rh.testcandidats.dtos.*;
+import fr.mipih.rh.testcandidats.models.Entretien;
+import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import fr.mipih.rh.testcandidats.dtos.AdminDto;
-import fr.mipih.rh.testcandidats.dtos.CandidatDto;
-import fr.mipih.rh.testcandidats.dtos.CredentialsCandidatDto;
 import fr.mipih.rh.testcandidats.exceptions.AppException;
 import fr.mipih.rh.testcandidats.mappers.CandidatMapper;
 import fr.mipih.rh.testcandidats.models.Admin;
@@ -14,7 +13,9 @@ import fr.mipih.rh.testcandidats.models.Candidat;
 import fr.mipih.rh.testcandidats.repositories.CandidatRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +23,13 @@ public class CandidatService {
 
 	private final CandidatMapper candidatMapper;
 	private final CandidatRepository candidatRepository;
+	private final EntretienRepository entretienRepository;
 	
 	public CandidatDto loginCandidat(CredentialsCandidatDto credentialsDto) {
 		Candidat candidat = candidatRepository.findByNom(credentialsDto.nom())
 				.orElseThrow(() -> new AppException("Candidat inconnu", HttpStatus.NOT_FOUND));
 		if(candidat.getPrenom().equals(credentialsDto.prenom())) {
-			if(candidat.getEntretienId() != null) {
+			if(candidat.getEntretien() != null) {
 				return candidatMapper.toCandidatDto(candidat);
 			}
 			throw new AppException("Pas de test associé à ce candidat", HttpStatus.BAD_REQUEST);
@@ -64,10 +66,26 @@ public class CandidatService {
 		if(doublon.isPresent()) {
 			throw new AppException("Candidat déjà présent", HttpStatus.BAD_REQUEST);
 		}
+		Candidat candidat = new Candidat();
+		candidat.setNom(newCandidatDto.getNom());
+		candidat.setPrenom(newCandidatDto.getPrenom());
 
-		Candidat candidat = candidatMapper.ajouterCandidat(newCandidatDto);
+		Optional<Entretien> entretienOpt = entretienRepository.findById(newCandidatDto.getEntretienId());
+		if(entretienOpt.isPresent()) {
+			Entretien entretien = entretienOpt.get();
+			candidat.setEntretien(entretien);
+		} else {
+			throw new AppException("Entretien non trouvé", HttpStatus.NOT_FOUND);
+		}
 
 		candidatRepository.save(candidat);
 		return candidatMapper.toCandidatDto(candidat);
+	}
+
+	public List<CandidatDto> getAllCandidats() {
+		return candidatRepository.findAll()
+				.stream()
+				.map(candidatMapper::toCandidatDto)
+				.collect(Collectors.toList());
 	}
 }

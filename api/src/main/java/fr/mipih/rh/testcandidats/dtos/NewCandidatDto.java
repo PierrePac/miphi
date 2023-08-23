@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class NewCandidatDto {
 	private String nom;
 	private String prenom;
+	private Long entretienId;
 }

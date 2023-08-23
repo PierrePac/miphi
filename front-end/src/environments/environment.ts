@@ -22,4 +22,11 @@ const environment = {
   addQuestionToQcm:'http://localhost:8080/qcm/add-question',
   getAllQcms: 'http://localhost:8080/qcm/all',
   updateOrdreQcmQuestion: 'http://localhost:8080/qcm/update-order',
+
+  addSandbox: 'http://localhost:8080/sandbox/add',
+
+  addEntretien: 'http://localhost:8080/entretien/add',
+
+  addCandidat: 'http://localhost:8080/personne/add-candidat',
+  getAllCandidats: 'http://localhost:8080/personne/get-candidat',
 }
