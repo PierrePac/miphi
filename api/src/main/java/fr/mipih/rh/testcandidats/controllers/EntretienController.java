@@ -32,4 +32,14 @@ public class EntretienController {
         return new ResponseEntity<>(savedEntretien, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EntretienDto> getEntretienDetail(@PathVariable Long id) {
+        EntretienDto entretienDto = entretienService.findDetailById(id);
+        if(entretienDto != null) {
+            return new ResponseEntity<>(entretienDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(entretienDto, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 
@@ -13,21 +13,15 @@ export class HeaderComponent implements OnInit, OnDestroy{
   activeItem: any | undefined;
   items!: any[];
   private subscription!: Subscription
-  showMenu: boolean = true;
+  showMenu: boolean = false;
 
   constructor(private router: Router,
-              protected authService: AuthenticationService) {
-    this.router.events.subscribe(event => {
-      if(event instanceof NavigationEnd) {
-        this.showMenu = event.url !== '/';
-      }
-    });
-  }
+              protected authService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.subscription = this.authService.isLoggedIn.subscribe(isLoggedin => {
-      console.log("isLoggedIn subscription triggered", isLoggedin);
       this.items = this.getRoutesBasedOnRole();
+      this.showMenu = isLoggedin;
       this.activeItem = this.items[0];
     })
   }
@@ -49,7 +43,6 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   private adminRoutes = [
     { label: 'Gérer les QCM', routerLink: 'admin/qcm' },
-    //{ label: 'Visualiser les QCMs', routerLink: 'admin/view-qcm' },
     { label: 'Gérer les candidats', routerLink: 'admin/candidats' },
     { label: 'Gérer les questions', routerLink: 'admin/question' },
     { label: 'Ajouter un admin', routerLink: 'admin/add-admin' },
@@ -72,6 +65,8 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   logout() {
     sessionStorage.clear();
+    window.localStorage.clear();
+    this.authService.isLoggedIn.next(false);
     this.router.navigateByUrl('');
   }
 }

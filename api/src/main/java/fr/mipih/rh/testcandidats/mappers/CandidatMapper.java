@@ -9,10 +9,11 @@ import fr.mipih.rh.testcandidats.models.Candidat;
 
 @Mapper(componentModel = "spring")
 public interface CandidatMapper {
-	
+
+	@Mapping(target = "entretienId", source = "entretien.id")
 	CandidatDto toCandidatDto(Candidat candidat);
 	
-	@Mapping(target = "entretienId", ignore = true)
+	@Mapping(target = "entretien", ignore = true)
 	Candidat ajouterCandidat(NewCandidatDto newCandidatDto);
 	
 	Candidat toEntity(CandidatDto adminDto);

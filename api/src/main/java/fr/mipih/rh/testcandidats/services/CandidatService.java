@@ -51,6 +51,9 @@ public class CandidatService {
 	
 	public CandidatDto save(CandidatDto candidatDto) {
         Candidat candidat = candidatMapper.toEntity(candidatDto);
+		Optional<Entretien> entretien = entretienRepository.findById(candidatDto.getEntretienId());
+		if(entretien.isPresent())
+			candidat.setEntretien(entretien.get());
         candidat = candidatRepository.save(candidat);
         return candidatMapper.toCandidatDto(candidat);
     }

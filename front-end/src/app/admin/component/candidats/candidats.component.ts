@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter } from 'rxjs/operators';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { EntretienService } from 'src/app/core/services/entretien/entretien.service';
@@ -33,7 +33,11 @@ export class CandidatsComponent implements OnInit{
 
   ngOnInit(): void {
     this.fetchAllCandidats();
-    this.qcmService.getQcms().subscribe();
+    this.qcmService.getQcms().subscribe(data => {
+      console.log('Data from getQcms', data);
+    });
+    this.combinedData$.subscribe();
+    console.log(this.combinedData$)
     this.createCandidatForm = this.formBuilder.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
@@ -94,8 +98,8 @@ console.log(formValues)
 
       this.entretienService.createEntretien(entretienData).subscribe((entretien: EntretienDto) => {
         const candidatData = {
-          nom: formValues.nom,
-          prenom: formValues.prenom,
+          nom: formValues.nom.toLowerCase(),
+          prenom: formValues.prenom.toLowerCase(),
           entretienId: entretien.id
         };
         this.personneService.createCandidat(candidatData).subscribe(response => {
@@ -104,8 +108,8 @@ console.log(formValues)
       });
     } else if (formValues.entretien) { // Handle the case where only entretien is provided, and qcm & sandbox are not.
       const candidatData = {
-        nom: formValues.nom,
-        prenom: formValues.prenom,
+        nom: formValues.nom.toLowerCase(),
+        prenom: formValues.prenom.toLowerCase(),
         entretienId: formValues.entretien.id
       };
       this.personneService.createCandidat(candidatData).subscribe(response => {
@@ -135,8 +139,22 @@ console.log(formValues)
 
   fetchAllCandidats() {
     this.personneService.getCandidats().subscribe(candidats => {
+      console.log('Data from getCandidats', candidats);
       this.allCandidatsSubject$.next(candidats);
-    })
+    });
   }
+
+
+  public combinedData$ = combineLatest([this.allQcms$, this.allCandidats$]).pipe(
+    map(([qcms, candidats]) => {
+      return candidats.map(candidat => {
+        const qcm = qcms.find(q => q.id === candidat.entretienId);
+        return {
+          ...candidat,
+          qcmName: qcm ? qcm.nom : 'N/A'
+        };
+      });
+    })
+  );
 
 }

@@ -12,8 +12,8 @@ import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
   styleUrls: ['./qcm.component.scss']
 })
 export class QcmComponent implements OnInit {
-  allQuestions$: Observable<QuestionDto[]>;
   toggleAddQcm: boolean = false;
+  allQuestions$: Observable<QuestionDto[]>;
   allQcms$!: Observable<QcmDto[]>;
 
 
@@ -22,7 +22,7 @@ export class QcmComponent implements OnInit {
     this.allQuestions$ = this.questionService.questions$;
     this.allQcms$ = this.qcmService.qcms$;
   }
-  
+
   ngOnInit(): void {
     this.qcmService.getQcms().subscribe();
   }

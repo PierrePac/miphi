@@ -1,6 +1,7 @@
 package fr.mipih.rh.testcandidats.dtos;
 
 import java.util.Date;
+import java.util.List;
 
 import fr.mipih.rh.testcandidats.models.Admin;
 import fr.mipih.rh.testcandidats.models.Qcm;
@@ -17,11 +18,11 @@ import lombok.NoArgsConstructor;
 public class EntretienDto {
 
     private Long id;
-    private Admin admin;
+    private AdminDto admin;
     private Date date_end;
     private Date date_start;
-    private Qcm qcm_id;
-    private Sandbox sandbox_id;
-
+    private QcmDto qcm;;
+    private SandboxDto sandbox;
+    private List<QuestionQcmDto> questionQcms;
 
 }

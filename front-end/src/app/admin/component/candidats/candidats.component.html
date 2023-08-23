@@ -43,5 +43,24 @@
 </section>
 
 <section *ngIf="mode === 'view-candidats'">
-  <h1>List des candidats</h1>
+  <div class="grid">
+    <div class="col-fixed" style="min-width:20vw">
+      <h1>List des candidats</h1>
+      <div class="card flex justify-content-center">
+        <p-orderList class="candidat-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Candidats" filterBy="nom" filterPlaceholder="Filter by nom">
+          <ng-template let-item pTemplate="item">
+            <div class="flex flex-column justify-content-center flex-wrap">
+              <h3 class="mt-0 mb-0 flex align-items-center justify-content-center">{{ item.nom }}</h3>
+              <p class="mt-0 mb-0 flex align-items-center justify-content-center">{{ item.prenom }}</p>
+              <p class="mt-0 mb-0 flex align-items-center justify-content-center"> {{ item.qcmName }}</p>
+            </div>
+            <p-divider></p-divider>
+          </ng-template>
+        </p-orderList>
+      </div>
+    </div>
+    <div class="col">
+      <h1>Résultat</h1>
+    </div>
+  </div>
 </section>

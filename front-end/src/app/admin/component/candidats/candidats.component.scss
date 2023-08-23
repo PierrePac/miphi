@@ -34,3 +34,12 @@ input {
     outline: none;
   }
 }
+
+.qcm-list {
+  position: fixed;
+}
+:host ::ng-deep {
+    .candidat-list .p-orderlist-controls{
+      display: none;
+    }
+  }

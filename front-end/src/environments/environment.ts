@@ -26,6 +26,7 @@ const environment = {
   addSandbox: 'http://localhost:8080/sandbox/add',
 
   addEntretien: 'http://localhost:8080/entretien/add',
+  getEntretien: 'http://localhost:8080/entretien/',
 
   addCandidat: 'http://localhost:8080/personne/add-candidat',
   getAllCandidats: 'http://localhost:8080/personne/get-candidat',

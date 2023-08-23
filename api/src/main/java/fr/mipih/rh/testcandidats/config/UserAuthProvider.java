@@ -51,6 +51,8 @@ public class UserAuthProvider {
         	adminService.save(admin);
         } else if (userDto instanceof CandidatDto) {
         	CandidatDto candidat = (CandidatDto) userDto;
+			candidat.setRefreshToken(refreshToken);
+
         	candidatService.save(candidat);
         }
         
