@@ -92,8 +92,8 @@ console.log(formValues)
         },
         date_end: dateEndFormatted,
         date_start: date_start,
-        qcm_id: formValues.qcm,
-        sandbox_id: formValues.sandbox
+        qcm: formValues.qcm,
+        sandbox: formValues.sandbox
       };
 
       this.entretienService.createEntretien(entretienData).subscribe((entretien: EntretienDto) => {

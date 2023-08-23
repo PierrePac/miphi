@@ -5,10 +5,10 @@ export interface EntretienDto {
   };
   date_end: string;
   date_start: string;
-  qcm_id: {
+  qcm: {
       id: number;
   };
-  sandbox_id: {
+  sandbox: {
       id: number;
   };
 }
