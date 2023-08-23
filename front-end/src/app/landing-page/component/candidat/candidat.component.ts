@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EntretienService } from 'src/app/core/services/entretien/entretien.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { EntretienDto } from 'src/app/share/dtos/entretien/entretien-dto';
+import { FullEntretienDto } from 'src/app/share/dtos/entretien/full-entretien-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 
 
@@ -14,9 +16,10 @@ import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 })
 export class CandidatComponent implements OnInit, OnDestroy {
   private entretienSubscription?: Subscription;
-  private entretien?: EntretienDto;
+  private entretien?: FullEntretienDto;
   private questionSubscription?: Subscription;
   private question?: QuestionDto[];
+  private combinedSubscription?: Subscription;
 
 
   constructor(private router: Router,
@@ -27,7 +30,6 @@ export class CandidatComponent implements OnInit, OnDestroy {
     this.questionService.loadAllQuestions().subscribe();
     this.entretienSubscription = this.entretienService.entretien$.subscribe((data) => {
       if(data) {
-        console.log('entretien: ', data)
         this.entretien = data;
       }
     },
@@ -37,15 +39,35 @@ export class CandidatComponent implements OnInit, OnDestroy {
 
     this.questionSubscription = this.questionService.questions$.subscribe((data) => {
       if(data) {
-        console.log('question: ', data)
         this.question = data;
       }
     },
     (error) => {
       console.error('Echec de chargement des questions', error);
-    })
+    });
 
+    this.combinedSubscription = combineLatest([this.entretienService.entretien$, this.questionService.questions$])
+      .pipe(
+        map(([entretien, allQuestions]) => {
+          if (!entretien || !allQuestions) {
+            return null;
+          }
+          const questionsIds = entretien.qcm.questions.map((q: { id: number }) => q.id);
 
+          const filteredQuestions = allQuestions.filter(question => 
+            question.id !== undefined && questionsIds.includes(question.id)
+          );
+
+          return { entretien, filteredQuestions };
+        })
+      ).subscribe((combinedData) => {
+        if (combinedData) {
+          sessionStorage.setItem('entretien', JSON.stringify(combinedData));
+        }
+      },
+      (error) => {
+        console.error('Erreur dans combineLatest', error);
+      })
   }
 
   towardTest(){
@@ -55,6 +77,12 @@ export class CandidatComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.entretienSubscription) {
       this.entretienSubscription.unsubscribe();
+    }
+    if(this.questionSubscription) {
+      this.questionSubscription.unsubscribe();
+    }
+    if (this.combinedSubscription) {
+      this.combinedSubscription.unsubscribe();
     }
   }
 }

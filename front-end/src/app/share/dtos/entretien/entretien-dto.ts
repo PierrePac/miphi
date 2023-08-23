@@ -6,6 +6,7 @@ export interface EntretienDto {
   date_end: string;
   date_start: string;
   qcm: {
+      questions: any;
       id: number;
   };
   sandbox: {
