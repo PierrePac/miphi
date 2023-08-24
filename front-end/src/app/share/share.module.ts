@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import {ToastModule} from 'primeng/toast';
-import {InputNumberModule} from 'primeng/inputnumber';
+import { ToastModule } from 'primeng/toast';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -20,6 +20,7 @@ import { OrderListModule } from 'primeng/orderlist';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SecondsToTimePipe } from './pipes/secondsToTime/seconds-to-time.pipe';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     OrderListModule,
     DragDropModule,
     InputSwitchModule,
+    ToggleButtonModule,
   ],
   exports: [
     CommonModule,
@@ -70,6 +72,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     DragDropModule,
     SecondsToTimePipe,
     InputSwitchModule,
+    ToggleButtonModule,
   ]
 })
 export class ShareModule { }

@@ -3,16 +3,18 @@ package fr.mipih.rh.testcandidats.models;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @DiscriminatorValue("CANDIDAT")
 @Table(name = "CANDIDAT")
-@Data
+@Getter
+@Setter
 @SuperBuilder
 @EqualsAndHashCode(exclude = {"entretien", "reponseCandidats"})
 @ToString(exclude = {"entretien", "reponseCandidats"})

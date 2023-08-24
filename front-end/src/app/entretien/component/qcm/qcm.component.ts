@@ -15,6 +15,7 @@ export class QcmComponent implements OnInit {
   public candidat!: CandidatDto;
   currentIndex: number = 0;
   selectedAnswers: any[] = [];
+  showButton: boolean = true;
 
   constructor(private timerService: TimerService) { }
 
@@ -39,8 +40,6 @@ export class QcmComponent implements OnInit {
       this.candidat = JSON.parse(candidatDetails);
       const candidatId = this.candidat.id;
     }
-
-    console.log(storedAnswers)
   }
 
   nextQuestion() {
@@ -77,6 +76,7 @@ export class QcmComponent implements OnInit {
     const currentQuestionId = currentQuestion.id;
     if(currentQuestionId === undefined) return;
     const currentAnswerId = this.selectedAnswers[currentQuestionId];
+    console.log(currentAnswerId)
     if(currentAnswerId === undefined) return;
     if (currentAnswerId === undefined || currentQuestionId === undefined) return;
     const currentCandidatId = this.candidat.id;
@@ -101,6 +101,11 @@ export class QcmComponent implements OnInit {
     }
     sessionStorage.setItem('candidatAnswers', JSON.stringify(storedAnswers));
     this.nextQuestion();
+  }
+
+  ValidateQcm() {
+    console.log(sessionStorage.getItem('candidatAnswers'));
+    console.log('prout')
   }
 
 }
