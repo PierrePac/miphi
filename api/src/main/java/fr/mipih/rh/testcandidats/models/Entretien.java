@@ -4,12 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -18,6 +15,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "ENTRETIEN")
 @Data
+@EqualsAndHashCode(exclude = {"candidats", "admin", "qcm", "sandbox"})
+@ToString(exclude = {"candidats"})
 public class Entretien {
 
 	@Id
@@ -31,6 +30,7 @@ public class Entretien {
 	@Column(name = "dateEnd")
 	private Date dateEnd;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy = "entretien", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Candidat> candidats = new HashSet<>();
 

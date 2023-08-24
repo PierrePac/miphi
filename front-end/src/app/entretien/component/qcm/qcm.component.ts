@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TimerService } from 'src/app/core/services/timer/timer.service';
+import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
 import { FullEntretienDto } from 'src/app/share/dtos/entretien/full-entretien-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { ReponseCandidatDto } from 'src/app/share/dtos/reponse/reponse-candidat-dto';
@@ -11,6 +12,7 @@ import { ReponseCandidatDto } from 'src/app/share/dtos/reponse/reponse-candidat-
 })
 export class QcmComponent implements OnInit {
   public sessionData: { entretien: FullEntretienDto, filteredQuestions: QuestionDto[] } | null = { entretien: {}, filteredQuestions: [] };
+  public candidat!: CandidatDto;
   currentIndex: number = 0;
   selectedAnswers: any[] = [];
 
@@ -25,13 +27,41 @@ export class QcmComponent implements OnInit {
         this.timerService.initializeTimer(temps);
       }
     }
-    console.log(sessionStorage.getItem('candidatAnswers'))
+    let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') || '[]');
+    storedAnswers.forEach(answer => {
+      if(answer.reponse_candidat_id.question_id !== undefined && answer.reponse_id.id !== undefined) {
+        this.selectedAnswers[answer.reponse_candidat_id.question_id] = answer.reponse_id.id;
+      }
+    })
+
+    const candidatDetails = sessionStorage.getItem('personne');
+    if(candidatDetails){
+      this.candidat = JSON.parse(candidatDetails);
+      const candidatId = this.candidat.id;
+    }
+
+    console.log(storedAnswers)
   }
 
   nextQuestion() {
     if (this.currentIndex < (this.sessionData?.filteredQuestions?.length || 0) - 1) {
       this.currentIndex++;
     }
+    const currentQuestionId = this.sessionData?.filteredQuestions[this.currentIndex]?.id;
+    if(currentQuestionId !== undefined) {
+      const storedAnswer = this.getStoredAnswer(currentQuestionId);
+      if(storedAnswer !== undefined) {
+        this.selectedAnswers[currentQuestionId] = storedAnswer;
+      } else {
+        delete this.selectedAnswers[currentQuestionId];
+      }
+    }
+  }
+
+  getStoredAnswer(questionId: number): number | undefined {
+    const storedAnswer: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') || '[]');
+    const answer = storedAnswer.find(a => a.reponse_candidat_id.question_id ==questionId);
+    return answer?.reponse_id.id;
   }
 
   previousQuestion() {
@@ -49,10 +79,12 @@ export class QcmComponent implements OnInit {
     const currentAnswerId = this.selectedAnswers[currentQuestionId];
     if(currentAnswerId === undefined) return;
     if (currentAnswerId === undefined || currentQuestionId === undefined) return;
+    const currentCandidatId = this.candidat.id;
+    if(currentCandidatId === undefined) return;
 
     const reponse: ReponseCandidatDto = {
       reponse_candidat_id: {
-        candidat_id: 1,  // Remplacez par votre ID de candidat
+        candidat_id: currentCandidatId,  // Remplacez par votre ID de candidat
         question_id: currentQuestionId,
       },
       reponse_id: {

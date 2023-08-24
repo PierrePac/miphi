@@ -1,16 +1,13 @@
 package fr.mipih.rh.testcandidats.services;
 
 import fr.mipih.rh.testcandidats.dtos.*;
-import fr.mipih.rh.testcandidats.models.Entretien;
-import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
+import fr.mipih.rh.testcandidats.models.*;
+import fr.mipih.rh.testcandidats.repositories.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import fr.mipih.rh.testcandidats.exceptions.AppException;
 import fr.mipih.rh.testcandidats.mappers.CandidatMapper;
-import fr.mipih.rh.testcandidats.models.Admin;
-import fr.mipih.rh.testcandidats.models.Candidat;
-import fr.mipih.rh.testcandidats.repositories.CandidatRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -24,15 +21,21 @@ public class CandidatService {
 	private final CandidatMapper candidatMapper;
 	private final CandidatRepository candidatRepository;
 	private final EntretienRepository entretienRepository;
+	private final QcmRepository qcmRepository;
+	private final QuestionQcmRepository questionQcmRepository;
+	private final QuestionRepository questionRepository;
+	private final ReponseCandidatRepository reponseCandidatRepository;
 	
 	public CandidatDto loginCandidat(CredentialsCandidatDto credentialsDto) {
-		Candidat candidat = candidatRepository.findByNom(credentialsDto.nom())
-				.orElseThrow(() -> new AppException("Candidat inconnu", HttpStatus.NOT_FOUND));
-		if(candidat.getPrenom().equals(credentialsDto.prenom())) {
-			if(candidat.getEntretien() != null) {
-				return candidatMapper.toCandidatDto(candidat);
+		Optional<Candidat> candidatOpt = candidatRepository.findByNom(credentialsDto.nom());
+		if(candidatOpt.isPresent()){
+			Candidat candidat = candidatOpt.get();
+			if(candidat.getPrenom().equals(credentialsDto.prenom())) {
+				if (candidat.getEntretien() != null) {
+					return candidatMapper.toCandidatDto(candidat);
+				}
+				throw new AppException("Pas de test associé à ce candidat", HttpStatus.BAD_REQUEST);
 			}
-			throw new AppException("Pas de test associé à ce candidat", HttpStatus.BAD_REQUEST);
 		}
 		throw new AppException("Candidat Inconnu", HttpStatus.BAD_REQUEST);
 	}
@@ -82,6 +85,7 @@ public class CandidatService {
 		}
 
 		candidatRepository.save(candidat);
+		createReponseCandidat(newCandidatDto);
 		return candidatMapper.toCandidatDto(candidat);
 	}
 
@@ -90,5 +94,35 @@ public class CandidatService {
 				.stream()
 				.map(candidatMapper::toCandidatDto)
 				.collect(Collectors.toList());
+	}
+
+	public void createReponseCandidat(NewCandidatDto newCandidatDto){
+		Optional<Entretien> entretienOpt = entretienRepository.findById(newCandidatDto.getEntretienId());
+		if(entretienOpt.isPresent()) {
+			Entretien entretien = entretienOpt.get();
+			Optional<Qcm> qcmOpt = qcmRepository.findById(entretien.getQcm().getId());
+			if(qcmOpt.isPresent()) {
+				Qcm qcm = qcmOpt.get();
+				Optional<List<QuestionQcm>> questionsQcmOpt = questionQcmRepository.findAllByQcmId(qcm.getId());
+				if(questionsQcmOpt.isPresent()){
+					List<QuestionQcm> questionQcmList = questionsQcmOpt.get();
+					Optional<Candidat> candidatOpt = candidatRepository.findByNomAndPrenom(newCandidatDto.getNom(), newCandidatDto.getPrenom());
+					if(candidatOpt.isPresent()){
+						Candidat candidat = candidatOpt.get();
+						for (QuestionQcm questionQcm: questionQcmList) {
+							Optional<Question> questionOpt = questionRepository.findById(questionQcm.getQuestion().getId());
+							if (questionOpt.isPresent()){
+								Question question = questionOpt.get();
+								ReponseCandidat reponseCandidat = new ReponseCandidat();
+								reponseCandidat.setCandidat(candidat);
+								reponseCandidat.setQuestion(question);
+								reponseCandidatRepository.save(reponseCandidat);
+							}
+
+						}
+					}
+				}
+			}
+		}
 	}
 }

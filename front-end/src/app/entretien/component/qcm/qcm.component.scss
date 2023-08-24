@@ -3,3 +3,9 @@
   flex-flow: row nowrap;
   justify-content: space-evenly;
 }
+
+.form{
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: start;
+}

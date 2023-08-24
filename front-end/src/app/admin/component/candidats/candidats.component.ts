@@ -106,14 +106,13 @@ console.log(formValues)
           // Handle the response or errors from createCandidat here if necessary
         });
       });
-    } else if (formValues.entretien) { // Handle the case where only entretien is provided, and qcm & sandbox are not.
+    } else if (formValues.entretien) {
       const candidatData = {
         nom: formValues.nom.toLowerCase(),
         prenom: formValues.prenom.toLowerCase(),
         entretienId: formValues.entretien.id
       };
       this.personneService.createCandidat(candidatData).subscribe(response => {
-        // Handle the response or errors from createCandidat here if necessary
       });
     }
   }

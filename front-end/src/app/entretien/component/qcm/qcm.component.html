@@ -1,12 +1,14 @@
 <p-card *ngIf="sessionData?.filteredQuestions && sessionData!.filteredQuestions.length > 0"
   header="Question {{currentIndex + 1}} sur {{sessionData!.filteredQuestions.length}}"
-  [style]="{ width: '80vw', margin: '50px auto' }">
+  [style]="{ width: '80vw', margin: '50px auto', minHeight: '25vh' }">
   <p>
       {{sessionData!.filteredQuestions[currentIndex].question}}
   </p>
-  <form>
-    <p-checkbox [(ngModel)]="selectedAnswers[sessionData!.filteredQuestions[currentIndex].id ?? -1]" name="reponse" value="{{reponse.id}}" label="{{reponse.reponse}}" *ngFor="let reponse of sessionData!.filteredQuestions[currentIndex].reponses"></p-checkbox>
+
+  <form class="form">
+    <p-checkbox class="mt-3 ml-8" [(ngModel)]="selectedAnswers[sessionData!.filteredQuestions[currentIndex].id ?? -1]" name="reponse" value="{{reponse.id}}" label="{{reponse.reponse}}" *ngFor="let reponse of sessionData!.filteredQuestions[currentIndex].reponses"></p-checkbox>
   </form>
+  <p-divider></p-divider>
   <ng-template pTemplate="footer">
     <div class="buttons">
       <p-button label="Retour" icon="pi pi-arrow-left" *ngIf="currentIndex > 0" (click)="previousQuestion()"></p-button>
