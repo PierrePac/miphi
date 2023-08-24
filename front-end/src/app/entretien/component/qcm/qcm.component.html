@@ -1,1 +1,18 @@
-<p>qcm works!</p>
+<p-card *ngIf="sessionData?.filteredQuestions && sessionData!.filteredQuestions.length > 0"
+  header="Question {{currentIndex + 1}} sur {{sessionData!.filteredQuestions.length}}"
+  [style]="{ width: '80vw', margin: '50px auto' }">
+  <p>
+      {{sessionData!.filteredQuestions[currentIndex].question}}
+  </p>
+  <form>
+    <p-checkbox [(ngModel)]="selectedAnswers[sessionData!.filteredQuestions[currentIndex].id ?? -1]" name="reponse" value="{{reponse.id}}" label="{{reponse.reponse}}" *ngFor="let reponse of sessionData!.filteredQuestions[currentIndex].reponses"></p-checkbox>
+  </form>
+  <ng-template pTemplate="footer">
+    <div class="buttons">
+      <p-button label="Retour" icon="pi pi-arrow-left" *ngIf="currentIndex > 0" (click)="previousQuestion()"></p-button>
+      <p-button label="Passer" icon="pi pi-step-forward" [style]="{ 'margin-left': '.5em' }" (click)="nextQuestion()"></p-button>
+      <p-button label="Valider" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 != sessionData!.filteredQuestions.length" (click)="validateAnswer()"></p-button>
+      <p-button label="Valider le Qcm" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 == sessionData!.filteredQuestions.length"></p-button>
+    </div>
+  </ng-template>
+</p-card>

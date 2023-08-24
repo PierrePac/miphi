@@ -1,7 +1,7 @@
 export interface FullEntretienDto {
     id?: number;
-    admin: {
-      id: number | null;
+    admin?: {
+      id?: number | null;
       nom?: string;
       prenom?: string;
       refreshToken?: string;
@@ -10,8 +10,8 @@ export interface FullEntretienDto {
     };
     date_end?: string;
     date_start?: string;
-    qcm: {
-      id: number;
+    qcm?: {
+      id?: number;
       nom?: string;
       point?: number;
       temps?: number;

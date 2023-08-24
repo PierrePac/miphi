@@ -8,6 +8,8 @@ export interface EntretienDto {
   qcm: {
       questions: any;
       id: number;
+      point: number;
+      temps: number;
   };
   sandbox: {
       id: number;

@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { FullEntretienDto } from 'src/app/share/dtos/entretien/full-entretien-dto';
+import { TimerService } from '../../services/timer/timer.service';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +11,15 @@ import { AuthenticationService } from '../../services/authentication/authenticat
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy{
-
   activeItem: any | undefined;
   items!: any[];
   private subscription!: Subscription
   showMenu: boolean = false;
+  remainingTime: number = 0;
 
   constructor(private router: Router,
-              protected authService: AuthenticationService) { }
+              private authService: AuthenticationService,
+              private timerService: TimerService) { }
 
   ngOnInit(): void {
     this.subscription = this.authService.isLoggedIn.subscribe(isLoggedin => {
@@ -24,11 +27,9 @@ export class HeaderComponent implements OnInit, OnDestroy{
       this.showMenu = isLoggedin;
       this.activeItem = this.items[0];
     })
-  }
-
-  ngOnDestroy(): void {
-    console.log("isLoggedIn unsubscription triggered");
-    this.subscription.unsubscribe();
+    this.timerService.remainingTime.subscribe(time => {
+      this.remainingTime = time;
+    })
   }
 
   get isAdmin(): boolean {
@@ -37,8 +38,8 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
 
   get isCandidat(): boolean {
-      const personne = JSON.parse(sessionStorage.getItem("personne") || '{}');
-      return personne.role === 'CANDIDAT';
+    const personne = JSON.parse(sessionStorage.getItem("personne") || '{}');
+    return personne.role === 'CANDIDAT';
   }
 
   private adminRoutes = [
@@ -50,23 +51,29 @@ export class HeaderComponent implements OnInit, OnDestroy{
   ];
 
   private candidatRoutes = [
-
+    { label: 'Se déconnecter', command: (event: any) => this.logout() }
   ];
 
   getRoutesBasedOnRole(): any[] {
     if (this.isAdmin) {
-        return this.adminRoutes;
+      return this.adminRoutes;
     } else if (this.isCandidat) {
-        return this.candidatRoutes;
+      return this.candidatRoutes;
     } else {
-        return []; // pour un rôle non reconnu ou un utilisateur non connecté
+      return []; // pour un rôle non reconnu ou un utilisateur non connecté
     }
   }
 
   logout() {
+    this.timerService.resetTimer();
     sessionStorage.clear();
     window.localStorage.clear();
     this.authService.isLoggedIn.next(false);
     this.router.navigateByUrl('');
   }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }
+

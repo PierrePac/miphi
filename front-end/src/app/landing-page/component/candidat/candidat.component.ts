@@ -30,6 +30,7 @@ export class CandidatComponent implements OnInit, OnDestroy {
     this.questionService.loadAllQuestions().subscribe();
     this.entretienSubscription = this.entretienService.entretien$.subscribe((data) => {
       if(data) {
+        console.log(data)
         this.entretien = data;
       }
     },
@@ -54,7 +55,7 @@ export class CandidatComponent implements OnInit, OnDestroy {
           }
           const questionsIds = entretien.qcm.questions.map((q: { id: number }) => q.id);
 
-          const filteredQuestions = allQuestions.filter(question => 
+          const filteredQuestions = allQuestions.filter(question =>
             question.id !== undefined && questionsIds.includes(question.id)
           );
 
