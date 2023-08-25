@@ -4,7 +4,6 @@ import { Subscription, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EntretienService } from 'src/app/core/services/entretien/entretien.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
-import { EntretienDto } from 'src/app/share/dtos/entretien/entretien-dto';
 import { FullEntretienDto } from 'src/app/share/dtos/entretien/full-entretien-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 
@@ -27,10 +26,10 @@ export class CandidatComponent implements OnInit, OnDestroy {
               private questionService: QuestionService) { }
 
   ngOnInit(): void {
-    this.questionService.loadAllQuestions().subscribe();
+    this.questionService.loadAllQuestionsWr().subscribe();
     this.entretienSubscription = this.entretienService.entretien$.subscribe((data) => {
       if(data) {
-        console.log(data)
+        //console.log(data)
         this.entretien = data;
       }
     },
@@ -38,7 +37,7 @@ export class CandidatComponent implements OnInit, OnDestroy {
       console.error('Echec de chargement de l\'entretien', error);
     });
 
-    this.questionSubscription = this.questionService.questions$.subscribe((data) => {
+    this.questionSubscription = this.questionService.questionsWr$.subscribe((data) => {
       if(data) {
         this.question = data;
       }
@@ -47,7 +46,7 @@ export class CandidatComponent implements OnInit, OnDestroy {
       console.error('Echec de chargement des questions', error);
     });
 
-    this.combinedSubscription = combineLatest([this.entretienService.entretien$, this.questionService.questions$])
+    this.combinedSubscription = combineLatest([this.entretienService.entretien$, this.questionService.questionsWr$])
       .pipe(
         map(([entretien, allQuestions]) => {
           if (!entretien || !allQuestions) {

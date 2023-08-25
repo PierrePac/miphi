@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import fr.mipih.rh.testcandidats.dtos.ReponseDto;
-import fr.mipih.rh.testcandidats.mappers.QuestionMapper;
-import fr.mipih.rh.testcandidats.mappers.ReponseMapper;
 import fr.mipih.rh.testcandidats.models.Question;
 import fr.mipih.rh.testcandidats.models.Reponse;
 import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
@@ -75,6 +73,25 @@ public class QuestionController {
             List<ReponseDto> reponseDtosForQuestion = questionIdToReponseDtosMap.getOrDefault(questionDto.getId(), Collections.emptyList());
             questionDto.setReponses(reponseDtosForQuestion.toArray(new ReponseDto[0]));
         }
+		return new ResponseEntity<>(questionDtos, HttpStatus.OK);
+	}
+
+	@GetMapping("/all-wr")
+	public ResponseEntity<List<QuestionDto>> getAllQuestionsWithoutResponses() {
+		List<QuestionDto> questionDtos = questionService.getAllQuestions();
+
+		List<ReponseDto> allReponses = reponseService.getAllReponses();
+		Map<Long, List<ReponseDto>> questionIdToReponseDtosMap = allReponses.stream()
+				.collect(Collectors.groupingBy(ReponseDto::getQuestion_id));
+
+
+		for (QuestionDto questionDto : questionDtos) {
+			List<ReponseDto> reponseDtosForQuestion = questionIdToReponseDtosMap.getOrDefault(questionDto.getId(), Collections.emptyList());
+			for(ReponseDto reponseDto: reponseDtosForQuestion) {
+				reponseDto.setCorrect(false);
+			}
+			questionDto.setReponses(reponseDtosForQuestion.toArray(new ReponseDto[0]));
+		}
 		return new ResponseEntity<>(questionDtos, HttpStatus.OK);
 	}
 	

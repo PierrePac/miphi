@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class QuestionQcmDto {
 	
 	private Long id;
-    private Long qcmId;
-    private Long questionIds;
+    private QcmDto qcm;
+    private QuestionDto question;
     private int ordre;
 }

@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReponseCandidatReponseDto {
-    private ReponseCandidat reponseCandidat;
-    private Reponse reponse;
+    private ReponseCandidatDto reponseCandidat;
+    private ReponseDto reponse;
 }

@@ -3,9 +3,24 @@
   flex-flow: row nowrap;
   justify-content: space-evenly;
 }
+.question {
+  min-height: 75px;
+
+  strong{
+    margin-right: 15px;
+    text-decoration: underline;
+  }
+}
 
 .form{
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
+  height: 250px;
+}
+
+.validate-answer {
+  color: red;
+  font-size: small;
+
 }

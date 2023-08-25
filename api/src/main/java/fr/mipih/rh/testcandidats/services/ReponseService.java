@@ -12,27 +12,22 @@ import fr.mipih.rh.testcandidats.repositories.ReponseRepository;
 
 @Service
 public class ReponseService {
-	
+
 	private final ReponseRepository reponseRepository;
-	private final ReponseMapper reponseMapper;
-	
+
 	@Autowired
-	public ReponseService(ReponseRepository reponseRepository, ReponseMapper reponseMapper) {
+	public ReponseService(ReponseRepository reponseRepository) {
 		this.reponseRepository = reponseRepository;
-		this.reponseMapper = reponseMapper;
 	}
-	
+
 	public ReponseDto addReponse(ReponseDto reponseDto) {
-		return reponseMapper.toDto(reponseRepository.save(reponseMapper.toEntity(reponseDto)));
+		return ReponseMapper.toDto(reponseRepository.save(ReponseMapper.toEntity(reponseDto)));
 	}
-	
+
 	public List<ReponseDto> getAllReponses() {
-		return reponseRepository.findAll()
-				.stream()
-				.map(reponseMapper::toDto)
-				.collect(Collectors.toList());
+		return ReponseMapper.toDtoList(reponseRepository.findAll());
 	}
-	
+
 	public void deleteReponse(Long id) {
 		reponseRepository.deleteById(id);
 	}

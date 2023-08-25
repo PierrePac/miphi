@@ -13,6 +13,10 @@ export class QuestionService {
   questions$ = this.questionSubject.asObservable().pipe(
     shareReplay(1)
   );
+  private questionSubjectWr = new BehaviorSubject<QuestionDto[]>([]);
+  questionsWr$ = this.questionSubjectWr.asObservable().pipe(
+    shareReplay(1)
+  );
 
   constructor(private httpClient: HttpClient) { }
 
@@ -20,6 +24,15 @@ export class QuestionService {
     return this.getAllQuestions().pipe(
       tap(questions => {
       this.questionSubject.next(questions);
+      this.saveQuestionsToCache(questions);
+      })
+    );
+  }
+
+  loadAllQuestionsWr(): Observable<QuestionDto[]> {
+    return this.getAllQuestionsWr().pipe(
+      tap(questions => {
+      this.questionSubjectWr.next(questions);
       this.saveQuestionsToCache(questions);
       })
     );
@@ -38,6 +51,19 @@ export class QuestionService {
       questions.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
 
     return this.httpClient.get<QuestionDto[]>(environment.GetAllQuestionUrl).pipe(
+      map(questions => sortQuestions(questions)),
+      map(questions => {
+        this.questionSubject.next(questions);
+        return questions;
+      })
+    );
+  }
+
+  getAllQuestionsWr(): Observable<QuestionDto[]> {
+    const sortQuestions = (questions: QuestionDto[]) =>
+      questions.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+
+    return this.httpClient.get<QuestionDto[]>(environment.GetAllQuestionUrlWr).pipe(
       map(questions => sortQuestions(questions)),
       map(questions => {
         this.questionSubject.next(questions);

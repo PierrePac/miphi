@@ -16,7 +16,7 @@ public class ReponseDto {
 	private Long id;
 	private Long question_id;
 	@JsonIgnore
-	private Question question;
+	private QuestionDto question;
 	private String reponse;
 	private boolean correct;
 }

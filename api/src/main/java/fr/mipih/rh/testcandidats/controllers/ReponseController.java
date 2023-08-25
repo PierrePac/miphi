@@ -2,6 +2,9 @@ package fr.mipih.rh.testcandidats.controllers;
 
 import java.util.Optional;
 
+import fr.mipih.rh.testcandidats.dtos.QuestionDto;
+import fr.mipih.rh.testcandidats.mappers.QuestionMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,27 +26,25 @@ import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/reponse")
+@RequiredArgsConstructor
 public class ReponseController {
 	
 	private final ReponseService reponseService;
 	private final QuestionRepository questionRepository;
+	private final QuestionMapper questionMapper;
 	
-	@Autowired
-	public ReponseController(ReponseService reponseService, QuestionRepository questionRepository) {
-		this.reponseService = reponseService;
-		this.questionRepository = questionRepository;
-	}
+
 	
 	@PostMapping("/add")
 	@Transactional
 	public ResponseEntity<ReponseDto> addReponse(@RequestBody ReponseDto reponseDto) {
-		Optional<Question> optionalQuestion = questionRepository.findById(reponseDto.getQuestion_id());
+	    Optional<Question> optionalQuestion = questionRepository.findById(reponseDto.getQuestion_id());
 	    
 	    if (!optionalQuestion.isPresent()) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 
-	    reponseDto.setQuestion(optionalQuestion.get());
+	    reponseDto.setQuestion(questionMapper.toDto(optionalQuestion.get()));
 	    ReponseDto savedReponseDto = reponseService.addReponse(reponseDto);
 	    return new ResponseEntity<>(savedReponseDto, HttpStatus.CREATED);
 	}
@@ -55,8 +56,8 @@ public class ReponseController {
 	    if (!optionalQuestion.isPresent()) {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
-	    
-	    reponseDto.setQuestion(optionalQuestion.get());
+
+	    reponseDto.setQuestion(questionMapper.toDto(optionalQuestion.get()));
 	    ReponseDto savedReponseDto = reponseService.addReponse(reponseDto);
 	    return new ResponseEntity<>(savedReponseDto, HttpStatus.CREATED);
 	}

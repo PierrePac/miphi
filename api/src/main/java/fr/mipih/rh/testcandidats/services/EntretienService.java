@@ -1,20 +1,33 @@
 package fr.mipih.rh.testcandidats.services;
 
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
-import fr.mipih.rh.testcandidats.mappers.*;
-import fr.mipih.rh.testcandidats.models.*;
-import fr.mipih.rh.testcandidats.repositories.AdminRepository;
-import fr.mipih.rh.testcandidats.repositories.QcmRepository;
-import fr.mipih.rh.testcandidats.repositories.SandboxRepository;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.hibernate.Hibernate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import fr.mipih.rh.testcandidats.dtos.EntretienDto;
+import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.exceptions.AppException;
+import fr.mipih.rh.testcandidats.mappers.AdminMapper;
+import fr.mipih.rh.testcandidats.mappers.EntretienMapper;
+import fr.mipih.rh.testcandidats.mappers.QcmMapper;
+import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
+import fr.mipih.rh.testcandidats.mappers.SandboxMapper;
+import fr.mipih.rh.testcandidats.models.Admin;
+import fr.mipih.rh.testcandidats.models.Entretien;
+import fr.mipih.rh.testcandidats.models.Qcm;
+import fr.mipih.rh.testcandidats.models.QuestionQcm;
+import fr.mipih.rh.testcandidats.models.Sandbox;
+import fr.mipih.rh.testcandidats.repositories.AdminRepository;
 import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
+import fr.mipih.rh.testcandidats.repositories.QcmRepository;
+import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
+import fr.mipih.rh.testcandidats.repositories.SandboxRepository;
 import lombok.RequiredArgsConstructor;
-
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +39,7 @@ public class EntretienService {
     private final AdminRepository adminRepository;
     private final QcmMapper qcmMapper;
     private final QcmRepository qcmRepository;
+    private final QuestionQcmRepository questionQcmRepository;
     private final SandboxMapper sandboxMapper;
     private final SandboxRepository sandboxRepository;
     private final QuestionQcmMapper questionQcmMapper;
@@ -57,20 +71,29 @@ public class EntretienService {
         Optional<Entretien> entretienOpt = entretienRepository.findById(id);
         if (entretienOpt.isPresent()) {
             Entretien entretien = entretienOpt.get();
+            Hibernate.initialize(entretien.getQcm());
 
-            // Création d'un nouvel objet EntretienDto
             EntretienDto entretienDto = new EntretienDto();
-
-            // Remplissage de EntretienDto avec les données de l'objet Entretien
             entretienDto.setId(entretien.getId());
             entretienDto.setDate_end(entretien.getDateEnd());
             entretienDto.setDate_start(entretien.getDateStart());
 
-            // Conversion des objets Admin, Qcm et Sandbox en leurs DTO respectifs
-            // J'utilise des "mappers" hypothétiques ici pour cette conversion,
-            // vous devrez implémenter ces méthodes vous-même ou utiliser une bibliothèque de mapping.
             entretienDto.setAdmin(adminMapper.toAdminDto(entretien.getAdmin()));
             entretienDto.setQcm(qcmMapper.toDto(entretien.getQcm()));
+            // rechercher questionQcm
+           
+            Optional<List<QuestionQcm>> questionQcmListOpt = questionQcmRepository.findAllByQcmId(entretienDto.getQcm().getId());
+            if(questionQcmListOpt.isPresent()) {
+            	List<QuestionQcm> questionQcmList = questionQcmListOpt.get();
+                List<QuestionQcmDto> questionQcmDtoList = new ArrayList<>();
+                
+                for (QuestionQcm questionQcm : questionQcmList) {
+                    questionQcmDtoList.add(questionQcmMapper.toDto(questionQcm));
+                }
+                
+                entretienDto.setQuestionQcms(questionQcmDtoList);
+            }
+            //entretienDto.setQuestionQcms(questionQcmDto);
             entretienDto.setSandbox(sandboxMapper.toSandboxDto(entretien.getSandbox()));
 
             return entretienDto;

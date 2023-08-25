@@ -15,7 +15,7 @@ export class QcmComponent implements OnInit {
   public candidat!: CandidatDto;
   currentIndex: number = 0;
   selectedAnswers: any[] = [];
-  showButton: boolean = true;
+  validatedAnswer: boolean = false;
 
   constructor(private timerService: TimerService) { }
 
@@ -60,12 +60,24 @@ export class QcmComponent implements OnInit {
   getStoredAnswer(questionId: number): number | undefined {
     const storedAnswer: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') || '[]');
     const answer = storedAnswer.find(a => a.reponse_candidat_id.question_id ==questionId);
+    this.validatedAnswer = Boolean(answer?.reponse_id.id);
     return answer?.reponse_id.id;
   }
 
   previousQuestion() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
+    }
+    const currentQuestionId = this.sessionData?.filteredQuestions[this.currentIndex]?.id;
+    if(currentQuestionId !== undefined) {
+      const storedAnswer = this.getStoredAnswer(currentQuestionId);
+      if(storedAnswer !== undefined) {
+        this.selectedAnswers[currentQuestionId] = storedAnswer;
+      } else {
+        delete this.selectedAnswers[currentQuestionId];
+
+
+      }
     }
   }
 
@@ -76,7 +88,6 @@ export class QcmComponent implements OnInit {
     const currentQuestionId = currentQuestion.id;
     if(currentQuestionId === undefined) return;
     const currentAnswerId = this.selectedAnswers[currentQuestionId];
-    console.log(currentAnswerId)
     if(currentAnswerId === undefined) return;
     if (currentAnswerId === undefined || currentQuestionId === undefined) return;
     const currentCandidatId = this.candidat.id;
@@ -105,7 +116,6 @@ export class QcmComponent implements OnInit {
 
   ValidateQcm() {
     console.log(sessionStorage.getItem('candidatAnswers'));
-    console.log('prout')
   }
 
 }

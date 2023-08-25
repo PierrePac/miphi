@@ -115,6 +115,7 @@ console.log(formValues)
       this.personneService.createCandidat(candidatData).subscribe(response => {
       });
     }
+    this.createCandidatForm.reset();
   }
 
   EntretienToggle() {

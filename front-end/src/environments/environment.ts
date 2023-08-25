@@ -9,6 +9,7 @@ const environment = {
   candidatConnexionUrl: 'http://localhost:8080/login/candidat',
 
   GetAllQuestionUrl: 'http://localhost:8080/question/all',
+  GetAllQuestionUrlWr: 'http://localhost:8080/question/all-wr',
   addQuestion: 'http://localhost:8080/question/add',
   deleteQuestion: 'http://localhost:8080/question/delete/',
   modifyQuestion: 'http://localhost:8080/question/modify/',

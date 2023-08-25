@@ -21,7 +21,7 @@ public class EntretienDto {
     private AdminDto admin;
     private Date date_end;
     private Date date_start;
-    private QcmDto qcm;;
+    private QcmDto qcm;
     private SandboxDto sandbox;
     private List<QuestionQcmDto> questionQcms;
 

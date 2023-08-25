@@ -68,7 +68,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       ),
       startWith(false)
     );
-    
+
   }
 
   createTechnoNiveauOptions(): OptionDto[] {
@@ -99,17 +99,21 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
         return this.allQuestions$.pipe(
           map(questions => {
             let questionsFiltrees = questions;
-            if(row.technologie && row.technologie.name) {
-              questionsFiltrees = questionsFiltrees.filter(q => q.technologie === row.technologie.name);
+            if(row.technologie && row.technologie.technologie) {
+              questionsFiltrees = questionsFiltrees.filter(q => q.technologie === row.technologie.technologie);
+              console.log(questionsFiltrees)
+            }
+
+            if(row.niveau) {
+              questionsFiltrees = questionsFiltrees.filter(q => q.niveau === row.niveau);
+              console.log(questionsFiltrees)
             }
 
             if(row.categorie && row.categorie.name) {
               questionsFiltrees = questionsFiltrees.filter(q => q.categorie === row.categorie.name);
+              console.log(questionsFiltrees)
             }
 
-            if(row.niveau && row.niveau.name) {
-              questionsFiltrees = questionsFiltrees.filter(q => q.niveau === row.niveau.name);
-            }
 
             return questionsFiltrees.length
           })
@@ -159,7 +163,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
       }
       // Ajoutez la copie modifiée à optionsNiveauArray
       this.optionsNiveauArray.push(clonedOptions);
-        
+
       // Ajoutez un nouveau formulaire de groupe à la liste de lignes
       this.rows.push(this.createRow());
       this.ecouterChangements(this.rows.length - 1);
@@ -187,15 +191,22 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
     let grandTotalPoints  = 0;
     let grandTotalTime  = 0;
 
-    formData.rows.forEach((row: {categorie: { name: string }; technologie: { name: string }; niveau: { name: string }; nbreQuestion: {name: string};}) => {
+    formData.rows.forEach((row: {categorie: { name: string }; technologie: { technologie: string }; niveau: string ; nbreQuestion: {name: string};}) => {
       let filteredQuestions = [...this.latestQuestions];
 
-      if(row.technologie && row.technologie.name)
-        filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.technologie === row.technologie.name);
-      if(row.categorie && row.categorie.name)
+      if(row.technologie && row.technologie.technologie) {
+        filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.technologie === row.technologie.technologie);
+        console.log(filteredQuestions)
+      }
+      if(row.niveau) {
+        filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.niveau === row.niveau);
+        console.log(row.niveau)
+        console.log(filteredQuestions)
+      }
+      if(row.categorie && row.categorie.name) {
         filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.categorie === row.categorie.name);
-      if(row.niveau && row.niveau.name)
-          filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.niveau === row.niveau.name);
+        console.log(filteredQuestions)
+      }
 
       const suffledQuestions = this.shuffleArray(filteredQuestions);
       const selectedQuestions = suffledQuestions.slice(0, Number(row.nbreQuestion.name));
@@ -240,6 +251,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
        console.error('Erreur lors de l\'envoi des données du QCM', error);
       }
     )
+    this.qcmForm.reset();
   }
 
   shuffleArray(array: any[]): any[] {

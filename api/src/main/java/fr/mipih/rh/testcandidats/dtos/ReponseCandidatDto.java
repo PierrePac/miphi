@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReponseCandidatDto {
     private Long id;
-    private Candidat candidat;
-    private Question question;
+    private CandidatDto candidat;
+    private QuestionDto question;
 }

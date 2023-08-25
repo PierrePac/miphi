@@ -21,13 +21,13 @@ public class QuestionService {
 		this.questionRepository = questionRepository;
 		this.questionMapper = questionMapper;
 	}
-	
+
 	public QuestionDto saveQuestion(QuestionDto questionDto) {
-		return questionMapper.toDto(questionRepository.save(questionMapper.toEntity(questionDto)));
+		return QuestionMapper.toDto(questionRepository.save(QuestionMapper.toEntity(questionDto)));
 	}
-	
+
 	public List<QuestionDto> getAllQuestions() {
-		return questionMapper.toDtoList(questionRepository.findAll());
+		return QuestionMapper.toDtoList(questionRepository.findAll());
 	}
 
 	public void deleteQuestion(Long id) {

@@ -50,7 +50,7 @@ public class Qcm {
 	private Set<Entretien> entretiens = new HashSet<>();
 
 	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<QuestionQcm> questions = new HashSet<>();
+	private Set<QuestionQcm> questionsQcm = new HashSet<>();
 
 	@Override
 	public int hashCode() {
