@@ -61,6 +61,23 @@ public class ReponseMapper {
         }
         return reponses;
     }
+
+    public static ReponseDto toGetAllDto(Reponse reponse) {
+        if (reponse == null) {
+            return null;
+        }
+
+        ReponseDto dto = new ReponseDto();
+        dto.setId(reponse.getId());
+        dto.setReponse(reponse.getReponse());
+        dto.setCorrect(reponse.isCorrect());
+
+        if (reponse.getQuestion() != null) {
+            dto.setQuestion_id(reponse.getQuestion().getId());
+        }
+
+        return dto;
+    }
 }
 	
 

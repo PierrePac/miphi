@@ -27,7 +27,6 @@ public class QcmService {
 	
 	private final QcmRepository qcmRepository;
 	private final QcmMapper qcmMapper;
-	private final QuestionMapper questionMapper;
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
 	private final QuestionQcmMapper questionQcmMapper;

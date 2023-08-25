@@ -74,11 +74,12 @@ public class QcmMapper {
 
 	public Set<QuestionQcm> toQuestionQcmEntitySet(List<QuestionQcmDto> questionQcmDtos) {
 		Set<QuestionQcm> questionQcms = new HashSet<>();
-		for (QuestionQcmDto questionQcmDto : questionQcmDtos) {
-			QuestionQcm questionQcm = new QuestionQcm();
-			questionQcm.setId(questionQcmDto.getId());
-			// Ajoutez les autres champs ici...
-			questionQcms.add(questionQcm);
+		if (questionQcmDtos != null) {
+			for (QuestionQcmDto questionQcmDto : questionQcmDtos) {
+				QuestionQcm questionQcm = new QuestionQcm();
+				questionQcm.setId(questionQcmDto.getId());
+				questionQcms.add(questionQcm);
+			}
 		}
 		return questionQcms;
 	}

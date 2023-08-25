@@ -1,8 +1,10 @@
 package fr.mipih.rh.testcandidats.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.mipih.rh.testcandidats.models.Reponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,14 @@ public class ReponseService {
 	}
 
 	public List<ReponseDto> getAllReponses() {
-		return ReponseMapper.toDtoList(reponseRepository.findAll());
+		List<Reponse> reponses = reponseRepository.findAll();
+		List<ReponseDto> reponseDtos = new ArrayList<>();
+
+		for (Reponse reponse : reponses) {
+			reponseDtos.add(ReponseMapper.toGetAllDto(reponse));
+		}
+
+		return reponseDtos;
 	}
 
 	public void deleteReponse(Long id) {

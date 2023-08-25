@@ -49,20 +49,19 @@ public class QuestionController {
 		QuestionDto savedQuestionDto = questionService.saveQuestion(questionDto);
 		return new ResponseEntity<>(savedQuestionDto, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/all")
 	public ResponseEntity<List<QuestionDto>> getAllQuestions() {
 		List<QuestionDto> questionDtos = questionService.getAllQuestions();
-		
+
 		List<ReponseDto> allReponses = reponseService.getAllReponses();
 		Map<Long, List<ReponseDto>> questionIdToReponseDtosMap = allReponses.stream()
-			    .collect(Collectors.groupingBy(ReponseDto::getQuestion_id));
+				.collect(Collectors.groupingBy(ReponseDto::getQuestion_id));
 
-        
-        for (QuestionDto questionDto : questionDtos) {
-            List<ReponseDto> reponseDtosForQuestion = questionIdToReponseDtosMap.getOrDefault(questionDto.getId(), Collections.emptyList());
-            questionDto.setReponses(reponseDtosForQuestion.toArray(new ReponseDto[0]));
-        }
+		for (QuestionDto questionDto : questionDtos) {
+			List<ReponseDto> reponseDtosForQuestion = questionIdToReponseDtosMap.getOrDefault(questionDto.getId(), Collections.emptyList());
+			questionDto.setReponses(reponseDtosForQuestion.toArray(new ReponseDto[0]));
+		}
 		return new ResponseEntity<>(questionDtos, HttpStatus.OK);
 	}
 

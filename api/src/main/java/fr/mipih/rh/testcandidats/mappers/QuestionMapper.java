@@ -33,8 +33,10 @@ public class QuestionMapper {
 		questionDto.setTechnologie(question.getTechnologie() != null ? question.getTechnologie().name() : null);
 
 		List<ReponseDto> reponseDtos = new ArrayList<>();
-		for (Reponse reponse : question.getReponses()) {
-			reponseDtos.add(ReponseMapper.toDto(reponse));
+		if (question.getReponses() != null) {
+			for (Reponse reponse : question.getReponses()) {
+				reponseDtos.add(ReponseMapper.toDto(reponse));
+			}
 		}
 		questionDto.setReponses(reponseDtos.toArray(new ReponseDto[0]));
 
@@ -56,8 +58,10 @@ public class QuestionMapper {
 		question.setTechnologie(questionDto.getTechnologie() != null ? Technologie.valueOf(questionDto.getTechnologie()) : null);
 
 		List<Reponse> reponses = new ArrayList<>();
-		for (ReponseDto reponseDto : questionDto.getReponses()) {
-			reponses.add(ReponseMapper.toEntity(reponseDto));
+		if (questionDto.getReponses() != null) {
+			for (ReponseDto reponseDto : questionDto.getReponses()) {
+				reponses.add(ReponseMapper.toEntity(reponseDto));
+			}
 		}
 		question.setReponses(new HashSet<>(reponses));
 
@@ -70,6 +74,23 @@ public class QuestionMapper {
 			questionDtos.add(toDto(question));
 		}
 		return questionDtos;
+	}
+
+	public static QuestionDto toGetAllDto(Question question) {
+		if (question == null) {
+			return null;
+		}
+
+		QuestionDto questionDto = new QuestionDto();
+		questionDto.setId(question.getId());
+		questionDto.setQuestion(question.getQuestion());
+		questionDto.setPoint(question.getPoint());
+		questionDto.setTemps(question.getTemps());
+		questionDto.setCategorie(question.getCategorie() != null ? question.getCategorie().name() : null);
+		questionDto.setNiveau(question.getNiveau() != null ? question.getNiveau().name() : null);
+		questionDto.setTechnologie(question.getTechnologie() != null ? question.getTechnologie().name() : null);
+
+		return questionDto;
 	}
 }
 

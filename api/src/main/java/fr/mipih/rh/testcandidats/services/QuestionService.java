@@ -1,5 +1,6 @@
 package fr.mipih.rh.testcandidats.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,14 @@ public class QuestionService {
 	}
 
 	public List<QuestionDto> getAllQuestions() {
-		return QuestionMapper.toDtoList(questionRepository.findAll());
+		List<Question> questions = questionRepository.findAll();
+		List<QuestionDto> questionDtos = new ArrayList<>();
+
+		for (Question question : questions) {
+			questionDtos.add(QuestionMapper.toGetAllDto(question));
+		}
+
+		return questionDtos;
 	}
 
 	public void deleteQuestion(Long id) {
