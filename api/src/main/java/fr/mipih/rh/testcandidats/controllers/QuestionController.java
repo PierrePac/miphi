@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,24 +29,13 @@ import fr.mipih.rh.testcandidats.services.ReponseService;
 
 @RestController
 @RequestMapping("/question")
+@RequiredArgsConstructor
 public class QuestionController {
 
 	private final QuestionService questionService;
 	private final QuestionRepository questionRepository;
 	private final ReponseRepository reponseRepository;
 	private final ReponseService reponseService;
-	
-	@Autowired
-	public QuestionController(	QuestionService questionService, 
-								QuestionRepository questionRepository, 
-								ReponseRepository reponseRepository,
-								ReponseService reponseService)
-	{
-		this.questionService = questionService;
-		this.questionRepository = questionRepository;
-		this.reponseRepository = reponseRepository;
-		this.reponseService = reponseService;
-	}
 
 	@PostMapping("/add")
 	public ResponseEntity<QuestionDto> createQuestion(@RequestBody QuestionDto questionDto) {

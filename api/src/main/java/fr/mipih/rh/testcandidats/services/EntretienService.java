@@ -47,7 +47,7 @@ public class EntretienService {
     public EntretienDto findById(Long id) {
         Entretien entretien = entretienRepository.findById(id)
                 .orElseThrow(() -> new AppException("Entretien introuvable", HttpStatus.NOT_FOUND));
-        return entretienMapper.toEntretienDto(entretien);
+        return entretienMapper.toDto(entretien);
     }
 
     public EntretienDto save(EntretienDto entretienDto) {
@@ -57,14 +57,14 @@ public class EntretienService {
                 .orElseThrow(() -> new AppException("Sandbox introuvable", HttpStatus.NOT_FOUND));
         Qcm qcm = qcmRepository.findById(entretienDto.getQcm().getId())
                 .orElseThrow(() -> new AppException("Qcm introuvable", HttpStatus.NOT_FOUND));
-        Entretien entretien = entretienMapper.toEntretienEntity(entretienDto);
+        Entretien entretien = entretienMapper.toEntity(entretienDto);
         entretien.setDateEnd(entretienDto.getDate_end());
         entretien.setDateStart(new Date());
         entretien.setAdmin(admin);
         entretien.setQcm(qcm);
         entretien.setSandbox(sandbox);
         entretien = entretienRepository.save(entretien);
-        return entretienMapper.toEntretienDto(entretien);
+        return entretienMapper.toDto(entretien);
     }
 
     public EntretienDto findDetailById(Long id) {
