@@ -1,10 +1,7 @@
 package fr.mipih.rh.testcandidats.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -12,23 +9,24 @@ import org.hibernate.annotations.GenerationTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"qcm","question"})
 @Entity
 @Table(name = "QUESTION_QCM")
 public class QuestionQcm {
 
-    @Id
-    @Column(name = "id", columnDefinition = "serial")
-    @Generated(GenerationTime.INSERT)
-    private Long id;
+    @EmbeddedId
+    private QuestionQcmId questionQcmId;
 
+    @MapsId("id")
     @ManyToOne
-    @JoinColumn(name = "question_id")
-    private Question question;
-
-    @ManyToOne
-    @JoinColumn(name = "qcm_id")
+    @JoinColumn(name= "idQcm")
     private Qcm qcm;
 
+    @MapsId("id")
+    @ManyToOne
+    @JoinColumn(name= "idQuestion")
+    private Question question;
+
     @Column(name = "ordre")
-    private int ordre;
+    private Long ordre;
 }

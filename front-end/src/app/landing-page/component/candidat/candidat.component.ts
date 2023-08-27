@@ -29,7 +29,7 @@ export class CandidatComponent implements OnInit, OnDestroy {
     this.questionService.loadAllQuestionsWr().subscribe();
     this.entretienSubscription = this.entretienService.entretien$.subscribe((data) => {
       if(data) {
-        //console.log(data)
+        console.log(data)
         this.entretien = data;
       }
     },
@@ -39,6 +39,7 @@ export class CandidatComponent implements OnInit, OnDestroy {
 
     this.questionSubscription = this.questionService.questionsWr$.subscribe((data) => {
       if(data) {
+        //console.log(data)
         this.question = data;
       }
     },

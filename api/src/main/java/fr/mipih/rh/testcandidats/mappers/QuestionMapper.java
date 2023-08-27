@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import fr.mipih.rh.testcandidats.dtos.ReponseDto;
-import fr.mipih.rh.testcandidats.models.Reponse;
+import fr.mipih.rh.testcandidats.dtos.PropositionDto;
+import fr.mipih.rh.testcandidats.models.Proposition;
 import fr.mipih.rh.testcandidats.models.enums.Categorie;
 import fr.mipih.rh.testcandidats.models.enums.Niveau;
 import fr.mipih.rh.testcandidats.models.enums.Technologie;
-import org.mapstruct.Mapper;
 
 import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import fr.mipih.rh.testcandidats.models.Question;
@@ -32,13 +31,13 @@ public class QuestionMapper {
 		questionDto.setNiveau(question.getNiveau() != null ? question.getNiveau().name() : null);
 		questionDto.setTechnologie(question.getTechnologie() != null ? question.getTechnologie().name() : null);
 
-		List<ReponseDto> reponseDtos = new ArrayList<>();
-		if (question.getReponses() != null) {
-			for (Reponse reponse : question.getReponses()) {
-				reponseDtos.add(ReponseMapper.toDto(reponse));
+		List<PropositionDto> reponseDtos = new ArrayList<>();
+		if (question.getPropositions() != null) {
+			for (Proposition proposition : question.getPropositions()) {
+				reponseDtos.add(PropositionMapper.toDto(proposition));
 			}
 		}
-		questionDto.setReponses(reponseDtos.toArray(new ReponseDto[0]));
+		questionDto.setReponses(reponseDtos.toArray(new PropositionDto[0]));
 
 		return questionDto;
 	}
@@ -57,13 +56,13 @@ public class QuestionMapper {
 		question.setNiveau(questionDto.getNiveau() != null ? Niveau.valueOf(questionDto.getNiveau()) : null);
 		question.setTechnologie(questionDto.getTechnologie() != null ? Technologie.valueOf(questionDto.getTechnologie()) : null);
 
-		List<Reponse> reponses = new ArrayList<>();
+		List<Proposition> propositions = new ArrayList<>();
 		if (questionDto.getReponses() != null) {
-			for (ReponseDto reponseDto : questionDto.getReponses()) {
-				reponses.add(ReponseMapper.toEntity(reponseDto));
+			for (PropositionDto propositionDto : questionDto.getReponses()) {
+				propositions.add(PropositionMapper.toEntity(propositionDto));
 			}
 		}
-		question.setReponses(new HashSet<>(reponses));
+		question.setPropositions(new HashSet<>(propositions));
 
 		return question;
 	}

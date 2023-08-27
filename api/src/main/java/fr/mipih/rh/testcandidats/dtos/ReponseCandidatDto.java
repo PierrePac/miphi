@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReponseCandidatDto {
-    private Long id;
-    private CandidatDto candidat;
-    private QuestionDto question;
+    private Long idProposition;
+    private Long idCandidat;
 }

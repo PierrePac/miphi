@@ -3,6 +3,7 @@ package fr.mipih.rh.testcandidats.services;
 import fr.mipih.rh.testcandidats.dtos.*;
 import fr.mipih.rh.testcandidats.models.*;
 import fr.mipih.rh.testcandidats.repositories.*;
+import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -97,32 +98,31 @@ public class CandidatService {
 	}
 
 	public void createReponseCandidat(NewCandidatDto newCandidatDto){
-		Optional<Entretien> entretienOpt = entretienRepository.findById(newCandidatDto.getEntretienId());
-		if(entretienOpt.isPresent()) {
-			Entretien entretien = entretienOpt.get();
-			Optional<Qcm> qcmOpt = qcmRepository.findById(entretien.getQcm().getId());
-			if(qcmOpt.isPresent()) {
-				Qcm qcm = qcmOpt.get();
-				Optional<List<QuestionQcm>> questionsQcmOpt = questionQcmRepository.findAllByQcmId(qcm.getId());
-				if(questionsQcmOpt.isPresent()){
-					List<QuestionQcm> questionQcmList = questionsQcmOpt.get();
-					Optional<Candidat> candidatOpt = candidatRepository.findByNomAndPrenom(newCandidatDto.getNom(), newCandidatDto.getPrenom());
-					if(candidatOpt.isPresent()){
-						Candidat candidat = candidatOpt.get();
-						for (QuestionQcm questionQcm: questionQcmList) {
-							Optional<Question> questionOpt = questionRepository.findById(questionQcm.getQuestion().getId());
-							if (questionOpt.isPresent()){
-								Question question = questionOpt.get();
-								ReponseCandidat reponseCandidat = new ReponseCandidat();
-								reponseCandidat.setCandidat(candidat);
-								reponseCandidat.setQuestion(question);
-								reponseCandidatRepository.save(reponseCandidat);
-							}
-
-						}
-					}
-				}
-			}
-		}
+//		Optional<Entretien> entretienOpt = entretienRepository.findById(newCandidatDto.getEntretienId());
+//		if(entretienOpt.isPresent()) {
+//			Entretien entretien = entretienOpt.get();
+//			Optional<Qcm> qcmOpt = qcmRepository.findById(entretien.getQcm().getId());
+//			if(qcmOpt.isPresent()) {
+//				Qcm qcm = qcmOpt.get();
+//				Optional<List<QuestionQcm>> questionsQcmOpt = questionQcmRepository.findAllByQcmId(qcm.getId());
+//				if(questionsQcmOpt.isPresent()){
+//					List<QuestionQcm> questionQcmList = questionsQcmOpt.get();
+//					Optional<Candidat> candidatOpt = candidatRepository.findByNomAndPrenom(newCandidatDto.getNom(), newCandidatDto.getPrenom());
+//					if(candidatOpt.isPresent()){
+//						Candidat candidat = candidatOpt.get();
+//						for (QuestionQcm questionQcm: questionQcmList) {
+//							Optional<Question> questionOpt = questionRepository.findById(questionQcm.getQuestion().getId());
+//							if (questionOpt.isPresent()){
+//								Question question = questionOpt.get();
+//								ReponseCandidat reponseCandidat = new ReponseCandidat();
+//								reponseCandidat.setCandidat(candidat);
+//								reponseCandidatRepository.save(reponseCandidat);
+//							}
+//
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 }

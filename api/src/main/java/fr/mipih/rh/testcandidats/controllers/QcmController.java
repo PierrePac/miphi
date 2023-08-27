@@ -35,7 +35,7 @@ public class QcmController {
 	@PostMapping("/add-question")
 	public ResponseEntity<Void> addQuestionToQcm(@RequestBody AddQuestionToQcmDto request) {
 		Long qcmId = request.getQcmId();
-		int ordre = 0;
+		Long ordre = 0L;
 		for(Long questionId: request.getQuestionIds()) {
 			qcmService.addQuestionToQcm(qcmId, questionId, ordre);
 			ordre ++;

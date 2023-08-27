@@ -27,15 +27,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "ENTRETIEN")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"candidats", "admin", "qcm", "sandbox"})
-@ToString(exclude = {"candidats"})
+@EqualsAndHashCode()
+@ToString(exclude = {"candidats", "admin", "qcm", "sandbox"})
 public class Entretien {
 
 	@Id
@@ -49,7 +48,6 @@ public class Entretien {
 	@Column(name = "dateEnd")
 	private Date dateEnd;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "entretien", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Candidat> candidats = new HashSet<>();
 
@@ -58,7 +56,6 @@ public class Entretien {
 	private Admin admin;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
 	@JoinColumn(name = "qcm_id")
 	private Qcm qcm;
 

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import lombok.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -26,18 +27,15 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "QUESTION")
+@ToString(exclude = {"questionQcms", "reponseCandidats", "propositions"})
 public class Question {
 
 	@Id
@@ -67,29 +65,29 @@ public class Question {
 	private Technologie technologie;
 
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<QuestionQcm> questionQcms = new HashSet<>();
+	private Set<QuestionQcm> questionQcms;
 
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "question")
-	Set<Reponse> reponses = new HashSet<>();
+	Set<Proposition> propositions;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "question_id", referencedColumnName = "id")
-	Set<ReponseCandidat> reponseCandidats = new HashSet<>();
+	Set<ReponseCandidat> reponseCandidats;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, question, point, temps, categorie, niveau, technologie);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-		Question other = (Question) obj;
-		return Objects.equals(id, other.id);
-	}
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(id, question, point, temps, categorie, niveau, technologie);
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj)
+//			return true;
+//		if (obj == null || getClass() != obj.getClass())
+//			return false;
+//		Question other = (Question) obj;
+//		return Objects.equals(id, other.id);
+//	}
 
 }

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class QuestionDto {
 	
 	private Long id;
-	@JsonInclude(JsonInclude.Include.NON_NULL)
+
 	private String question;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private int point;
@@ -27,5 +27,5 @@ public class QuestionDto {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String technologie;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private ReponseDto[] reponses;
+	private PropositionDto[] reponses;
 }

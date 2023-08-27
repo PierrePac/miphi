@@ -33,11 +33,8 @@ export class CandidatsComponent implements OnInit{
 
   ngOnInit(): void {
     this.fetchAllCandidats();
-    this.qcmService.getQcms().subscribe(data => {
-      console.log('Data from getQcms', data);
-    });
+    this.qcmService.getQcms().subscribe();
     this.combinedData$.subscribe();
-    console.log(this.combinedData$)
     this.createCandidatForm = this.formBuilder.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
@@ -71,7 +68,7 @@ export class CandidatsComponent implements OnInit{
 
   onSubmit() {
     const formValues = this.createCandidatForm.value;
-console.log(formValues)
+
     if (formValues.qcm && formValues.sandbox) {
       const currentDate = new Date();
       const date_end = new Date(currentDate);
@@ -92,8 +89,8 @@ console.log(formValues)
         },
         date_end: dateEndFormatted,
         date_start: date_start,
-        qcm: formValues.qcm,
-        sandbox: formValues.sandbox
+        qcm: { id: formValues.qcm.id },
+        sandbox: { id: formValues.sandbox.id }
       };
 
       this.entretienService.createEntretien(entretienData).subscribe((entretien: EntretienDto) => {
@@ -139,7 +136,6 @@ console.log(formValues)
 
   fetchAllCandidats() {
     this.personneService.getCandidats().subscribe(candidats => {
-      console.log('Data from getCandidats', candidats);
       this.allCandidatsSubject$.next(candidats);
     });
   }
