@@ -1,5 +1,6 @@
 package fr.mipih.rh.testcandidats.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -28,6 +29,7 @@ public class Admin extends Personne {
 	@Column(name = "motDePasse")
 	private String motDePasse;
 
-	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Entretien> entretiens;
+	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<Entretien> entretiens = new HashSet<>();
 }
+

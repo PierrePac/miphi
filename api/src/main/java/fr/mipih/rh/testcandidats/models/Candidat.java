@@ -20,12 +20,12 @@ import lombok.experimental.SuperBuilder;
 @ToString(exclude = {"entretien", "reponseCandidats"})
 public class Candidat extends Personne {
 
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "entretien")
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "entretien", nullable = true)
 	private Entretien entretien;
 
-	@OneToMany(mappedBy = "candidat", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "candidat", fetch = FetchType.LAZY)
 	private Set<ReponseCandidat> reponseCandidats;
 
 }
+
