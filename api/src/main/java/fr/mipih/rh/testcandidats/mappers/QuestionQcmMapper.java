@@ -25,8 +25,8 @@ public class QuestionQcmMapper {
 
     public QuestionQcmDto toDto(QuestionQcm questionQcm) {
         return new QuestionQcmDto(
-                questionQcm.getQuestion().getId(),
                 questionQcm.getQcm().getId(),
+                questionQcm.getQuestion().getId(),
                 questionQcm.getOrdre()
         );
     }

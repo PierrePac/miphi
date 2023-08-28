@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable, shareReplay, map } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QcmQuestionDto } from 'src/app/share/dtos/qcm/qcm-question-dto';
+import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
+import { QuestionQcmDto } from 'src/app/share/dtos/question/question-qcm-dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -45,11 +47,24 @@ export class QcmService {
     );
   }
 
+  getQcmQuestion(qcmId: number): Observable<QuestionQcmDto[]> {
+    return this.httpClient.get<QuestionQcmDto[]>(`${environment.getQcmQuestion}${qcmId}`)
+  }
+
+  getQcmQuestionByEntretien(entretienId: number) : Observable<QuestionQcmDto[]> {
+    return this.httpClient.get<QuestionQcmDto[]>(`${environment.getQcmQuestionByEntretien}${entretienId}`)
+  }
+
+  getQcmByEntretien(entretienId: number): Observable<QcmDto> {
+    return this.httpClient.get<QcmDto>(`${environment.getOneQcm}${entretienId}`)
+  }
+
   getCurrentQcms(): QcmDto[] {
     return this.qcms;
   }
 
-  updateQuestionsOrder(question: QcmQuestionDto[]): Observable<any> {
+  updateQuestionsOrder(question: QuestionQcmDto[]): Observable<any> {
     return this.httpClient.post(environment.updateOrdreQcmQuestion, question);
   }
+
 }

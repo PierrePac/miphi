@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, switchMap, throwError } from 'rxjs';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { ReponseService } from 'src/app/core/services/reponse/reponse.service';
+import { PropositionDto } from 'src/app/share/dtos/proposition/proposition-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
-import { ReponseDto } from 'src/app/share/dtos/reponse/reponse-dto';
 import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
@@ -57,7 +57,7 @@ export class QuestionComponent implements OnInit {
       technologie: questionValue.technologie,
       niveau: questionValue.niveau
     };
-    const reponses: ReponseDto[] = questionValue.reponses?.map((reponse: ReponseDto) => ({
+    const reponses: PropositionDto[] = questionValue.reponses?.map((reponse: PropositionDto) => ({
         id: reponse.id,
         reponse: reponse.reponse,
         correct: reponse.correct,
@@ -70,7 +70,7 @@ export class QuestionComponent implements OnInit {
           const newquestionId = reponse.id;
           const reponseObservables = questionValue.reponses?.map(reponse => {
             if(reponse.reponse) {
-              const reponseDto: ReponseDto = {
+              const reponseDto: PropositionDto = {
                 reponse: reponse.reponse,
                 correct: reponse.correct,
                 question_id: newquestionId
@@ -108,7 +108,7 @@ export class QuestionComponent implements OnInit {
       ).subscribe();
     }
   }
-    private updateLocalQuestionsCache(question: QuestionDto, reponses: ReponseDto[]) {
+    private updateLocalQuestionsCache(question: QuestionDto, reponses: PropositionDto[]) {
       this.allQuestions$.subscribe(questions => this.originalQuestionsCache = [...questions]);
 
       this.allQuestions$ = this.allQuestions$.pipe(

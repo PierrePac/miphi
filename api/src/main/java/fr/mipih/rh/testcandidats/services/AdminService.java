@@ -41,6 +41,8 @@ public class AdminService {
 		}
 		
 		Admin admin = adminMapper.ajouterAdmin(newAdminDto);
+		admin.setNom(newAdminDto.getNom());
+		admin.setPrenom(newAdminDto.getPrenom());
 		admin.setMotDePasse(passwordEncoder.encode(CharBuffer.wrap(newAdminDto.getMotDePasse())));
 
 		adminRepository.save(admin);

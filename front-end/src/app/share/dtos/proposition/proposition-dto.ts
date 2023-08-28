@@ -1,4 +1,4 @@
-export interface ReponseDto {
+export interface PropositionDto {
   id?: number;
   reponse: string;
   correct: boolean;

@@ -31,6 +31,7 @@ public class QcmService {
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
 	private final QuestionQcmMapper questionQcmMapper;
+
 	
 	public List<QcmDto> getAllQcm(){
 		List<Qcm> qcmList = qcmRepository.findAll();
@@ -47,24 +48,6 @@ public class QcmService {
 		return resultDto;
 	}
 
-
-	public QuestionQcmDto updateOrder(QuestionQcmDto questionQcmDto) {
-		QuestionQcmId questionQcmId = new QuestionQcmId();
-		questionQcmId.setIdQcm(questionQcmDto.getIdQcm());
-		questionQcmId.setIdQuestion(questionQcmDto.getIdQuestion());
-	    Optional<QuestionQcm> questionQcmOpt = questionQcmRepository.findById(questionQcmId);
-	    
-	    if (questionQcmOpt.isPresent()) {
-	        QuestionQcm questionQcm = questionQcmOpt.get();
-	        questionQcm.setOrdre(questionQcmDto.getOrdre());
-	        questionQcmRepository.save(questionQcm);
-
-	        return questionQcmMapper.toDto(questionQcm);
-	    } else {
-	        throw new EntityNotFoundException("No QuestionQcm found with id: " + questionQcmId);
-	    }
-	}
-
 	@Transactional
 	public void addQuestionToQcm(Long qcmId, Long questionId, Long ordre) {
 		Qcm qcm = qcmRepository.findById(qcmId)
@@ -73,9 +56,13 @@ public class QcmService {
 				.orElseThrow(() -> new RuntimeException("Question not found with id: " + questionId));
 
 		QuestionQcm questionQcm = new QuestionQcm();
+		QuestionQcmId questionQcmId = new QuestionQcmId();
+		questionQcmId.setIdQcm(qcm.getId());
+		questionQcmId.setIdQuestion(question.getId());
 		questionQcm.setQcm(qcm);
 		questionQcm.setQuestion(question);
 		questionQcm.setOrdre(ordre);
+		questionQcm.setQuestionQcmId(questionQcmId);
 		questionQcmRepository.save(questionQcm);
 	}
 
@@ -83,6 +70,16 @@ public class QcmService {
 		List<Qcm> qcmList = qcmRepository.findAll();
 		QcmMapper qcmMapper = new QcmMapper();
 		return qcmMapper.toDtoList(qcmList);
+	}
+
+	public QcmDto getQcm(Long id) {
+		Optional<Qcm> qcmOpt = qcmRepository.findById(id);
+		if(qcmOpt.isPresent()){
+			Qcm qcm = qcmOpt.get();
+			QcmMapper qcmMapper = new QcmMapper();
+			return qcmMapper.toDto(qcm);
+		}
+		return null;
 	}
 
 }

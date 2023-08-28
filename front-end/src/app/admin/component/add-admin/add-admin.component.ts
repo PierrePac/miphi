@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PersonneService } from 'src/app/core/services/personne/personne.service';
+import { NewAdminDto } from 'src/app/share/dtos/admin/new-admin-dto';
 
 
 
@@ -11,9 +13,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AddAdminComponent implements OnInit{
 
   addAdminForm!: FormGroup;
+  newAdmin!: NewAdminDto;
 
   constructor(private formbuilder: FormBuilder,
-) {}
+              private personneService: PersonneService) {}
 
   ngOnInit(): void {
     this.addAdminForm = this.formbuilder.group({
@@ -24,6 +27,10 @@ export class AddAdminComponent implements OnInit{
   }
 
   onSubmit() {
-    
+    if(this.addAdminForm.valid){
+      this.newAdmin = this.addAdminForm.value;
+      this.personneService.createAdmin(this.newAdmin).subscribe();
+      console.log(this.newAdmin)
+    }
   }
 }

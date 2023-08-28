@@ -1,7 +1,5 @@
-import { QuestionDto } from "./question-dto";
-
 export interface QuestionQcmDto {
-  id: number;
+  idQcm: number;
+  idQuestion: number;
   ordre: number;
-  question?: QuestionDto;
 }

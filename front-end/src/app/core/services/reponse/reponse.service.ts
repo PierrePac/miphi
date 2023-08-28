@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ReponseDto } from 'src/app/share/dtos/reponse/reponse-dto';
+import { PropositionDto } from 'src/app/share/dtos/proposition/proposition-dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,12 +11,12 @@ export class ReponseService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addReponse(newReponse: ReponseDto): Observable<ReponseDto> {
-    return this.httpClient.post<ReponseDto>(environment.addReponse, newReponse);
+  addReponse(newReponse: PropositionDto): Observable<PropositionDto> {
+    return this.httpClient.post<PropositionDto>(environment.addReponse, newReponse);
   }
 
-  modifyReponse(reponseId: number, reponse: ReponseDto): Observable<ReponseDto> {
+  modifyReponse(reponseId: number, reponse: PropositionDto): Observable<PropositionDto> {
     console.log(reponse)
-    return this.httpClient.put<ReponseDto>(`${environment.modifyReponse}${reponseId}`, reponse);
+    return this.httpClient.put<PropositionDto>(`${environment.modifyReponse}${reponseId}`, reponse);
   }
 }

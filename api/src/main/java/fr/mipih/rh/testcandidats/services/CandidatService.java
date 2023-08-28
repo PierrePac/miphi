@@ -3,7 +3,6 @@ package fr.mipih.rh.testcandidats.services;
 import fr.mipih.rh.testcandidats.dtos.*;
 import fr.mipih.rh.testcandidats.models.*;
 import fr.mipih.rh.testcandidats.repositories.*;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +21,7 @@ public class CandidatService {
 	private final CandidatMapper candidatMapper;
 	private final CandidatRepository candidatRepository;
 	private final EntretienRepository entretienRepository;
-	private final QcmRepository qcmRepository;
-	private final QuestionQcmRepository questionQcmRepository;
-	private final QuestionRepository questionRepository;
-	private final ReponseCandidatRepository reponseCandidatRepository;
+
 	
 	public CandidatDto loginCandidat(CredentialsCandidatDto credentialsDto) {
 		Optional<Candidat> candidatOpt = candidatRepository.findByNom(credentialsDto.nom());
@@ -86,7 +82,7 @@ public class CandidatService {
 		}
 
 		candidatRepository.save(candidat);
-		createReponseCandidat(newCandidatDto);
+		//createReponseCandidat(newCandidatDto);
 		return candidatMapper.toCandidatDto(candidat);
 	}
 

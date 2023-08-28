@@ -1,11 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { Observable, Subscription, combineLatest } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { QuestionQcmDto } from 'src/app/share/dtos/question/question-qcm-dto';
-import { QcmQuestionDto } from 'src/app/share/dtos/qcm/qcm-question-dto';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 
 @Component({
@@ -20,6 +19,7 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
   sidebarVisible: boolean = true;
   selectedQcm!: QcmDto;
   selectedQcmQuestions!: QuestionDto[];
+  questionQcm!: QuestionQcmDto[]
   questionsWithOrder: QuestionQcmDto[] = [];
 
 
@@ -37,56 +37,57 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
     this.questionService.loadAllQuestions().subscribe();
   }
 
-  loadQuestionsForQcm(qcm: any) {
-    this.selectedQcm = qcm;
-    this.loadQuestions();
+    loadQuestionsForQcm(qcm: any) {
+      this.selectedQcm = qcm;
+      this.qcmService.getQcmQuestion(qcm.id).subscribe(
+        (data: QuestionQcmDto[]) => {
+        this.questionQcm = data;
+        this.loadQuestions();
+      }
+    )
   }
 
   loadQuestions() {
-    combineLatest([this.allQuestions$, this.qcms$])
-      .pipe(
-        map(([questions, qcms]) => {
-          const currentQcm = qcms.find(qcm => qcm.id === this.selectedQcm.id);
-          if (!currentQcm || !currentQcm.questions) return [];
-          const questionsWithOrder: QuestionQcmDto[] = (currentQcm.questions as unknown as QcmQuestionDto[])
-              .map(q => {
-                const matchingQuestion = questions.find(ques => ques.id === q.questionIds);
-                if (matchingQuestion) {
-                  return {
-                    id: q.id,
-                    ordre: q.ordre,
-                    question: matchingQuestion
-                  };
-                }
-                return null;
-              })
-            .filter(Boolean) as QuestionQcmDto[];
-              questionsWithOrder.sort((a, b) => a.ordre - b.ordre);
-              console.group(questionsWithOrder)
-            return questionsWithOrder;
-          })
-        )
-        .subscribe(questionsWithOrder => {
-            this.questionsWithOrder = questionsWithOrder;
+    this.allQuestions$.pipe(
+      map(allQuestions => {
+        // Filtre les questions
+        return allQuestions.filter(q => {
+          return this.questionQcm.some(qcm => qcm.idQuestion === q.id);
         });
+      }),
+      map(filteredQuestions => {
+        // Trie les questions filtrées selon leur ordre
+        return filteredQuestions.sort((a, b) => {
+          const ordreA = this.questionQcm.find(qcm => qcm.idQuestion === a.id)?.ordre;
+          const ordreB = this.questionQcm.find(qcm => qcm.idQuestion === b.id)?.ordre;
+
+          if (ordreA === undefined || ordreB === undefined) {
+            return 0; // ou autre logique de tri pour les valeurs non définies
+          }
+
+          return ordreA - ordreB;
+        });
+      })
+    ).subscribe(sortedAndFilteredQuestions => {
+      this.selectedQcmQuestions = sortedAndFilteredQuestions;
+      console.log(this.questionQcm)
+      console.log(this.selectedQcmQuestions);
+    });
   }
 
-  onQuestionsReordered() {
-    this.questionsWithOrder.forEach((question, index) => {
-      question.ordre = index;
-    });
-
-    console.log(this.questionsWithOrder);
-
-    const transformedQuestions = this.questionsWithOrder.map(question => ({
-      id: question.id,
-      ordre: question.ordre
-    }));
-
-    this.qcmService.updateQuestionsOrder(this.questionsWithOrder).subscribe(resp => {
-      console.log('ordres de questions mise à jour');
+   onQuestionsReordered() {
+  this.selectedQcmQuestions.forEach((question, index) => {
+    const foundQcm = this.questionQcm.find(qcm => qcm.idQuestion === question.id);
+    if (foundQcm) {
+      foundQcm.ordre = index;
+    }
+  });
+  this.questionQcm.sort((a, b) => a.ordre - b.ordre);
+  this.qcmService.updateQuestionsOrder(this.questionQcm)
+    .subscribe(response => {
+      console.log('Ordre mis à jour:', response);
     }, error => {
-      console.error('Erreur dans la mise à jour de l\'ordre des questions')
+      console.error('Erreur lors de la mise à jour de l\'ordre:', error);
     });
   }
 

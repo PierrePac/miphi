@@ -14,5 +14,6 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface QuestionQcmRepository extends JpaRepository<QuestionQcm, QuestionQcmId> {
 
+    List<QuestionQcm> findAllByQuestionQcmIdIdQcm(Long idQcm);
 
 }

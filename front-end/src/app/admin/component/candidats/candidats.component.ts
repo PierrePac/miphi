@@ -94,14 +94,15 @@ export class CandidatsComponent implements OnInit{
       };
 
       this.entretienService.createEntretien(entretienData).subscribe((entretien: EntretienDto) => {
+        if (entretien && entretien.id !== undefined) {
         const candidatData = {
           nom: formValues.nom.toLowerCase(),
           prenom: formValues.prenom.toLowerCase(),
           entretienId: entretien.id
         };
-        this.personneService.createCandidat(candidatData).subscribe(response => {
-          // Handle the response or errors from createCandidat here if necessary
+          this.personneService.createCandidat(candidatData).subscribe(response => {
         });
+      }
       });
     } else if (formValues.entretien) {
       const candidatData = {

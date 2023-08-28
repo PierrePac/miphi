@@ -1,4 +1,4 @@
-import { ReponseDto } from "../reponse/reponse-dto";
+import { PropositionDto } from "../proposition/proposition-dto";
 
 export interface QuestionDto {
   id?: number;
@@ -8,5 +8,5 @@ export interface QuestionDto {
   categorie?: string;
   technologie?: string;
   niveau?: string;
-  reponses?: ReponseDto[];
+  reponses?: PropositionDto[];
 }

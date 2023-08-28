@@ -34,7 +34,7 @@ export class EntretienService {
     }
   }
 
-  private getEntretienById(id: number) {
+  getEntretienById(id: number) {
     return this.httpClient.get<EntretienDto>(`${environment.getEntretien}${id}`);
   }
 

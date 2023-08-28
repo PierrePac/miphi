@@ -1,14 +1,14 @@
-<p-card *ngIf="sessionData?.filteredQuestions && sessionData!.filteredQuestions.length > 0"
-  header="Question {{currentIndex + 1}} sur {{sessionData!.filteredQuestions.length}}"
+<p-card *ngIf="questions && questions.length > 0"
+  header="Question {{ currentIndex + 1 }} sur {{ questions.length }}"
   [style]="{ width: '80vw', margin: '50px auto', minHeight: '45vh' }">
   <p class="question">
-    <strong>Question :</strong> {{sessionData!.filteredQuestions[currentIndex].question}}
+    <strong>Question :</strong> {{ questions[currentIndex].question }}
   </p>
+  <p><strong>Sélectionnez la ou les réponses vrai :</strong></p>
   <form class="form">
-    <p><strong>Sélectionnez la ou les réponses vrai :</strong></p>
-    <p-checkbox class="mt-3 ml-8" [(ngModel)]="selectedAnswers[sessionData!.filteredQuestions[currentIndex].id ?? -1]" name="reponse"
-      value="{{reponse.id}}" label="{{reponse.reponse}}"
-      *ngFor="let reponse of sessionData!.filteredQuestions[currentIndex].reponses"
+    <p-checkbox class="mt-3 ml-8" [(ngModel)]="selectedAnswers[questions[currentIndex].id ?? -1]" name="reponse"
+      value="{{ reponse.id }}" label="{{ reponse.reponse }}"
+      *ngFor="let reponse of questions[currentIndex].reponses"
       ></p-checkbox>
   </form>
   <p-divider></p-divider>
@@ -16,8 +16,8 @@
     <div class="buttons">
       <p-button label="Retour" icon="pi pi-arrow-left" *ngIf="currentIndex > 0" (click)="previousQuestion()"></p-button>
       <p-button label="Passer" icon="pi pi-step-forward" [style]="{ 'margin-left': '.5em' }" (click)="nextQuestion()"></p-button>
-      <p-button label="Valider" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 != sessionData!.filteredQuestions.length" (click)="validateAnswer()"></p-button>
-      <p-button label="Valider le Qcm" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 == sessionData!.filteredQuestions.length" (click)="ValidateQcm()"></p-button>
+      <p-button label="Valider" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 != questions.length" (click)="validateAnswer()"></p-button>
+      <p-button label="Valider le Qcm" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 == questions.length" (click)="ValidateQcm()"></p-button>
     </div>
     <p *ngIf="validatedAnswer === false" class="validate-answer">* Réponse non validé</p>
   </ng-template>

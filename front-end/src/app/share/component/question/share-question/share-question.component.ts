@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
-import { ReponseDto } from 'src/app/share/dtos/reponse/reponse-dto';
+import { PropositionDto } from 'src/app/share/dtos/proposition/proposition-dto';
 import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
@@ -80,7 +80,7 @@ export class ShareQuestionComponent implements OnInit {
       categorie: question.categorie,
       technologie: question.technologie,
       niveau: question.niveau,
-      reponses: question.reponses?.map((resp: ReponseDto) => ({
+      reponses: question.reponses?.map((resp: PropositionDto) => ({
         id: resp.id,
         reponse: resp.reponse,
         correct: resp.correct

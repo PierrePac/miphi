@@ -16,23 +16,23 @@
 
 
   <div class="col qcm-content">
-    <p-orderList [value]="questionsWithOrder" [listStyle]="{ 'height': '100%' }" header="Questions" [dragdrop]="true" (onReorder)="onQuestionsReordered()">
+    <p-orderList [value]="selectedQcmQuestions" [listStyle]="{ 'height': '100%' }" header="Questions" [dragdrop]="true" (onReorder)="onQuestionsReordered()">
       <ng-template let-question pTemplate="item">
         <div class="question-details">
           <div class="question">
-            <p>{{question?.question?.question}}</p>
-            
+            <p>{{question.question}}</p>
+
           </div>
           <p-fieldset legend="Details" [toggleable]="true" [collapsed]="true">
             <div class="details flex flex-row justify-content-evenly flex-wrap">
-              <p *ngIf="question?.question?.niveau">niveau : {{ question?.question?.niveau }}</p>
-              <p *ngIf="question?.question?.categorie">Catégorie : {{ question?.question?.categorie }}</p>
-              <p>nombre de point : {{ question?.question?.point}} points</p>
-              <p>Temps : {{ question?.question?.temps}} secondes</p>
-              <p *ngIf="question?.question?.technologie">Technologie : {{ question?.question?.technologie }}</p>
+              <p>niveau : {{ question.niveau }}</p>
+              <p>Catégorie : {{ question.categorie }}</p>
+              <p>nombre de point : {{ question.point}} points</p>
+              <p>Temps : {{ question.temps}} secondes</p>
+              <p>Technologie : {{ question.technologie }}</p>
             </div>
-            <div class="reponses" *ngFor="let reponse of question?.question?.reponses">
-              <p *ngIf="reponse?.reponse" [ngClass]="{ 'classe-true': reponse?.correct, 'classe-false': !reponse?.correct }">{{reponse?.reponse}}</p>
+            <div class="reponses" *ngFor="let reponse of question.reponses">
+              <p  [ngClass]="{ 'classe-true': reponse.correct, 'classe-false': !reponse.correct }">{{reponse.reponse}}</p>
             </div>
           </p-fieldset>
        </div>

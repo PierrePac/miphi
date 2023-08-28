@@ -2,16 +2,16 @@ package fr.mipih.rh.testcandidats.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import fr.mipih.rh.testcandidats.dtos.EntretienDto;
+import fr.mipih.rh.testcandidats.models.Entretien;
+import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
@@ -25,6 +25,7 @@ import fr.mipih.rh.testcandidats.services.QcmService;
 public class QcmController {
 
 	private final QcmService qcmService;
+	private final EntretienRepository entretienRepository;
 	
 	@PostMapping("/add")
 	public ResponseEntity<QcmDto> createQcm(@RequestBody QcmDto qcmDto) {
@@ -48,14 +49,19 @@ public class QcmController {
 		List<QcmDto> qcms = qcmService.getAllQcms();
 		return new ResponseEntity<>(qcms, HttpStatus.OK);
 	}
-	
-	@PostMapping("/update-order")
-	public ResponseEntity<List<QuestionQcmDto>> updateOrder(@RequestBody List<QuestionQcmDto> questionQcmDtos) {
-		List<QuestionQcmDto> updatedQuestions  = new ArrayList<>();
-		for(QuestionQcmDto questionQcmDto: questionQcmDtos) {
-			QuestionQcmDto updatedQuestion = qcmService.updateOrder(questionQcmDto);
-			updatedQuestions.add(updatedQuestion);
+
+	@GetMapping("/get-by-entretien/{id}")
+	public ResponseEntity<QcmDto> getQcmByEntretienId(@PathVariable Long id) {
+		Optional<Entretien> entretienOpt = entretienRepository.findById(id);
+		if(entretienOpt.isPresent()){
+			Entretien entretien = entretienOpt.get();
+			QcmDto qcmDto = qcmService.getQcm(entretien.getQcm().getId());
+			return new ResponseEntity<>(qcmDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(updatedQuestions, HttpStatus.OK);
+		return null;
 	}
+	
+
+
+
 }

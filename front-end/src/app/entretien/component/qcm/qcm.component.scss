@@ -14,9 +14,9 @@
 
 .form{
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: column wrap;
   justify-content: flex-start;
-  height: 250px;
+  height: 130px;
 }
 
 .validate-answer {
