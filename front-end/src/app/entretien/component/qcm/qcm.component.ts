@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { EntretienService } from 'src/app/core/services/entretien/entretien.service';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
+import { ReponseCandidatService } from 'src/app/core/services/reponseCandidat/reponse-candidat.service';
 import { TimerService } from 'src/app/core/services/timer/timer.service';
 import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { ReponseCandidatDto } from 'src/app/share/dtos/reponse/reponse-candidat-dto';
+import { ReponseQcmDto } from 'src/app/share/dtos/reponse/reponse-qcm-dto';
 
 @Component({
   selector: 'app-qcm',
@@ -20,14 +20,17 @@ export class QcmComponent implements OnInit {
   currentIndex: number = 0;
   selectedAnswers: any[] = [];
   validatedAnswer: boolean = false;
+  currentCandidatId!: number;
+  
 
   constructor(private timerService: TimerService,
-              private qcmService: QcmService) { }
+              private qcmService: QcmService,
+              private reponseCandidatService: ReponseCandidatService) { }
 
   ngOnInit(): void {
-    // Récupération des données de la personne depuis le sessionStorage
     const personneJSON = sessionStorage.getItem('personne');
     const personne = personneJSON ? JSON.parse(personneJSON) : null;
+    this.currentCandidatId = personne.id;
     this.qcmService.getQcmByEntretien(personne.entretienId).subscribe(
       (data: QcmDto) => {
         this.qcm = data;
@@ -39,7 +42,6 @@ export class QcmComponent implements OnInit {
     );
     const questionJson = sessionStorage.getItem('question_qcm');
     this.questions = questionJson ? JSON.parse(questionJson) : null;
-    console.log(this.questions);
 
     let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') || '[]');
     storedAnswers.forEach(answer => {
@@ -88,7 +90,6 @@ export class QcmComponent implements OnInit {
   }
 
   validateAnswer() {
-    
     if (!this.questions) return;
     const currentQuestion = this.questions[this.currentIndex];
     if (!currentQuestion) return;
@@ -97,7 +98,8 @@ export class QcmComponent implements OnInit {
     const currentAnswerId = this.selectedAnswers[currentQuestionId];
     if(currentAnswerId === undefined) return;
     if (currentAnswerId === undefined || currentQuestionId === undefined) return;
-    const currentCandidatId = this.candidat.id;
+    const currentCandidatId = this.currentCandidatId;
+    console.log(currentCandidatId)
     if(currentCandidatId === undefined) return;
 
     const reponse: ReponseCandidatDto = {
@@ -121,7 +123,26 @@ export class QcmComponent implements OnInit {
 
 
   ValidateQcm() {
-    console.log(sessionStorage.getItem('candidatAnswers'));
+    this.validateAnswer()
+    const storedAnswersJSON = sessionStorage.getItem('candidatAnswers');
+    const storedAnswers: ReponseCandidatDto[] = storedAnswersJSON ? JSON.parse(storedAnswersJSON) : [];
+    const transformedAnswers: ReponseQcmDto[] = [];
+
+    storedAnswers.forEach(answer => {
+      if(answer.proposition_id && Array.isArray(answer.proposition_id)) {
+        answer.proposition_id.forEach(prop_id => {
+          transformedAnswers.push({
+            idCandidat: answer.candidat_id,
+            idProposition: prop_id
+          });
+        });
+      }
+    });
+
+   console.log(transformedAnswers)
+    this.reponseCandidatService.postQcmAnswer(transformedAnswers).subscribe((resp: any) => {
+      console.log(resp)
+    });
   }
 
 }

@@ -9,17 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.mappers.QcmMapper;
-import fr.mipih.rh.testcandidats.mappers.QuestionMapper;
-import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
 import fr.mipih.rh.testcandidats.models.Qcm;
 import fr.mipih.rh.testcandidats.models.Question;
 import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,7 +26,6 @@ public class QcmService {
 	private final QcmMapper qcmMapper;
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
-	private final QuestionQcmMapper questionQcmMapper;
 
 	
 	public List<QcmDto> getAllQcm(){

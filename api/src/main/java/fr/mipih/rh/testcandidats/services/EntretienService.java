@@ -1,31 +1,22 @@
 package fr.mipih.rh.testcandidats.services;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Hibernate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import fr.mipih.rh.testcandidats.dtos.EntretienDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.exceptions.AppException;
-import fr.mipih.rh.testcandidats.mappers.AdminMapper;
 import fr.mipih.rh.testcandidats.mappers.EntretienMapper;
 import fr.mipih.rh.testcandidats.mappers.QcmMapper;
-import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
-import fr.mipih.rh.testcandidats.mappers.SandboxMapper;
 import fr.mipih.rh.testcandidats.models.Admin;
 import fr.mipih.rh.testcandidats.models.Entretien;
 import fr.mipih.rh.testcandidats.models.Qcm;
-import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.models.Sandbox;
 import fr.mipih.rh.testcandidats.repositories.AdminRepository;
 import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
-import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import fr.mipih.rh.testcandidats.repositories.SandboxRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -38,10 +29,8 @@ public class EntretienService {
     private final AdminRepository adminRepository;
     private final QcmMapper qcmMapper;
     private final QcmRepository qcmRepository;
-    private final QuestionQcmRepository questionQcmRepository;
-    private final SandboxMapper sandboxMapper;
     private final SandboxRepository sandboxRepository;
-    private final QuestionQcmMapper questionQcmMapper;
+
 
     public EntretienDto findById(Long id) {
         Entretien entretien = entretienRepository.findById(id)
@@ -76,22 +65,6 @@ public class EntretienService {
 
             entretienDto.setQcm(qcmMapper.toDto(entretien.getQcm()));
 
-           
-//            Optional<List<QuestionQcm>> questionQcmListOpt = questionQcmRepository.findAllById(entretien.getQcm().getId());
-//            if(questionQcmListOpt.isPresent()) {
-//            	List<QuestionQcm> questionQcmList = questionQcmListOpt.get();
-//                List<QuestionQcmDto> questionQcmDtoList = new ArrayList<>();
-//
-//                for (QuestionQcm questionQcm : questionQcmList) {
-//                    questionQcmDtoList.add(questionQcmMapper.toDto(questionQcm));
-//                }
-//
-//                entretienDto.setQuestionQcms(questionQcmDtoList);
-//            }
-//            //entretienDto.setQuestionQcms(questionQcmDto);
-//            entretienDto.setSandbox(sandboxMapper.toSandboxDto(entretien.getSandbox()));
-//
-//            return entretienDto;
         }
         return null;
     }

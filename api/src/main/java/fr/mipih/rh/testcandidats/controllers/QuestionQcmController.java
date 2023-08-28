@@ -36,7 +36,7 @@ public class QuestionQcmController {
         Optional<Entretien> entretienOpt = entretienRepository.findById(id);
         if(entretienOpt.isPresent()){
             Entretien entretien = entretienOpt.get();
-            List<QuestionQcmDto> QuestionQcmDtos = questionService.getQuestionQcm(id);
+            List<QuestionQcmDto> QuestionQcmDtos = questionService.getQuestionQcm(entretien.getQcm().getId());
             return new ResponseEntity<>(QuestionQcmDtos, HttpStatus.OK);
         }
         return null;

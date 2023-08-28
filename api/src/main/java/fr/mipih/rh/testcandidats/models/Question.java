@@ -67,27 +67,8 @@ public class Question {
 	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<QuestionQcm> questionQcms;
 
-
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "question")
 	Set<Proposition> propositions;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "question_id", referencedColumnName = "id")
-	Set<ReponseCandidat> reponseCandidats;
-
-//	@Override
-//	public int hashCode() {
-//		return Objects.hash(id, question, point, temps, categorie, niveau, technologie);
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null || getClass() != obj.getClass())
-//			return false;
-//		Question other = (Question) obj;
-//		return Objects.equals(id, other.id);
-//	}
 
 }

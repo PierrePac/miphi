@@ -33,7 +33,6 @@ export class CandidatComponent implements OnInit, OnDestroy {
           (data: QuestionQcmDto[]) => {
             this.questionQcm = data;
             this.loadQuestions()
-            //console.log(this.questionQcm)
           }
         )
       }

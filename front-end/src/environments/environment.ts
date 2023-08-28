@@ -35,4 +35,6 @@ const environment = {
   addAdmin: 'http://localhost:8080/personne/add-admin',
   addCandidat: 'http://localhost:8080/personne/add-candidat',
   getAllCandidats: 'http://localhost:8080/personne/get-candidat',
+
+  postQcmReponses: 'http://localhost:8080/reponse-candidat/saveAll',
 }

@@ -8,7 +8,6 @@ import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
 import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.mipih.rh.testcandidats.dtos.QuestionDto;
@@ -21,7 +20,6 @@ import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
 public class QuestionService {
 	
 	private final QuestionRepository questionRepository;
-	private final QuestionMapper questionMapper;
 	private final QuestionQcmRepository questionQcmRepository;
 	private final QuestionQcmMapper questionQcmMapper;
 
