@@ -1,7 +1,6 @@
 package fr.mipih.rh.testcandidats.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.mipih.rh.testcandidats.models.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReponseDto {
+public class PropositionDto {
 
 	private Long id;
 	private Long question_id;

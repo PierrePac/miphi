@@ -20,6 +20,6 @@ public class QcmDto {
 	private String nom;
 	private int point;
 	private int temps;
-	private List<QuestionQcmDto> questionsQcm;
+	//private List<QuestionQcmDto> questionsQcm;
 
 }

@@ -29,17 +29,18 @@ public abstract class Personne {
 	@Column(name = "id", columnDefinition = "serial")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "nom")
 	private String nom;
-	
+
 	@Column(name = "prenom")
 	private String prenom;
-	
+
 	@Column(name = "token")
 	private String token;
-	
+
 	@Column(name = "refreshToken")
 	private String refreshToken;
 
 }
+

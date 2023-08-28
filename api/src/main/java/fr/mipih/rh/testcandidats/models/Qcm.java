@@ -18,10 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Getter
@@ -30,6 +27,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "QCM")
+@ToString(exclude = {"entretiens", "questionsQcm"})
 public class Qcm {
 
 	@Id
@@ -47,23 +45,8 @@ public class Qcm {
 	private int point;
 
 	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Entretien> entretiens = new HashSet<>();
+	private Set<Entretien> entretiens;
 
 	@OneToMany(mappedBy = "qcm", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<QuestionQcm> questionsQcm = new HashSet<>();
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, nom, temps, point);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-		Qcm other = (Qcm) obj;
-		return Objects.equals(id, other.id);
-	}
+	private Set<QuestionQcm> questionsQcm;
 }

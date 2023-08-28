@@ -1,18 +1,14 @@
 package fr.mipih.rh.testcandidats.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Setter
+@Getter
 public class QuestionQcmDto {
 	
-	private Long id;
-    private QcmDto qcm;
-    private QuestionDto question;
-    private int ordre;
+	private Long idQcm;
+    private Long idQuestion;
+    private Long ordre;
 }

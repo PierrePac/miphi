@@ -35,7 +35,6 @@ public class EntretienService {
 
     private final EntretienMapper entretienMapper;
     private final EntretienRepository entretienRepository;
-    private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
     private final QcmMapper qcmMapper;
     private final QcmRepository qcmRepository;
@@ -57,7 +56,7 @@ public class EntretienService {
                 .orElseThrow(() -> new AppException("Sandbox introuvable", HttpStatus.NOT_FOUND));
         Qcm qcm = qcmRepository.findById(entretienDto.getQcm().getId())
                 .orElseThrow(() -> new AppException("Qcm introuvable", HttpStatus.NOT_FOUND));
-        Entretien entretien = entretienMapper.toEntity(entretienDto);
+        Entretien entretien = new Entretien();
         entretien.setDateEnd(entretienDto.getDate_end());
         entretien.setDateStart(new Date());
         entretien.setAdmin(admin);
@@ -71,32 +70,28 @@ public class EntretienService {
         Optional<Entretien> entretienOpt = entretienRepository.findById(id);
         if (entretienOpt.isPresent()) {
             Entretien entretien = entretienOpt.get();
-            Hibernate.initialize(entretien.getQcm());
 
             EntretienDto entretienDto = new EntretienDto();
             entretienDto.setId(entretien.getId());
-            entretienDto.setDate_end(entretien.getDateEnd());
-            entretienDto.setDate_start(entretien.getDateStart());
 
-            entretienDto.setAdmin(adminMapper.toAdminDto(entretien.getAdmin()));
             entretienDto.setQcm(qcmMapper.toDto(entretien.getQcm()));
-            // rechercher questionQcm
-           
-            Optional<List<QuestionQcm>> questionQcmListOpt = questionQcmRepository.findAllByQcmId(entretienDto.getQcm().getId());
-            if(questionQcmListOpt.isPresent()) {
-            	List<QuestionQcm> questionQcmList = questionQcmListOpt.get();
-                List<QuestionQcmDto> questionQcmDtoList = new ArrayList<>();
-                
-                for (QuestionQcm questionQcm : questionQcmList) {
-                    questionQcmDtoList.add(questionQcmMapper.toDto(questionQcm));
-                }
-                
-                entretienDto.setQuestionQcms(questionQcmDtoList);
-            }
-            //entretienDto.setQuestionQcms(questionQcmDto);
-            entretienDto.setSandbox(sandboxMapper.toSandboxDto(entretien.getSandbox()));
 
-            return entretienDto;
+           
+//            Optional<List<QuestionQcm>> questionQcmListOpt = questionQcmRepository.findAllById(entretien.getQcm().getId());
+//            if(questionQcmListOpt.isPresent()) {
+//            	List<QuestionQcm> questionQcmList = questionQcmListOpt.get();
+//                List<QuestionQcmDto> questionQcmDtoList = new ArrayList<>();
+//
+//                for (QuestionQcm questionQcm : questionQcmList) {
+//                    questionQcmDtoList.add(questionQcmMapper.toDto(questionQcm));
+//                }
+//
+//                entretienDto.setQuestionQcms(questionQcmDtoList);
+//            }
+//            //entretienDto.setQuestionQcms(questionQcmDto);
+//            entretienDto.setSandbox(sandboxMapper.toSandboxDto(entretien.getSandbox()));
+//
+//            return entretienDto;
         }
         return null;
     }

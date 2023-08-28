@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import fr.mipih.rh.testcandidats.models.QuestionQcmId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,7 +49,10 @@ public class QcmService {
 
 
 	public QuestionQcmDto updateOrder(QuestionQcmDto questionQcmDto) {
-	    Optional<QuestionQcm> questionQcmOpt = questionQcmRepository.findById(questionQcmDto.getId());
+		QuestionQcmId questionQcmId = new QuestionQcmId();
+		questionQcmId.setIdQcm(questionQcmDto.getIdQcm());
+		questionQcmId.setIdQuestion(questionQcmDto.getIdQuestion());
+	    Optional<QuestionQcm> questionQcmOpt = questionQcmRepository.findById(questionQcmId);
 	    
 	    if (questionQcmOpt.isPresent()) {
 	        QuestionQcm questionQcm = questionQcmOpt.get();
@@ -57,12 +61,12 @@ public class QcmService {
 
 	        return questionQcmMapper.toDto(questionQcm);
 	    } else {
-	        throw new EntityNotFoundException("No QuestionQcm found with id: " + questionQcmDto.getId());
+	        throw new EntityNotFoundException("No QuestionQcm found with id: " + questionQcmId);
 	    }
 	}
 
 	@Transactional
-	public void addQuestionToQcm(Long qcmId, Long questionId, int ordre) {
+	public void addQuestionToQcm(Long qcmId, Long questionId, Long ordre) {
 		Qcm qcm = qcmRepository.findById(qcmId)
 				.orElseThrow(() -> new RuntimeException("Qcm not found with id: " + qcmId));
 		Question question = questionRepository.findById(questionId)

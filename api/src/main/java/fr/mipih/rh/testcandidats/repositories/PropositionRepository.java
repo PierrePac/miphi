@@ -2,14 +2,14 @@ package fr.mipih.rh.testcandidats.repositories;
 
 import java.util.List;
 
+import fr.mipih.rh.testcandidats.models.Proposition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import fr.mipih.rh.testcandidats.models.Reponse;
 
 @Repository
-public interface ReponseRepository extends JpaRepository<Reponse, Long> {
+public interface PropositionRepository extends JpaRepository<Proposition, Long> {
 	
-	List<Reponse> findAllByQuestionId(Long questionId);
+	List<Proposition> findAllByQuestionId(Long questionId);
 
 }
