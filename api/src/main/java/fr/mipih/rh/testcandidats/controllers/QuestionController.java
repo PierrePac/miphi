@@ -34,7 +34,6 @@ public class QuestionController {
 	private final QuestionService questionService;
 	private final QuestionRepository questionRepository;
 	private final PropositionRepository propositionRepository;
-	private final QuestionQcmRepository questionQcmRepository;
 	private final PropositionService propositionService;
 
 	@PostMapping("/add")

@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, map } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
-import { QcmQuestionDto } from 'src/app/share/dtos/qcm/qcm-question-dto';
-import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { QuestionQcmDto } from 'src/app/share/dtos/question/question-qcm-dto';
 import { environment } from 'src/environments/environment';
 

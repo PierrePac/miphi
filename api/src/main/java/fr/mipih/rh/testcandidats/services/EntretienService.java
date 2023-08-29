@@ -48,7 +48,7 @@ public class EntretienService {
         Entretien entretien = new Entretien();
         entretien.setDateEnd(entretienDto.getDate_end());
         entretien.setDateStart(new Date());
-        //entretien.setAdmin(admin);
+        entretien.setAdmin(admin);
         entretien.setQcm(qcm);
         entretien.setSandbox(sandbox);
         entretien = entretienRepository.save(entretien);

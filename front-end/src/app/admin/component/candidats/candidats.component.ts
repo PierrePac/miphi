@@ -161,6 +161,8 @@ export class CandidatsComponent implements OnInit{
     });
   }
 
+
+  
   loadCandidatResult(candidat: CandidatDto){
     this.qcmService.getQcmByEntretien(candidat.entretienId).subscribe((data: QcmDto) => {
       this.qcmCandidatSubject$.next(data);
