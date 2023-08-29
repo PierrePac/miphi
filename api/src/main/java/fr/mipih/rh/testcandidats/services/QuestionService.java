@@ -2,6 +2,7 @@ package fr.mipih.rh.testcandidats.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
@@ -21,7 +22,6 @@ public class QuestionService {
 	
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
-	private final QuestionQcmMapper questionQcmMapper;
 
 	public QuestionDto saveQuestion(QuestionDto questionDto) {
 		return QuestionMapper.toDto(questionRepository.save(QuestionMapper.toEntity(questionDto)));
@@ -37,17 +37,22 @@ public class QuestionService {
 		return questionDtos;
 	}
 
-	public List<QuestionQcmDto> getQuestionQcm(Long qcmId) {
-		List<QuestionQcm> questionQcmList = questionQcmRepository.findAllByQuestionQcmIdIdQcm(qcmId);
-		List<QuestionQcmDto> questionQcmListDto = new ArrayList<>();
-		for (QuestionQcm questionQcm : questionQcmList) {
-			QuestionQcmDto dto = questionQcmMapper.toDto(questionQcm);
-			questionQcmListDto.add(dto);
-		}
-		return questionQcmListDto;
-	}
-
 	public void deleteQuestion(Long id) {
 		questionRepository.deleteById(id);
+	}
+
+	public List<QuestionDto> getAllQuestionOfQcm(Long id) {
+		List<QuestionQcm> questionQcmList = questionQcmRepository.findAllByQuestionQcmIdIdQcm(id);
+		List<QuestionDto> questionDtoList = new ArrayList<>();
+
+		for(QuestionQcm questionQcm: questionQcmList) {
+			Optional<Question> questionOpt = questionRepository.findById(questionQcm.getQuestion().getId());
+			if(questionOpt.isPresent()) {
+				Question question = questionOpt.get();
+				QuestionDto questionDto = QuestionMapper.toDto(question);
+				questionDtoList.add(questionDto);
+			}
+		}
+		return questionDtoList;
 	}
 }

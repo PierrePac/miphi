@@ -14,10 +14,13 @@
   <p-divider></p-divider>
   <ng-template pTemplate="footer">
     <div class="buttons">
-      <p-button label="Retour" icon="pi pi-arrow-left" *ngIf="currentIndex > 0" (click)="previousQuestion()"></p-button>
-      <p-button label="Passer" icon="pi pi-step-forward" [style]="{ 'margin-left': '.5em' }" (click)="nextQuestion()"></p-button>
-      <p-button label="Valider" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 != questions.length" (click)="validateAnswer()"></p-button>
-      <p-button label="Valider le Qcm" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="currentIndex + 1 == questions.length" (click)="ValidateQcm()"></p-button>
+      <!-- bouton timer >= 0 -->
+      <p-button label="Retour" icon="pi pi-arrow-left" *ngIf="timerHasEnded >=0 && currentIndex > 0" (click)="previousQuestion()"></p-button>
+      <p-button label="Passer" icon="pi pi-step-forward" *ngIf="timerHasEnded >=0" [style]="{ 'margin-left': '.5em' }" (click)="nextQuestion()"></p-button>
+      <p-button label="Valider" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="timerHasEnded >=0 && currentIndex + 1 != questions.length" (click)="validateAnswer()"></p-button>
+      <p-button label="Valider le Qcm" icon="pi pi-check" [style]="{ 'margin-left': '.5em' }" *ngIf="timerHasEnded >=0 && currentIndex + 1 == questions.length" (click)="ValidateQcm()"></p-button>
+      <!-- bouton timer < 0 -->
+      <p-button label="Valider le Qcm" icon="pi pi-check" *ngIf="timerHasEnded < 0" [style]="{ 'margin-left': '.5em' }" (click)="ValidateQcm()"></p-button>
     </div>
     <p *ngIf="validatedAnswer === false" class="validate-answer">* Réponse non validé</p>
   </ng-template>

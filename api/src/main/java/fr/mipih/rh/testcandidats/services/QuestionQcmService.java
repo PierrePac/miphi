@@ -9,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +35,15 @@ public class QuestionQcmService {
         } else {
             throw new EntityNotFoundException("No QuestionQcm found with id: " + questionQcmId);
         }
+    }
+
+    public List<QuestionQcmDto> getQuestionQcm(Long qcmId) {
+        List<QuestionQcm> questionQcmList = questionQcmRepository.findAllByQuestionQcmIdIdQcm(qcmId);
+        List<QuestionQcmDto> questionQcmListDto = new ArrayList<>();
+        for (QuestionQcm questionQcm : questionQcmList) {
+            QuestionQcmDto dto = questionQcmMapper.toDto(questionQcm);
+            questionQcmListDto.add(dto);
+        }
+        return questionQcmListDto;
     }
 }

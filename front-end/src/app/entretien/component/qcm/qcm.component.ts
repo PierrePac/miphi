@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter  } from '@angular/core';
+import { Router } from '@angular/router';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { ReponseCandidatService } from 'src/app/core/services/reponseCandidat/reponse-candidat.service';
 import { TimerService } from 'src/app/core/services/timer/timer.service';
@@ -21,11 +22,12 @@ export class QcmComponent implements OnInit {
   selectedAnswers: any[] = [];
   validatedAnswer: boolean = false;
   currentCandidatId!: number;
-  
+  timerHasEnded!: number;
 
   constructor(private timerService: TimerService,
               private qcmService: QcmService,
-              private reponseCandidatService: ReponseCandidatService) { }
+              private reponseCandidatService: ReponseCandidatService,
+              private router: Router) { }
 
   ngOnInit(): void {
     const personneJSON = sessionStorage.getItem('personne');
@@ -48,6 +50,10 @@ export class QcmComponent implements OnInit {
       if (answer.question_id !== undefined && answer.proposition_id !== undefined) {
         this.selectedAnswers[answer.question_id] = answer.proposition_id;
       }
+    });
+
+    this.timerService.remainingTime.subscribe(time => {
+        this.timerHasEnded = time;
     });
   }
 
@@ -99,7 +105,6 @@ export class QcmComponent implements OnInit {
     if(currentAnswerId === undefined) return;
     if (currentAnswerId === undefined || currentQuestionId === undefined) return;
     const currentCandidatId = this.currentCandidatId;
-    console.log(currentCandidatId)
     if(currentCandidatId === undefined) return;
 
     const reponse: ReponseCandidatDto = {
@@ -138,11 +143,10 @@ export class QcmComponent implements OnInit {
         });
       }
     });
-
-   console.log(transformedAnswers)
     this.reponseCandidatService.postQcmAnswer(transformedAnswers).subscribe((resp: any) => {
       console.log(resp)
     });
+    this.router.navigate(['/candidat'], { queryParams: { section: 'sandbox' } });
   }
 
 }

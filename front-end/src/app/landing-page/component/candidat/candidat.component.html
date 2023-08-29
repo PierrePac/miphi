@@ -1,4 +1,4 @@
-<section>
+<section class="qcm" *ngIf="activeSection === 'qcm'">
   <div class="message">
     <p-card header="La zone de test">
       <p class="m-0">
@@ -10,6 +10,20 @@
     </p-card>
   </div>
   <div class="button">
-    <button class="btn" type="submit" (click)="towardTest()">Commencer le test</button>
+    <button class="btn" type="submit" (click)="towardTest()">Commencer le Qcm</button>
   </div>
 </section>
+
+<section class="sandbox" *ngIf="activeSection === 'sandbox'">
+  <div class="message">
+    <p-card header="La zone de test">
+      <p class="m-0">
+        Maintenant test de code
+      </p>
+    </p-card>
+  </div>
+  <div class="button">
+    <button class="btn" type="submit" (click)="towardTest()">Commencer le code</button>
+  </div>
+</section>
+

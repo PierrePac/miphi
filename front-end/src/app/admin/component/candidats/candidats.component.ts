@@ -1,13 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter, map, tap } from 'rxjs/operators';
-import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { EntretienService } from 'src/app/core/services/entretien/entretien.service';
 import { PersonneService } from 'src/app/core/services/personne/personne.service';
 import { EntretienDto } from 'src/app/share/dtos/entretien/entretien-dto';
 import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
+import { QuestionService } from 'src/app/core/services/question/question.service';
+import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
+import { ReponseQcmDto } from 'src/app/share/dtos/reponse/reponse-qcm-dto';
+import { ReponseService } from 'src/app/core/services/reponse/reponse.service';
 
 @Component({
   selector: 'app-candidats',
@@ -16,17 +19,34 @@ import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
 })
 export class CandidatsComponent implements OnInit{
   @Input() mode:'view-candidats' | 'create-candidat' = 'create-candidat';
+
+  private allCandidatsSubject$: BehaviorSubject<CandidatDto[]> = new BehaviorSubject<CandidatDto[]>([]);
+  public allCandidats$ = this.allCandidatsSubject$.asObservable();
+
+  private qcmCandidatSubject$ = new BehaviorSubject<QcmDto | null>(null);
+  public qcmCandidat$ = this.qcmCandidatSubject$.asObservable();
+
+  private qcmQuestionSubject$ = new BehaviorSubject<QuestionDto[] | null>(null);
+  public qcmQuestion$ = this.qcmQuestionSubject$.asObservable();
+
+  private reponseCandidatSubject$ = new BehaviorSubject<ReponseQcmDto[] | null>(null);
+  public reponseCandidat$ = this.reponseCandidatSubject$.asObservable();
+
   allQcms$: Observable<QcmDto[]> = of([]);
   createCandidatForm!: FormGroup;
   entretienSwitch: boolean = false;
   selectedQcm?: QcmDto;
   idAdmin: number | null = null;
-  private allCandidatsSubject$: BehaviorSubject<CandidatDto[]> = new BehaviorSubject<CandidatDto[]>([]);
-  public allCandidats$ = this.allCandidatsSubject$.asObservable();
+  candidats: CandidatDto[] = [];
+  qcmCandidat!: QcmDto;
+  qcmQuestion!: QuestionDto[];
+  reponseCandidat!: ReponseQcmDto[];
 
   constructor(private qcmService: QcmService,
               private entretienService: EntretienService,
               private personneService: PersonneService,
+              private questionService: QuestionService,
+              private reponseService: ReponseService,
               private formBuilder: FormBuilder) {
     this.allQcms$ = this.qcmService.qcms$;
   }
@@ -34,7 +54,6 @@ export class CandidatsComponent implements OnInit{
   ngOnInit(): void {
     this.fetchAllCandidats();
     this.qcmService.getQcms().subscribe();
-    this.combinedData$.subscribe();
     this.createCandidatForm = this.formBuilder.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
@@ -94,7 +113,7 @@ export class CandidatsComponent implements OnInit{
       };
 
       this.entretienService.createEntretien(entretienData).subscribe((entretien: EntretienDto) => {
-        if (entretien && entretien.id !== undefined) {
+        if (entretien?.id !== undefined) {
         const candidatData = {
           nom: formValues.nom.toLowerCase(),
           prenom: formValues.prenom.toLowerCase(),
@@ -138,20 +157,45 @@ export class CandidatsComponent implements OnInit{
   fetchAllCandidats() {
     this.personneService.getCandidats().subscribe(candidats => {
       this.allCandidatsSubject$.next(candidats);
+      this.candidats = candidats;
     });
   }
 
+  loadCandidatResult(candidat: CandidatDto){
+    this.qcmService.getQcmByEntretien(candidat.entretienId).subscribe((data: QcmDto) => {
+      this.qcmCandidatSubject$.next(data);
 
-  public combinedData$ = combineLatest([this.allQcms$, this.allCandidats$]).pipe(
-    map(([qcms, candidats]) => {
-      return candidats.map(candidat => {
-        const qcm = qcms.find(q => q.id === candidat.entretienId);
-        return {
-          ...candidat,
-          qcmName: qcm ? qcm.nom : 'N/A'
-        };
-      });
-    })
-  );
+      if (data?.id) {
+        this.questionService.getQuestionsOfQcm(data.id).subscribe((data: QuestionDto[]) => {
+          this.qcmQuestionSubject$.next(data);
+        });
+      }
+    });
+    if(candidat?.id) {
+      this.reponseService.getReponsesCandidat(candidat.id).subscribe((data: ReponseQcmDto[]) => {
+        this.reponseCandidatSubject$.next(data)
+      })
+    }
+
+    this.qcmCandidat$.subscribe(qcmCandidat => {
+      if(qcmCandidat)
+        this.qcmCandidat = qcmCandidat;
+    });
+
+    this.qcmQuestion$.subscribe(qcmQuestion => {
+      if(qcmQuestion)
+        this.qcmQuestion = qcmQuestion;
+    });
+
+    this.reponseCandidat$.subscribe(reponseCandidat => {
+      if(reponseCandidat)
+        this.reponseCandidat = reponseCandidat;
+    });
+
+
+    console.log(this.qcmCandidat)
+    console.log(this.qcmQuestion)
+    console.log(this.reponseCandidat)
+  }
 
 }

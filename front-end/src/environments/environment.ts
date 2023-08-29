@@ -10,6 +10,7 @@ const environment = {
 
   GetAllQuestionUrl: 'http://localhost:8080/question/all',
   GetAllQuestionUrlWr: 'http://localhost:8080/question/all-wr',
+  getQuestionFromQcm: 'http://localhost:8080/question/get-by-qcm/',
   addQuestion: 'http://localhost:8080/question/add',
   deleteQuestion: 'http://localhost:8080/question/delete/',
   modifyQuestion: 'http://localhost:8080/question/modify/',
@@ -20,7 +21,7 @@ const environment = {
 
   addQcm: 'http://localhost:8080/qcm/add',
   deleteQcm: 'http://localhost:8080/qcm/delete/',
-  addQuestionToQcm:'http://localhost:8080/qcm/add-question',
+  addQuestionToQcm:'http://localhost:8080/qcm/add-question/',
   getAllQcms: 'http://localhost:8080/qcm/all',
   getOneQcm:'http://localhost:8080/qcm/get-by-entretien/',
   getQcmQuestion: 'http://localhost:8080/question-qcm/get/',
@@ -37,4 +38,5 @@ const environment = {
   getAllCandidats: 'http://localhost:8080/personne/get-candidat',
 
   postQcmReponses: 'http://localhost:8080/reponse-candidat/saveAll',
+  getQcmReponsesOfCandidat: 'http://localhost:8080/reponse-candidat/get-by-candidat/',
 }

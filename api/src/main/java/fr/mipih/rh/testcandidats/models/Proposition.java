@@ -16,7 +16,8 @@ import lombok.*;
 @Entity
 @Table(name = "PROPOSITIONS")
 @Data
-@ToString(exclude = {"question"})
+@EqualsAndHashCode(exclude = {"reponseCandidats"})
+@ToString(exclude = {"question", "reponseCandidats"})
 public class Proposition {
 
 	@Id

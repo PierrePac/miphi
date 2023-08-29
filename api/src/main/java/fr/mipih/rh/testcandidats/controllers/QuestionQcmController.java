@@ -27,7 +27,7 @@ public class QuestionQcmController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<List<QuestionQcmDto>> getQcmQuestionOfQcm(@PathVariable("id") Long id) {
-        List<QuestionQcmDto> QuestionQcmDtos = questionService.getQuestionQcm(id);
+        List<QuestionQcmDto> QuestionQcmDtos = questionQcmService.getQuestionQcm(id);
         return new ResponseEntity<>(QuestionQcmDtos, HttpStatus.OK);
     }
 
@@ -36,7 +36,7 @@ public class QuestionQcmController {
         Optional<Entretien> entretienOpt = entretienRepository.findById(id);
         if(entretienOpt.isPresent()){
             Entretien entretien = entretienOpt.get();
-            List<QuestionQcmDto> QuestionQcmDtos = questionService.getQuestionQcm(entretien.getQcm().getId());
+            List<QuestionQcmDto> QuestionQcmDtos = questionQcmService.getQuestionQcm(entretien.getQcm().getId());
             return new ResponseEntity<>(QuestionQcmDtos, HttpStatus.OK);
         }
         return null;

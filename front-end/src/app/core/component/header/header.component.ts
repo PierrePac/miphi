@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { FullEntretienDto } from 'src/app/share/dtos/entretien/full-entretien-dto';
@@ -15,11 +15,19 @@ export class HeaderComponent implements OnInit, OnDestroy{
   items!: any[];
   private subscription!: Subscription
   showMenu: boolean = false;
-  remainingTime: number = 0;
+  remainingTime!: number;
+  public showDiv: boolean = false;
 
   constructor(private router: Router,
               private authService: AuthenticationService,
-              private timerService: TimerService) { }
+              private timerService: TimerService)
+    {
+      this.router.events.subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.showDiv = this.router.url === '/entretien/qcm';
+        }
+      });
+    }
 
   ngOnInit(): void {
     this.subscription = this.authService.isLoggedIn.subscribe(isLoggedin => {
@@ -51,6 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   ];
 
   private candidatRoutes = [
+    // pour le dev
     { label: 'Se déconnecter', command: (event: any) => this.logout() }
   ];
 

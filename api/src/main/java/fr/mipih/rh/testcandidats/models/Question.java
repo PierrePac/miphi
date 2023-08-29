@@ -35,7 +35,7 @@ import jakarta.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "QUESTION")
-@ToString(exclude = {"questionQcms", "reponseCandidats", "propositions"})
+@ToString(exclude = {"questionQcms", "propositions"})
 public class Question {
 
 	@Id

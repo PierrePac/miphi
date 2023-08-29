@@ -22,15 +22,28 @@ public class ReponseCandidatService {
     private final PropositionRepository propositionRepository;
     private final CandidatRepository candidatRepository;
 
-    private List<ReponseCandidat> repository = new ArrayList<>();
+    private List<ReponseCandidat> repositoryEntity = new ArrayList<>();
+
     public List<ReponseCandidat> saveAll(List<ReponseCandidatDto> reponseCandidatDtoList) {
         List<ReponseCandidat> entities = new ArrayList<>();
         for (ReponseCandidatDto reponseCandidatDto: reponseCandidatDtoList) {
             ReponseCandidat reponseCandidat = reponseCandidatMapper.toEntity(reponseCandidatDto, propositionRepository, candidatRepository);
             reponseCandidatRepository.save(reponseCandidat);
-            repository.add(reponseCandidat);
+            repositoryEntity.add(reponseCandidat);
             entities.add(reponseCandidat);
         }
         return entities;
     }
+
+    public List<ReponseCandidatDto> getResponseCandidatByCandidat(Long id) {
+        List<ReponseCandidatDto> reponseDto = new ArrayList<>();
+        List<ReponseCandidat> reponseCandidatList = reponseCandidatRepository.findAllByReponseCandidatIdIdCandidat(id);
+        for(ReponseCandidat reponseCandidat: reponseCandidatList) {
+            ReponseCandidatDto reponseCandidatDto = reponseCandidatMapper.toDto(reponseCandidat);
+            reponseDto.add(reponseCandidatDto);
+        }
+    return reponseDto;
+    }
+
+
 }

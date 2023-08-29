@@ -5,7 +5,8 @@
       <p-tabMenu [model]="items" [activeItem]="activeItem"></p-tabMenu>
     </div>
   </div>
-  <p-card header="temps restant" *ngIf="remainingTime != 0">
-    <h1>{{ remainingTime | secondsToTime }} </h1>
-  </p-card>
+  <div class="timer" *ngIf="showDiv">
+    <h3 *ngIf="remainingTime > 0">temps restant : {{ remainingTime | secondsToTime }} </h3>
+    <h3 *ngIf="remainingTime < 0">temps écoulé </h3>
+  </div>
 </header>

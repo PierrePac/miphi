@@ -2,7 +2,7 @@
   <button pButton pRipple class="p-button-success" *ngIf="mode === 'create-candidat'" (click)="toggleMode()">
     <span>Voir les Candidats</span>
   </button>
-  <button pButton pRipple class="p-button-danger" *ngIf="mode === 'view-candidats'" (click)="toggleMode()">
+  <button pButton pRipple class="p-button-info" *ngIf="mode === 'view-candidats'" (click)="toggleMode()">
     <span>Ajouter un Candidat</span>
   </button>
 </div>
@@ -47,12 +47,12 @@
     <div class="col-fixed" style="min-width:20vw">
       <h1>List des candidats</h1>
       <div class="card flex justify-content-center">
-        <p-orderList class="candidat-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Candidats" filterBy="nom" filterPlaceholder="Filter by nom">
-          <ng-template let-item pTemplate="item">
-            <div class="flex flex-column justify-content-center flex-wrap">
-              <h3 class="mt-0 mb-0 flex align-items-center justify-content-center">{{ item.nom }}</h3>
-              <p class="mt-0 mb-0 flex align-items-center justify-content-center">{{ item.prenom }}</p>
-              <p class="mt-0 mb-0 flex align-items-center justify-content-center"> {{ item.qcmName }}</p>
+        <p-orderList [value]="candidats" class="candidat-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Candidats" filterBy="nom" filterPlaceholder="Filter by nom">
+          <ng-template let-candidat pTemplate="item">
+            <div class="flex flex-column justify-content-center flex-wrap" (click)="loadCandidatResult(candidat)">
+              <h3 class="mt-0 mb-0 flex align-items-center justify-content-center">{{ candidat.nom }}</h3>
+              <p class="mt-0 mb-0 flex align-items-center justify-content-center">{{ candidat.prenom }}</p>
+              <p class="mt-0 mb-0 flex align-items-center justify-content-center"> {{ candidat.qcmName }}</p>
             </div>
             <p-divider></p-divider>
           </ng-template>

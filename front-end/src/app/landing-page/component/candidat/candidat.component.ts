@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { QuestionQcmDto } from 'src/app/share/dtos/question/question-qcm-dto';
-
 
 @Component({
   selector: 'app-candidat',
@@ -17,11 +16,14 @@ export class CandidatComponent implements OnInit, OnDestroy {
   questionsList!: QuestionDto[];
   filteredQuestion!: QuestionDto[];
   questionQcm!: QuestionQcmDto[];
-
+  activeSection!: string;
 
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private questionService: QuestionService,
-              private qcmService: QcmService) { }
+              private qcmService: QcmService) {
+                this.activeSection = this.route.snapshot.queryParamMap.get('section') || 'qcm';
+               }
 
   ngOnInit(): void {
     const personneJSON = sessionStorage.getItem('personne');

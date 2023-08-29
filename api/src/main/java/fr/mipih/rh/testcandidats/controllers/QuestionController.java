@@ -1,11 +1,11 @@
 package fr.mipih.rh.testcandidats.controllers;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import fr.mipih.rh.testcandidats.models.Proposition;
+import fr.mipih.rh.testcandidats.models.QuestionQcm;
+import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +34,7 @@ public class QuestionController {
 	private final QuestionService questionService;
 	private final QuestionRepository questionRepository;
 	private final PropositionRepository propositionRepository;
+	private final QuestionQcmRepository questionQcmRepository;
 	private final PropositionService propositionService;
 
 	@PostMapping("/add")
@@ -95,4 +96,12 @@ public class QuestionController {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@GetMapping("/get-by-qcm/{id}")
+	public ResponseEntity<List<QuestionDto>> getQuestionByQcmId(@PathVariable("id") Long id) {
+		List<QuestionDto> questionDtoList = questionService.getAllQuestionOfQcm(id);
+		return new ResponseEntity<>(questionDtoList, HttpStatus.OK);
+	}
+
+
 }

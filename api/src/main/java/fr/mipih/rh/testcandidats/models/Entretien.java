@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -25,7 +27,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode()
-@ToString(exclude = {"candidats", "admin", "qcm", "sandbox"})
+@ToString(exclude = {"candidats", "qcm", "sandbox"})
 public class Entretien {
 
 	@Id
@@ -42,10 +44,6 @@ public class Entretien {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "entretien", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Candidat> candidats = new HashSet<>();
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "admin_id", nullable = true)
-	private Admin admin;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "qcm_id")

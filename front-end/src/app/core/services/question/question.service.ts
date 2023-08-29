@@ -8,7 +8,9 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+
 export class QuestionService {
+
   private questionSubject = new BehaviorSubject<QuestionDto[]>([]);
   questions$ = this.questionSubject.asObservable().pipe(
     shareReplay(1)
@@ -120,7 +122,11 @@ export class QuestionService {
   }
 
   updateQuestions(questions: QuestionDto[]) {
-    this.questionSubject.next(questions); // mise à jour du BehaviorSubject
+    this.questionSubject.next(questions);
     localStorage.setItem('questions_cache', JSON.stringify(questions));
-}
+  }
+
+  getQuestionsOfQcm(id: number): Observable<QuestionDto[]> {
+    return this.httpClient.get<QuestionDto[]>(`${environment.getQuestionFromQcm}${id}`);
+  }
 }

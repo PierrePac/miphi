@@ -6,12 +6,11 @@ import fr.mipih.rh.testcandidats.services.ReponseCandidatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/reponse-candidat")
@@ -21,13 +20,22 @@ public class ReponseCandidatContrroller {
     private final ReponseCandidatService reponseCandidatService;
 
     @PostMapping("/saveAll")
-    public ResponseEntity<String> saveAll(@RequestBody List<ReponseCandidatDto> reponseCandidatDtoList) {
+    public ResponseEntity<Map<String, String>> saveAll(@RequestBody List<ReponseCandidatDto> reponseCandidatDtoList) {
+        Map<String, String> response = new HashMap<>();
+
         try {
-            reponseCandidatService.saveAll(reponseCandidatDtoList);  // Assurez-vous que reponseCandidatService est injecté
-            return new ResponseEntity<>("Les réponses ont été enregistrées avec succès.", HttpStatus.CREATED);
+            reponseCandidatService.saveAll(reponseCandidatDtoList);
+            response.put("message", "Les réponses ont été enregistrées avec succès.");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
-            // Loggez l'exception pour le débogage
-            return new ResponseEntity<>("Une erreur est survenue lors de l'enregistrement des réponses.", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Une erreur est survenue lors de l'enregistrement des réponses.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/get-by-candidat/{id}")
+    public ResponseEntity<List<ReponseCandidatDto>> getResponseCandidatByCandidat(@PathVariable("id") Long id) {
+        List<ReponseCandidatDto> reponseCandidatDtoList = reponseCandidatService.getResponseCandidatByCandidat(id);
+        return new ResponseEntity<>(reponseCandidatDtoList, HttpStatus.OK);
     }
 }

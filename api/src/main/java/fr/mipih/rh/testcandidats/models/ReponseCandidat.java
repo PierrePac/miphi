@@ -10,6 +10,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @ToString(exclude = {"proposition","candidat"})
+@EqualsAndHashCode(exclude = {"proposition", "candidat"})
 @Entity
 public class ReponseCandidat {
 

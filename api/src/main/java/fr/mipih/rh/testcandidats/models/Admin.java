@@ -15,6 +15,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @DiscriminatorValue("ADMIN")
@@ -29,7 +31,5 @@ public class Admin extends Personne {
 	@Column(name = "motDePasse")
 	private String motDePasse;
 
-	@OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<Entretien> entretiens = new HashSet<>();
 }
 
