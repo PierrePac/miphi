@@ -27,7 +27,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode()
-@ToString(exclude = {"candidats", "qcm", "sandbox"})
+@ToString(exclude = {"candidats", "qcm", "admin", "sandbox"})
 public class Entretien {
 
 	@Id
@@ -53,5 +53,9 @@ public class Entretien {
 	@JoinColumn(name = "sandbox_id")
 	private Sandbox sandbox;
 
+	@ManyToOne( targetEntity = Admin.class,
+			fetch = FetchType.LAZY)
+	@JoinColumn(nullable = true, name = "admin_id")
+	private Admin admin;
 
 }
