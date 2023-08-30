@@ -69,7 +69,7 @@
     <div class="col">
       <p-tabPanel header="Résultat global">
         <p>Pourcentage de réussite : {{ globalSuccessRate | number: '1.1-1' }}%</p>
-        <p-rating [(ngModel)]="globalRating" readonly [stars]="5">
+        <p-rating [(ngModel)]="globalRating" [stars]="5">
           <ng-template pTemplate="cancel">
             <img src="https://primefaces.org/cdn/primeng/images/demo/rating/cancel.png" width="25px" height="25px" />
           </ng-template>

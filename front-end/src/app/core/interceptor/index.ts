@@ -1,6 +1,6 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { retry } from 'rxjs';
+import { retry } from 'rxjs/operators';
 import { AuthInterceptor } from './auth-interceptor/auth-interceptor';
 
 export const httpInterceptorProviders = [

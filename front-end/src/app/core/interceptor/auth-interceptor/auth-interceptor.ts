@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 import { AuthenticationService } from "../../services/authentication/authentication.service";
 import { Router } from "@angular/router";
 import { HttpClient, HttpEvent, HttpHandler, HttpRequest } from "@angular/common/http";
-import { Observable, catchError, map, retry, switchMap, throwError } from "rxjs";
+import { Observable, catchError, switchMap, throwError } from "rxjs";
+import { retry } from 'rxjs/operators';
+
 import { environment } from "src/environments/environment";
 import { TokenDto } from "src/app/share/dtos/token/token-dto";
 
