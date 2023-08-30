@@ -70,8 +70,6 @@ export class ViewQcmComponent implements OnInit, OnDestroy {
       })
     ).subscribe(sortedAndFilteredQuestions => {
       this.selectedQcmQuestions = sortedAndFilteredQuestions;
-      console.log(this.questionQcm)
-      console.log(this.selectedQcmQuestions);
     });
   }
 

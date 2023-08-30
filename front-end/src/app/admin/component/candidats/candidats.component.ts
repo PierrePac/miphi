@@ -11,6 +11,9 @@ import { QuestionService } from 'src/app/core/services/question/question.service
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { ReponseQcmDto } from 'src/app/share/dtos/reponse/reponse-qcm-dto';
 import { ReponseService } from 'src/app/core/services/reponse/reponse.service';
+import { QuestionTriDto } from 'src/app/share/dtos/question/question-tri-dto';
+import { ReponseCandidatQuestionDto } from 'src/app/share/dtos/reponse/reponse-candidat-question';
+import { CorrectAnswerDto } from 'src/app/share/dtos/reponse/correct-answer-dto';
 
 @Component({
   selector: 'app-candidats',
@@ -18,7 +21,7 @@ import { ReponseService } from 'src/app/core/services/reponse/reponse.service';
   styleUrls: ['./candidats.component.scss']
 })
 export class CandidatsComponent implements OnInit{
-  @Input() mode:'view-candidats' | 'create-candidat' = 'create-candidat';
+  @Input() mode:'view-candidats' | 'create-candidat' = 'view-candidats';
 
   private allCandidatsSubject$: BehaviorSubject<CandidatDto[]> = new BehaviorSubject<CandidatDto[]>([]);
   public allCandidats$ = this.allCandidatsSubject$.asObservable();
@@ -41,6 +44,9 @@ export class CandidatsComponent implements OnInit{
   qcmCandidat!: QcmDto;
   qcmQuestion!: QuestionDto[];
   reponseCandidat!: ReponseQcmDto[];
+  transformedQuestions!: QuestionTriDto[];
+  public transformedReponses: ReponseCandidatQuestionDto[] = [];
+
 
   constructor(private qcmService: QcmService,
               private entretienService: EntretienService,
@@ -162,7 +168,7 @@ export class CandidatsComponent implements OnInit{
   }
 
 
-  
+
   loadCandidatResult(candidat: CandidatDto){
     this.qcmService.getQcmByEntretien(candidat.entretienId).subscribe((data: QcmDto) => {
       this.qcmCandidatSubject$.next(data);
@@ -187,6 +193,11 @@ export class CandidatsComponent implements OnInit{
     this.qcmQuestion$.subscribe(qcmQuestion => {
       if(qcmQuestion)
         this.qcmQuestion = qcmQuestion;
+        this.transformedQuestions = this.entretienService.transformQuestions(this.qcmQuestion);
+        this.transformedReponses = this.entretienService.transformReponses(this.reponseCandidat, this.qcmQuestion);
+        const transformedData: CorrectAnswerDto[] = this.entretienService.transformToCorrectAnswerDto(this.transformedQuestions);
+        console.log('transformedReponses', this.transformedReponses)
+        console.log('transformedData', transformedData);
     });
 
     this.reponseCandidat$.subscribe(reponseCandidat => {
@@ -195,9 +206,11 @@ export class CandidatsComponent implements OnInit{
     });
 
 
-    console.log(this.qcmCandidat)
-    console.log(this.qcmQuestion)
-    console.log(this.reponseCandidat)
   }
+
+  isCandidateAnswer(questionId: number, answerId: number): boolean {
+    return this.entretienService.isCandidateAnswer(this.transformedReponses, questionId, answerId);
+  }
+
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { ReponseCandidatService } from 'src/app/core/services/reponseCandidat/reponse-candidat.service';
@@ -45,7 +45,7 @@ export class QcmComponent implements OnInit {
     const questionJson = sessionStorage.getItem('question_qcm');
     this.questions = questionJson ? JSON.parse(questionJson) : null;
 
-    let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') || '[]');
+    let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') ?? '[]');
     storedAnswers.forEach(answer => {
       if (answer.question_id !== undefined && answer.proposition_id !== undefined) {
         this.selectedAnswers[answer.question_id] = answer.proposition_id;
@@ -113,7 +113,7 @@ export class QcmComponent implements OnInit {
         proposition_id: currentAnswerId,
       }
 
-    let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') || '[]');
+    let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') ?? '[]');
     const existingAnswerIndex = storedAnswers.findIndex(storedAnswer => storedAnswer.question_id === currentQuestionId);
 
     if (existingAnswerIndex > -1) {

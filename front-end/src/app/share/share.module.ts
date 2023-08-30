@@ -21,6 +21,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SecondsToTimePipe } from './pipes/secondsToTime/seconds-to-time.pipe';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TabViewModule } from 'primeng/tabview';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     DragDropModule,
     InputSwitchModule,
     ToggleButtonModule,
+    TabViewModule,
+    AccordionModule,
   ],
   exports: [
     CommonModule,
@@ -73,6 +77,8 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     SecondsToTimePipe,
     InputSwitchModule,
     ToggleButtonModule,
+    TabViewModule,
+    AccordionModule,
   ]
 })
 export class ShareModule { }

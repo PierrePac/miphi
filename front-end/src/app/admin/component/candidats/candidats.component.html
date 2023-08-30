@@ -45,7 +45,6 @@
 <section *ngIf="mode === 'view-candidats'">
   <div class="grid">
     <div class="col-fixed" style="min-width:20vw">
-      <h1>List des candidats</h1>
       <div class="card flex justify-content-center">
         <p-orderList [value]="candidats" class="candidat-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Candidats" filterBy="nom" filterPlaceholder="Filter by nom">
           <ng-template let-candidat pTemplate="item">
@@ -61,6 +60,52 @@
     </div>
     <div class="col">
       <h1>Résultat</h1>
+      <p-tabView >
+        <p-tabPanel header="Résultat">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </p-tabPanel>
+        <p-tabPanel header="Le QCM">
+          <ng-container  *ngIf="transformedQuestions">
+            <p-accordion [activeIndex]="0">
+              <ng-container *ngFor="let transformedQuestion of transformedQuestions">
+                <p-accordionTab header="Questions à propos de: {{ transformedQuestion.technologie }}">
+                  <div *ngFor="let question of transformedQuestion.questions">
+                    <h3 class="mt-5 mb-3">Question : {{ question.question }}</h3>
+                    <div class="details flex flex-row justify-content-evenly flex-wrap">
+                      <p>niveau : {{ question.niveau }}</p>
+                      <p>Catégorie : {{ question.categorie }}</p>
+                      <p>nombre de point : {{ question.point}} points</p>
+                      <p>Temps : {{ question.temps}} secondes</p>
+                      <p>Technologie : {{ question.technologie }}</p>
+                    </div>
+                    <div class="responses mb-5">
+                      <div class="reponse" *ngFor="let reponse of question.reponses">
+                        <p [ngClass]="{
+                          'classe-true': reponse.correct,
+                          'classe-false': !reponse.correct,
+                          'border-orange': (question.id !== undefined && reponse.id !== undefined) ? isCandidateAnswer(question.id, reponse.id) : false
+                        }">
+                      {{ reponse.reponse }}
+                    </p>
+
+                      </div>
+                    </div>
+                  </div>
+                </p-accordionTab>
+              </ng-container>
+            </p-accordion>
+          </ng-container>
+        </p-tabPanel>
+        <p-tabPanel header="Le code">
+            <p>
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+            </p>
+        </p-tabPanel>
+    </p-tabView>
     </div>
   </div>
 </section>
