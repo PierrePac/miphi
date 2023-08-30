@@ -1,4 +1,5 @@
 export interface ScoreDto {
   technologie: string;
-  score: number;
+  scoreTotal: number;
+  scoreCandidat: number;
 }

@@ -9,33 +9,40 @@
 
 <section *ngIf="mode === 'create-candidat'" class="create-candidat">
   <h1 class="flex align-items-center justify-content-center">Créer un Candidat</h1>
-  <form [formGroup]="createCandidatForm" (ngSubmit)="onSubmit()" class="flex flex-column align-items-center justify-content-center">
+  <form [formGroup]="createCandidatForm" (ngSubmit)="onSubmit()"
+    class="flex flex-column align-items-center justify-content-center">
     <span class="p-float-label mt-4">
-      <input pInputText id="prenom"  pInputText formControlName="prenom"/>
+      <input pInputText id="prenom" pInputText formControlName="prenom" />
       <label htmlFor="prenom">prénom du candidat</label>
     </span>
     <span class="p-float-label mt-2">
-      <input pInputText id="nom"  pInputText formControlName="nom"/>
+      <input pInputText id="nom" pInputText formControlName="nom" />
       <label htmlFor="nom">Nom du candidat</label>
     </span>
     <div class="switch mt-4 flex">
-      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === false">Clickez pour sélectionner un test</p>
-      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === true">Clickez pour créer un test</p>
+      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === false">Clickez pour
+        sélectionner un test</p>
+      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === true">Clickez pour créer
+        un test</p>
       <p-inputSwitch (click)="EntretienToggle()" class="flex align-items-center justify-content-center"></p-inputSwitch>
     </div>
     <ng-container *ngIf="entretienSwitch === false">
-      <p-dropdown class="mt-4" [options]="(allQcms$ | async) || []" formControlName="qcm" optionLabel="nom" [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Qcm" [style]="{'width':'400px'}">
+      <p-dropdown class="mt-4" [options]="(allQcms$ | async) || []" formControlName="qcm" optionLabel="nom"
+        [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Qcm" [style]="{'width':'400px'}">
         <ng-template pTemplate="selectedItem">
           <div class="flex align-items-center gap-2" *ngIf="selectedQcm">
             <div>{{ selectedQcm.nom }}</div>
           </div>
         </ng-template>
       </p-dropdown>
-      <p-dropdown class="mt-4" [options]="sandboxOptions" formControlName="sandbox" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Sélectionner une Sandbox" [style]="{'width':'400px'}">
+      <p-dropdown class="mt-4" [options]="sandboxOptions" formControlName="sandbox" optionLabel="name" [filter]="true"
+        filterBy="name" [showClear]="true" placeholder="Sélectionner une Sandbox" [style]="{'width':'400px'}">
       </p-dropdown>
     </ng-container>
     <ng-container *ngIf="entretienSwitch === true">
-      <p-dropdown class="mt-4" [options]="entretienOptions" formControlName="entretien" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Sélectionner un Test" [style]="{'width':'400px'}">
+      <p-dropdown class="mt-4" [options]="entretienOptions" formControlName="entretien" optionLabel="name"
+        [filter]="true" filterBy="name" [showClear]="true" placeholder="Sélectionner un Test"
+        [style]="{'width':'400px'}">
       </p-dropdown>
     </ng-container>
     <button type="submit" [disabled]="!createCandidatForm.valid" class="btn mt-4">Créer le candidat</button>
@@ -46,7 +53,8 @@
   <div class="grid">
     <div class="col-fixed" style="min-width:20vw">
       <div class="card flex justify-content-center">
-        <p-orderList [value]="candidats" class="candidat-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Candidats" filterBy="nom" filterPlaceholder="Filter by nom">
+        <p-orderList [value]="candidats" class="candidat-list" [listStyle]="{ 'max-height': '55vh' }"
+          header="Liste des Candidats" filterBy="nom" filterPlaceholder="Filter by nom">
           <ng-template let-candidat pTemplate="item">
             <div class="flex flex-column justify-content-center flex-wrap" (click)="loadCandidatResult(candidat)">
               <h3 class="mt-0 mb-0 flex align-items-center justify-content-center">{{ candidat.nom }}</h3>
@@ -59,53 +67,63 @@
       </div>
     </div>
     <div class="col">
-      <h1>Résultat</h1>
-      <p-tabView >
-        <p-tabPanel header="Résultat">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-        </p-tabPanel>
-        <p-tabPanel header="Le QCM">
-          <ng-container  *ngIf="transformedQuestions">
-            <p-accordion [activeIndex]="0">
-              <ng-container *ngFor="let transformedQuestion of transformedQuestions">
-                <p-accordionTab header="Questions à propos de: {{ transformedQuestion.technologie }}">
-                  <div *ngFor="let question of transformedQuestion.questions">
-                    <h3 class="mt-5 mb-3">Question : {{ question.question }}</h3>
-                    <div class="details flex flex-row justify-content-evenly flex-wrap">
-                      <p>niveau : {{ question.niveau }}</p>
-                      <p>Catégorie : {{ question.categorie }}</p>
-                      <p>nombre de point : {{ question.point}} points</p>
-                      <p>Temps : {{ question.temps}} secondes</p>
-                      <p>Technologie : {{ question.technologie }}</p>
-                    </div>
-                    <div class="responses mb-5">
-                      <div class="reponse" *ngFor="let reponse of question.reponses">
-                        <p [ngClass]="{
+      <p-tabPanel header="Résultat global">
+        <p>Pourcentage de réussite : {{ globalSuccessRate | number: '1.1-1' }}%</p>
+        <p-rating [(ngModel)]="globalRating" readonly [stars]="5">
+          <ng-template pTemplate="cancel">
+            <img src="https://primefaces.org/cdn/primeng/images/demo/rating/cancel.png" width="25px" height="25px" />
+          </ng-template>
+          <ng-template pTemplate="onicon">
+            <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon-active.png" width="25px"
+              height="25px" />
+          </ng-template>
+          <ng-template pTemplate="officon">
+            <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon.png" width="25px"
+              height="25px" />
+          </ng-template>
+        </p-rating>
+      </p-tabPanel>
+      <p-tabPanel header="Le QCM">
+        <ng-container *ngIf="transformedQuestions">
+          <p-accordion [activeIndex]="0">
+            <ng-container *ngFor="let transformedQuestion of transformedQuestions">
+              <p-accordionTab header="Questions à propos de: {{ transformedQuestion.technologie }}">
+                <div *ngFor="let question of transformedQuestion.questions">
+                  <h3 class="mt-5 mb-3">Question : {{ question.question }}</h3>
+                  <div class="details flex flex-row justify-content-evenly flex-wrap">
+                    <p>niveau : {{ question.niveau }}</p>
+                    <p>Catégorie : {{ question.categorie }}</p>
+                    <p>nombre de point : {{ question.point}} points</p>
+                    <p>Temps : {{ question.temps}} secondes</p>
+                    <p>Technologie : {{ question.technologie }}</p>
+                  </div>
+                  <div class="responses mb-5">
+                    <div class="reponse" *ngFor="let reponse of question.reponses">
+                      <p [ngClass]="{
                           'classe-true': reponse.correct,
                           'classe-false': !reponse.correct,
                           'border-orange': (question.id !== undefined && reponse.id !== undefined) ? isCandidateAnswer(question.id, reponse.id) : false
                         }">
-                      {{ reponse.reponse }}
-                    </p>
+                        {{ reponse.reponse }}
+                      </p>
 
-                      </div>
                     </div>
                   </div>
-                </p-accordionTab>
-              </ng-container>
-            </p-accordion>
-          </ng-container>
-        </p-tabPanel>
-        <p-tabPanel header="Le code">
-            <p>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-                qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-            </p>
-        </p-tabPanel>
-    </p-tabView>
+                </div>
+              </p-accordionTab>
+            </ng-container>
+          </p-accordion>
+        </ng-container>
+      </p-tabPanel>
+      <p-tabPanel header="Le code">
+        <p>
+          At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
+          atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
+          sunt in culpa
+          qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et
+          expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+        </p>
+      </p-tabPanel>
     </div>
   </div>
 </section>

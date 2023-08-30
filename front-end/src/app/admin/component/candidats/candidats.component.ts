@@ -14,6 +14,7 @@ import { ReponseService } from 'src/app/core/services/reponse/reponse.service';
 import { QuestionTriDto } from 'src/app/share/dtos/question/question-tri-dto';
 import { ReponseCandidatQuestionDto } from 'src/app/share/dtos/reponse/reponse-candidat-question';
 import { CorrectAnswerDto } from 'src/app/share/dtos/reponse/correct-answer-dto';
+import { ScoreDto } from 'src/app/share/dtos/entretien/score-dto';
 
 @Component({
   selector: 'app-candidats',
@@ -46,6 +47,9 @@ export class CandidatsComponent implements OnInit{
   reponseCandidat!: ReponseQcmDto[];
   transformedQuestions!: QuestionTriDto[];
   public transformedReponses: ReponseCandidatQuestionDto[] = [];
+  scores!: ScoreDto[];
+  globalSuccessRate: number = 0;
+  globalRating!: number;
 
 
   constructor(private qcmService: QcmService,
@@ -196,8 +200,20 @@ export class CandidatsComponent implements OnInit{
         this.transformedQuestions = this.entretienService.transformQuestions(this.qcmQuestion);
         this.transformedReponses = this.entretienService.transformReponses(this.reponseCandidat, this.qcmQuestion);
         const transformedData: CorrectAnswerDto[] = this.entretienService.transformToCorrectAnswerDto(this.transformedQuestions);
-        console.log('transformedReponses', this.transformedReponses)
-        console.log('transformedData', transformedData);
+        this.scores= this.entretienService.calculateScores(this.transformedReponses, transformedData);
+        let totalpoints = 0;
+        let totalCandidatePoints = 0;
+
+        this.scores.forEach(score => {
+          totalpoints += score.scoreTotal;
+          totalCandidatePoints += score.scoreCandidat;
+        });
+
+        if (totalpoints != 0) {
+          this.globalSuccessRate = (totalCandidatePoints / totalpoints) * 100
+        }
+        this.updateGlobalRating();
+
     });
 
     this.reponseCandidat$.subscribe(reponseCandidat => {
@@ -206,6 +222,10 @@ export class CandidatsComponent implements OnInit{
     });
 
 
+  }
+
+  updateGlobalRating() {
+    this.globalRating = Math.round((this.globalSuccessRate / 100) * 5);
   }
 
   isCandidateAnswer(questionId: number, answerId: number): boolean {

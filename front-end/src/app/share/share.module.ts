@@ -23,12 +23,16 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
+import { PourcentageToRatingPipe } from './pipes/pourcentageToRating/pourcentage-to-rating.pipe';
+import { RatingModule } from 'primeng/rating';
+
 
 @NgModule({
   declarations: [
     ShareQuestionComponent,
     FormatEnumPipe,
     SecondsToTimePipe,
+    PourcentageToRatingPipe,
   ],
   imports: [
     CommonModule,
@@ -53,6 +57,7 @@ import { AccordionModule } from 'primeng/accordion';
     ToggleButtonModule,
     TabViewModule,
     AccordionModule,
+    RatingModule,
   ],
   exports: [
     CommonModule,
@@ -79,6 +84,7 @@ import { AccordionModule } from 'primeng/accordion';
     ToggleButtonModule,
     TabViewModule,
     AccordionModule,
+    RatingModule,
   ]
 })
 export class ShareModule { }

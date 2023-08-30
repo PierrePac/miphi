@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { EntretienDto } from 'src/app/share/dtos/entretien/entretien-dto';
+import { ScoreDto } from 'src/app/share/dtos/entretien/score-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { QuestionTriDto } from 'src/app/share/dtos/question/question-tri-dto';
 import { CorrectAnswerDto } from 'src/app/share/dtos/reponse/correct-answer-dto';
@@ -138,4 +139,52 @@ export class EntretienService {
 
       return result;
     };
+
+    calculateScores(
+      transformedReponses: ReponseCandidatQuestionDto[],
+      correctAnswers: CorrectAnswerDto[]
+    ): ScoreDto[] {
+      const scores: { [key: string]: ScoreDto } = {};
+    
+      // Initialisation du score total pour chaque technologie
+      correctAnswers.forEach((correctAnswer) => {
+        const { technologie, point } = correctAnswer;
+        if (!scores[technologie]) {
+          scores[technologie] = {
+            technologie,
+            scoreTotal: 0,
+            scoreCandidat: 0,
+          };
+        }
+        scores[technologie].scoreTotal += point;
+      });
+    
+      // Calcul du score du candidat
+      transformedReponses.forEach((response) => {
+        const { question_id, candateAnswer, technologie } = response;
+        const correctAnswer = correctAnswers.find(
+          (answer) => answer.question_id === question_id
+        );
+    
+        if (correctAnswer) {
+          // Vérifiez que les deux tableaux ont la même longueur
+          if (correctAnswer.correctAnswer.length === candateAnswer.length) {
+            // Vérifiez que toutes les réponses du candidat sont correctes et aucune incorrecte
+            const allCorrect = candateAnswer.every((ans) =>
+              correctAnswer.correctAnswer.includes(ans)
+            );
+            const noneIncorrect = candateAnswer.every(
+              (ans) => !correctAnswer.incorrectAnswer.includes(ans)
+            );
+    
+            if (allCorrect && noneIncorrect) {
+              scores[correctAnswer.technologie].scoreCandidat +=
+                correctAnswer.point;
+            }
+          }
+        }
+      });
+    
+      return Object.values(scores);
+    }
 }
