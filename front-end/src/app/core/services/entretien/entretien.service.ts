@@ -141,19 +141,10 @@ export class EntretienService {
     };
 
     calculateScores(
-<<<<<<< Updated upstream
-      transformedReponses: ReponseCandidatQuestionDto[],
-      correctAnswers: CorrectAnswerDto[]
-    ): ScoreDto[] {
-      const scores: { [key: string]: ScoreDto } = {};
-    
-      // Initialisation du score total pour chaque technologie
-=======
       transformedResponses: ReponseCandidatQuestionDto[],
       correctAnswers: CorrectAnswerDto[]
     ): ScoreDto[] {
       const scores: { [key: string]: ScoreDto } = {};
->>>>>>> Stashed changes
       correctAnswers.forEach((correctAnswer) => {
         const { technologie, point } = correctAnswer;
         if (!scores[technologie]) {
@@ -165,30 +156,6 @@ export class EntretienService {
         }
         scores[technologie].scoreTotal += point;
       });
-<<<<<<< Updated upstream
-    
-      // Calcul du score du candidat
-      transformedReponses.forEach((response) => {
-        const { question_id, candateAnswer, technologie } = response;
-        const correctAnswer = correctAnswers.find(
-          (answer) => answer.question_id === question_id
-        );
-    
-        if (correctAnswer) {
-          // Vérifiez que les deux tableaux ont la même longueur
-          if (correctAnswer.correctAnswer.length === candateAnswer.length) {
-            // Vérifiez que toutes les réponses du candidat sont correctes et aucune incorrecte
-            const allCorrect = candateAnswer.every((ans) =>
-              correctAnswer.correctAnswer.includes(ans)
-            );
-            const noneIncorrect = candateAnswer.every(
-              (ans) => !correctAnswer.incorrectAnswer.includes(ans)
-            );
-    
-            if (allCorrect && noneIncorrect) {
-              scores[correctAnswer.technologie].scoreCandidat +=
-                correctAnswer.point;
-=======
       transformedResponses.forEach((response) => {
         const { question_id, candidateAnswer, technologie } = response;
         const correctAnswer = correctAnswers.find(
@@ -205,16 +172,11 @@ export class EntretienService {
             );
             if (allCorrect && noneIncorrect) {
               scores[correctAnswer.technologie].scoreCandidat += correctAnswer.point;
->>>>>>> Stashed changes
             }
           }
         }
       });
-<<<<<<< Updated upstream
-    
-=======
 
->>>>>>> Stashed changes
       return Object.values(scores);
     }
 }

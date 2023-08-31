@@ -4,10 +4,6 @@ import { Router } from "@angular/router";
 import { HttpClient, HttpEvent, HttpHandler, HttpRequest } from "@angular/common/http";
 import { Observable, catchError, switchMap, throwError } from "rxjs";
 import { retry } from 'rxjs/operators';
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 import { environment } from "src/environments/environment";
 import { TokenDto } from "src/app/share/dtos/token/token-dto";
 
