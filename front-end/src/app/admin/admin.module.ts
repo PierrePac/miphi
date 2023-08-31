@@ -8,8 +8,9 @@ import { CandidatsComponent } from './component/candidats/candidats.component';
 import { QuestionComponent } from './component/question/question.component';
 import { ShareModule } from '../share/share.module';
 import { AddAdminComponent } from './component/add-admin/add-admin.component';
-
 import { CreateQcmComponent } from './component/create-qcm/create-qcm.component';
+import { CreateCandidatComponent } from './component/create-candidat/create-candidat.component';
+import { ViewResultComponent } from './component/view-result/view-result.component';
 
 
 @NgModule({
@@ -19,12 +20,14 @@ import { CreateQcmComponent } from './component/create-qcm/create-qcm.component'
     CandidatsComponent,
     QuestionComponent,
     AddAdminComponent,
-    CreateQcmComponent
+    CreateQcmComponent,
+    CreateCandidatComponent,
+    ViewResultComponent
   ],
   imports: [
     AdminRoutingModule,
     CommonModule,
-    ShareModule
+    ShareModule,
   ]
 })
 export class AdminModule { }

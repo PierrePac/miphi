@@ -1,5 +1,5 @@
 export interface ReponseCandidatQuestionDto {
   question_id: number;
-  candateAnswer: number[];
+  candidateAnswer: number[];
   technologie: string | undefined;
 }

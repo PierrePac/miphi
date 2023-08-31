@@ -6,7 +6,7 @@ import { ScoreDto } from 'src/app/share/dtos/entretien/score-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { QuestionTriDto } from 'src/app/share/dtos/question/question-tri-dto';
 import { CorrectAnswerDto } from 'src/app/share/dtos/reponse/correct-answer-dto';
-import { ReponseCandidatQuestionDto } from 'src/app/share/dtos/reponse/reponse-candidat-question';
+import { ReponseCandidatQuestionDto } from 'src/app/share/dtos/reponse/reponse-candidat-question-dto';
 import { ReponseQcmDto } from 'src/app/share/dtos/reponse/reponse-qcm-dto';
 import { environment } from 'src/environments/environment';
 
@@ -94,7 +94,7 @@ export class EntretienService {
     const result: ReponseCandidatQuestionDto[] = Object.keys(groupedAnswers).map((key) => {
       return {
         question_id: Number(key),
-        candateAnswer: groupedAnswers[Number(key)].answers,
+        candidateAnswer: groupedAnswers[Number(key)].answers,
         technologie: groupedAnswers[Number(key)].technologie
       };
     });
@@ -104,7 +104,7 @@ export class EntretienService {
 
     isCandidateAnswer(transformedReponses: ReponseCandidatQuestionDto[], questionId: number, answerId: number): boolean {
       const foundQuestion = transformedReponses.find(q => q.question_id === questionId);
-      return foundQuestion ? foundQuestion.candateAnswer.includes(answerId) : false;
+      return foundQuestion ? foundQuestion.candidateAnswer.includes(answerId) : false;
     }
 
     transformToCorrectAnswerDto = (questionArray: QuestionTriDto[]): CorrectAnswerDto[] => {
@@ -141,12 +141,19 @@ export class EntretienService {
     };
 
     calculateScores(
+<<<<<<< Updated upstream
       transformedReponses: ReponseCandidatQuestionDto[],
       correctAnswers: CorrectAnswerDto[]
     ): ScoreDto[] {
       const scores: { [key: string]: ScoreDto } = {};
     
       // Initialisation du score total pour chaque technologie
+=======
+      transformedResponses: ReponseCandidatQuestionDto[],
+      correctAnswers: CorrectAnswerDto[]
+    ): ScoreDto[] {
+      const scores: { [key: string]: ScoreDto } = {};
+>>>>>>> Stashed changes
       correctAnswers.forEach((correctAnswer) => {
         const { technologie, point } = correctAnswer;
         if (!scores[technologie]) {
@@ -158,6 +165,7 @@ export class EntretienService {
         }
         scores[technologie].scoreTotal += point;
       });
+<<<<<<< Updated upstream
     
       // Calcul du score du candidat
       transformedReponses.forEach((response) => {
@@ -180,11 +188,33 @@ export class EntretienService {
             if (allCorrect && noneIncorrect) {
               scores[correctAnswer.technologie].scoreCandidat +=
                 correctAnswer.point;
+=======
+      transformedResponses.forEach((response) => {
+        const { question_id, candidateAnswer, technologie } = response;
+        const correctAnswer = correctAnswers.find(
+          (answer) => answer.question_id === question_id
+        );
+
+        if (correctAnswer) {
+          if (correctAnswer.correctAnswer.length === candidateAnswer.length) {
+            const allCorrect = candidateAnswer.every((ans: number) =>
+              correctAnswer.correctAnswer.includes(ans)
+            );
+            const noneIncorrect = candidateAnswer.every(
+              (ans: number) => !correctAnswer.incorrectAnswer.includes(ans)
+            );
+            if (allCorrect && noneIncorrect) {
+              scores[correctAnswer.technologie].scoreCandidat += correctAnswer.point;
+>>>>>>> Stashed changes
             }
           }
         }
       });
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
       return Object.values(scores);
     }
 }

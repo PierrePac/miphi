@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <div class="card flex justify-content-end mt-4 mr-4">
   <button pButton pRipple class="p-button-success" *ngIf="mode === 'create-candidat'" (click)="toggleMode()">
     <span>Voir les Candidats</span>
@@ -127,3 +128,18 @@
     </div>
   </div>
 </section>
+=======
+<section>
+  <div class="card flex justify-content-end mt-4 mr-4">
+    <button pButton pRipple class="p-button-success" *ngIf="mode === 'create-candidat'" (click)="toggleMode()">
+      <p class="mt-0 mb-0">Ajouter un Candidat</p>
+    </button>
+    <button pButton pRipple class="p-button-info" *ngIf="mode === 'view-result'" (click)="toggleMode()">
+      <p class="mt-0 mb-0">Voir les résultats</p>
+    </button>
+  </div>
+
+  <app-create-candidat *ngIf="mode === 'create-candidat'"></app-create-candidat>
+  <app-view-result *ngIf="mode === 'view-result'"></app-view-result>
+</section>
+>>>>>>> Stashed changes

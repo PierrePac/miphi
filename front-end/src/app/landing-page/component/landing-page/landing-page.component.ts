@@ -25,6 +25,7 @@ export class LandingPageComponent implements OnInit {
   constructor( private formBuilder: FormBuilder,
               private router: Router,
               private authService: AuthenticationService,
+              private messageService: MessageService
               ) {}
 
   ngOnInit(): void {
@@ -37,6 +38,15 @@ export class LandingPageComponent implements OnInit {
       nom: ['', Validators.required],
       motDePasse: ['', Validators.required]
     });
+  }
+
+  show(message: string, type: string) {
+    if(type === 'error')
+    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
+    if(type === 'warning')
+    this.messageService.add({ severity: 'warn', summary: 'warn', detail: message });
+    if(type === 'success')
+    this.messageService.add({ severity: 'success', summary: 'success', detail: message });
   }
 
   ngAfterViewInit(): void {
@@ -59,7 +69,12 @@ export class LandingPageComponent implements OnInit {
           nom: form.value.nom.toLowerCase(),
           motDePasse: form.value.motDePasse
         }).subscribe(response => {
+          console.log(response);
           this.handleLoginResponse(response);
+        }, error => {
+          if (error.error.message) {
+            this.show(error.error.message, 'error')
+          }
         });
       } else if (form === this.candidatForm) {
         this.authService.authenticateCandidat({
@@ -67,8 +82,14 @@ export class LandingPageComponent implements OnInit {
           prenom: form.value.prenom.toLowerCase()
         }).subscribe(response => {
           this.handleLoginResponse(response);
-        })
+        }, error => {
+          if (error.error.message) {
+            this.show(error.error.message, 'error')
+          }
+        });
       }
+    } else {
+      this.show('Formulaire mal rempli.', 'warning')
     }
   }
 

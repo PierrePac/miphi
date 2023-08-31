@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { ReponseCandidatService } from 'src/app/core/services/reponseCandidat/reponse-candidat.service';
 import { TimerService } from 'src/app/core/services/timer/timer.service';
@@ -12,7 +13,8 @@ import { ReponseQcmDto } from 'src/app/share/dtos/reponse/reponse-qcm-dto';
 @Component({
   selector: 'app-qcm',
   templateUrl: './qcm.component.html',
-  styleUrls: ['./qcm.component.scss']
+  styleUrls: ['./qcm.component.scss'],
+  providers: [MessageService]
 })
 export class QcmComponent implements OnInit {
   public candidat!: CandidatDto;
@@ -27,7 +29,8 @@ export class QcmComponent implements OnInit {
   constructor(private timerService: TimerService,
               private qcmService: QcmService,
               private reponseCandidatService: ReponseCandidatService,
-              private router: Router) { }
+              private router: Router,
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
     const personneJSON = sessionStorage.getItem('personne');
@@ -57,6 +60,14 @@ export class QcmComponent implements OnInit {
     });
   }
 
+  show(message: string, type: string) {
+    if(type === 'error')
+    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
+    if(type === 'warning')
+    this.messageService.add({ severity: 'warn', summary: 'warn', detail: message });
+    if(type === 'success')
+    this.messageService.add({ severity: 'success', summary: 'success', detail: message });
+  }
 
   nextQuestion() {
     if (this.currentIndex < (this.questions.length || 0) - 1) {
@@ -144,9 +155,12 @@ export class QcmComponent implements OnInit {
       }
     });
     this.reponseCandidatService.postQcmAnswer(transformedAnswers).subscribe((resp: any) => {
-      console.log(resp)
+      let message:string = resp.message
+      this.show(message, 'success')
+      setTimeout(() => {
+        this.router.navigate(['/candidat'], { queryParams: { section: 'sandbox' } });
+      }, 1500);
     });
-    this.router.navigate(['/candidat'], { queryParams: { section: 'sandbox' } });
   }
 
 }

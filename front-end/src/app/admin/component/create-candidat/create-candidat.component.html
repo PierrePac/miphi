@@ -1,0 +1,41 @@
+<section class="create-candidat">
+  <h1 class="flex align-items-center justify-content-center">Créer un Candidat</h1>
+  <form [formGroup]="createCandidatForm" (ngSubmit)="onSubmit()"
+    class="flex flex-column align-items-center justify-content-center">
+    <span class="p-float-label mt-4">
+      <input pInputText id="prenom" pInputText formControlName="prenom" />
+      <label htmlFor="prenom">prénom du candidat</label>
+    </span>
+    <span class="p-float-label mt-2">
+      <input pInputText id="nom" pInputText formControlName="nom" />
+      <label htmlFor="nom">Nom du candidat</label>
+    </span>
+    <div class="switch mt-4 flex">
+      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === false">Clickez pour
+        sélectionner un test</p>
+      <p class="flex align-items-center justify-content-center mr-2" *ngIf="entretienSwitch === true">Clickez pour créer
+        un test</p>
+      <p-inputSwitch (click)="EntretienToggle()" class="flex align-items-center justify-content-center"></p-inputSwitch>
+    </div>
+    <ng-container *ngIf="entretienSwitch === false">
+      <p-dropdown class="mt-4" [options]="(allQcms$ | async) || []" formControlName="qcm" optionLabel="nom"
+        [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Qcm" [style]="{'width':'400px'}">
+        <ng-template pTemplate="selectedItem">
+          <div class="flex align-items-center gap-2" *ngIf="selectedQcm">
+            <div>{{ selectedQcm.nom }}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+      <p-dropdown class="mt-4" [options]="sandboxOptions" formControlName="sandbox" optionLabel="name" [filter]="true"
+        filterBy="name" [showClear]="true" placeholder="Sélectionner une Sandbox" [style]="{'width':'400px'}">
+      </p-dropdown>
+    </ng-container>
+    <ng-container *ngIf="entretienSwitch === true">
+      <p-dropdown class="mt-4" [options]="entretienOptions" formControlName="entretien" optionLabel="name"
+        [filter]="true" filterBy="name" [showClear]="true" placeholder="Sélectionner un Test"
+        [style]="{'width':'400px'}">
+      </p-dropdown>
+    </ng-container>
+    <button type="submit" [disabled]="!createCandidatForm.valid" class="btn mt-4">Créer le candidat</button>
+  </form>
+</section>

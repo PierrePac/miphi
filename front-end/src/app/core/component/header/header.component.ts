@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   private candidatRoutes = [
     // pour le dev
-    { label: 'Se déconnecter', command: (event: any) => this.logout() }
+    //{ label: 'Se déconnecter', command: (event: any) => this.logout() }
   ];
 
   getRoutesBasedOnRole(): any[] {

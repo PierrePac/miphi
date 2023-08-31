@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
@@ -17,7 +18,6 @@ export class AdminComponent implements OnInit {
   filteredQuestions$!: Observable<QuestionDto[]>;
 
   cards = [
-    //{ title: 'Créer un QCM', route: 'admin/qcm', image: 'assets/media/create_qcm.jpg' },
     { title: 'Gérer les QCMs', route: 'admin/qcm', image:'assets/media/list_qcm.jpg' },
     { title: 'Gérer les candidats', route:'admin/candidats', image:'assets/media/candidats.jpg' },
     { title:'Gérer les questions', route:'admin/question', image:'assets/media/add_question.jpg' },
@@ -25,7 +25,6 @@ export class AdminComponent implements OnInit {
   ]
 
   constructor(private questionService: QuestionService,
-              private qcmService: QcmService,
               private router: Router) { }
 
   ngOnInit(): void {

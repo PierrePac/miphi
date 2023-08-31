@@ -25,7 +25,10 @@ import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
 import { PourcentageToRatingPipe } from './pipes/pourcentageToRating/pourcentage-to-rating.pipe';
 import { RatingModule } from 'primeng/rating';
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 @NgModule({
   declarations: [

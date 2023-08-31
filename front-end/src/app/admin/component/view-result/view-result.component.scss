@@ -1,0 +1,43 @@
+$white: #e9e9e9;
+$blue: #0367a6;
+$lightblue: #293371;
+
+:host ::ng-deep {
+    .candidat-list .p-orderlist-controls{
+      display: none;
+    }
+  }
+
+.reponse {
+  width: 70%;
+  margin: 0 auto;
+
+  .classe-true, .classe-false {
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: -3px -3px 5px rgba(255, 255, 255, 0.8), 3px 3px 5px rgba(0, 0, 0, 0.3);
+    width: 100%;
+  }
+
+  .classe-true {
+    border: 1px solid #4CAF50;
+    background-color: #e8f5e9;
+  }
+
+  .classe-false {
+    border: 1px solid #f44336;
+    background-color: #ffebee;
+  }
+
+  .border-orange {
+    border: 2px solid blue;
+}
+}
+
+  .details p {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: -3px -3px 5px rgba(255, 255, 255, 0.8), 3px 3px 5px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
+  }

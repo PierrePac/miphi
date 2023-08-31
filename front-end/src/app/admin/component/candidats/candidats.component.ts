@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -15,18 +16,20 @@ import { QuestionTriDto } from 'src/app/share/dtos/question/question-tri-dto';
 import { ReponseCandidatQuestionDto } from 'src/app/share/dtos/reponse/reponse-candidat-question';
 import { CorrectAnswerDto } from 'src/app/share/dtos/reponse/correct-answer-dto';
 import { ScoreDto } from 'src/app/share/dtos/entretien/score-dto';
+=======
+import { Component } from '@angular/core';
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-candidats',
   templateUrl: './candidats.component.html',
   styleUrls: ['./candidats.component.scss']
 })
-export class CandidatsComponent implements OnInit{
-  @Input() mode:'view-candidats' | 'create-candidat' = 'view-candidats';
+export class CandidatsComponent {
 
-  private allCandidatsSubject$: BehaviorSubject<CandidatDto[]> = new BehaviorSubject<CandidatDto[]>([]);
-  public allCandidats$ = this.allCandidatsSubject$.asObservable();
+  public mode: 'view-result' | 'create-candidat' = 'view-result';
 
+<<<<<<< Updated upstream
   private qcmCandidatSubject$ = new BehaviorSubject<QcmDto | null>(null);
   public qcmCandidat$ = this.qcmCandidatSubject$.asObservable();
 
@@ -233,4 +236,10 @@ export class CandidatsComponent implements OnInit{
   }
 
 
+=======
+  toggleMode(): void {
+    this.mode = this.mode === 'create-candidat' ? 'view-result' : 'create-candidat';
+  }
+
+>>>>>>> Stashed changes
 }
