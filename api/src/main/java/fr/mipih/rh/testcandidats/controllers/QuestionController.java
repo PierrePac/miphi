@@ -4,8 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import fr.mipih.rh.testcandidats.models.Proposition;
-import fr.mipih.rh.testcandidats.models.QuestionQcm;
-import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

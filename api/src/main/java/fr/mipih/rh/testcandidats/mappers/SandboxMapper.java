@@ -21,7 +21,8 @@ public class SandboxMapper {
         sandboxDto.setSrc(sandbox.getSrc());
         sandboxDto.setNiveau(sandbox.getNiveau().name());
         sandboxDto.setTechnologie(sandbox.getTechnologie().name());
-        // Conversion des autres champs, si nécessaire
+        sandboxDto.setNom(sandbox.getNom());
+        sandboxDto.setConsigne(sandbox.getConsigne());
 
         return sandboxDto;
     }
@@ -36,7 +37,8 @@ public class SandboxMapper {
         sandbox.setSrc(sandboxDto.getSrc());
         sandbox.setNiveau(Niveau.valueOf(sandboxDto.getNiveau()));
         sandbox.setTechnologie(Technologie.valueOf(sandboxDto.getTechnologie()));
-        // Conversion des autres champs, si nécessaire
+        sandbox.setNom(sandboxDto.getNom());
+        sandbox.setConsigne(sandboxDto.getConsigne());
 
         return sandbox;
     }

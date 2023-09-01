@@ -1,0 +1,13 @@
+<section>
+  <div class="card flex justify-content-end mt-4 mr-4">
+    <button pButton pRipple class="p-button-success" *ngIf="mode === 'create-sandbox'" (click)="toggleMode()">
+      <p class="mt-0 mb-0">Liste des Sandbox</p>
+    </button>
+    <button pButton pRipple class="p-button-info" *ngIf="mode === 'list-sandbox'" (click)="toggleMode()">
+      <p class="mt-0 mb-0">Ajouter une Sandbox</p>
+    </button>
+  </div>
+
+  <app-create-sandbox *ngIf="mode === 'create-sandbox'" (onSave)="handleSave($event)"></app-create-sandbox>
+  <app-list-sandbox *ngIf="mode === 'list-sandbox'"></app-list-sandbox>
+</section>

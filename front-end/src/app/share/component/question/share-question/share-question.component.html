@@ -1,6 +1,6 @@
 <!-- share-question-component.html -->
-
 <div *ngIf="mode === 'edit'">
+  <p-toast></p-toast>
   <section class="add-question">
     <h1>Rajouter une question</h1>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">

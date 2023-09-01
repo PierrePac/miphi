@@ -24,9 +24,9 @@ public class EntretienMapper {
         EntretienDto entretienDto = new EntretienDto();
 
         entretienDto.setId(entretien.getId());
+        entretienDto.setNom(entretien.getNom());
 
-
-        //entretienDto.setAdmin(adminMapper.toAdminDto(entretien.getAdmin()));
+        entretienDto.setAdmin(adminMapper.toAdminDto(entretien.getAdmin()));
         entretienDto.setQcm(qcmMapper.toDto(entretien.getQcm()));
         entretienDto.setSandbox(sandboxMapper.toSandboxDto(entretien.getSandbox()));
 
@@ -41,9 +41,9 @@ public class EntretienMapper {
         Entretien entretien = new Entretien();
 
         entretien.setId(entretienDto.getId());
-        // ... (autres champs)
+        entretien.setNom(entretienDto.getNom());
 
-        //entretien.setAdmin(adminMapper.toEntity(entretienDto.getAdmin()));
+        entretien.setAdmin(adminMapper.toEntity(entretienDto.getAdmin()));
         entretien.setQcm(qcmMapper.toEntity(entretienDto.getQcm()));
         entretien.setSandbox(sandboxMapper.toSandboxEntity(entretienDto.getSandbox()));
 

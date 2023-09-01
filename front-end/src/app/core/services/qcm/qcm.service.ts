@@ -35,7 +35,7 @@ export class QcmService {
 
   getQcms(): Observable<QcmDto[]> {
     const sortQcm = (qcms: QcmDto[]) =>
-    qcms.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+      qcms.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
 
     return this.httpClient.get<QcmDto[]>(environment.getAllQcms).pipe(
       map(qcms => sortQcm(qcms)),

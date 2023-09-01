@@ -38,6 +38,12 @@ public class Sandbox {
 	@Column(name = "scr")
 	private String src;
 
+	@Column(name = "nom")
+	private String nom;
+
+	@Column(name = "consigne")
+	private String consigne;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "niveau")
 	private Niveau niveau;

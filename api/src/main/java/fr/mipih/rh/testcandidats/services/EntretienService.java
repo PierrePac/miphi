@@ -1,8 +1,11 @@
 package fr.mipih.rh.testcandidats.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +50,7 @@ public class EntretienService {
                 .orElseThrow(() -> new AppException("Qcm introuvable", HttpStatus.NOT_FOUND));
         Entretien entretien = new Entretien();
         entretien.setDateEnd(entretienDto.getDate_end());
+        entretien.setNom(entretienDto.getNom());
         entretien.setDateStart(new Date());
         entretien.setAdmin(admin);
         entretien.setQcm(qcm);
@@ -67,5 +71,15 @@ public class EntretienService {
 
         }
         return null;
+    }
+
+    public List<EntretienDto> getAll() {
+        List<Entretien> entretienList = entretienRepository.findAll();
+        List<EntretienDto> entretienDtoList = new ArrayList<>();
+        for(Entretien entretien: entretienList) {
+            EntretienDto entretienDto = entretienMapper.toDto(entretien);
+            entretienDtoList.add(entretienDto);
+        }
+        return entretienDtoList;
     }
 }

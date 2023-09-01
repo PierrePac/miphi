@@ -24,10 +24,7 @@ public class QuestionService {
 	private final QuestionQcmRepository questionQcmRepository;
 
 	public QuestionDto saveQuestion(QuestionDto questionDto) {
-		Question question = QuestionMapper.toEntity(questionDto);
-		questionRepository.save(question);
-		QuestionDto questionDtoSaved = QuestionMapper.toDto(question);
-		return questionDtoSaved;
+		return QuestionMapper.toDto(questionRepository.save(QuestionMapper.toEntity(questionDto)));
 	}
 
 	public List<QuestionDto> getAllQuestions() {

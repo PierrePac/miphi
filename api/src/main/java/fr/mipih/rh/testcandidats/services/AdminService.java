@@ -35,7 +35,7 @@ public class AdminService {
 	}
 	
 	public AdminDto ajoutAdmin(NewAdminDto newAdminDto) {
-		Optional<Admin> doublon = adminRepository.findByNomAndPrenom(newAdminDto.getNom(), newAdminDto.getPrenom());
+		Optional<Admin> doublon = adminRepository.findByNom(newAdminDto.getNom());
 		if(doublon.isPresent()) {
 			throw new AppException("Admin déjà présent", HttpStatus.BAD_REQUEST);
 		}

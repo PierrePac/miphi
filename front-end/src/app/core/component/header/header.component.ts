@@ -51,6 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
 
   private adminRoutes = [
+    { label: 'Gérer les Sandbox', routerLink: 'admin/sandbox' },
     { label: 'Gérer les QCM', routerLink: 'admin/qcm' },
     { label: 'Gérer les candidats', routerLink: 'admin/candidats' },
     { label: 'Gérer les questions', routerLink: 'admin/question' },

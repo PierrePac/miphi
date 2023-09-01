@@ -19,6 +19,7 @@ public class EntretienDto {
 
     private Long id;
     private AdminDto admin;
+    private String nom;
     private Date date_end;
     private Date date_start;
     private QcmDto qcm;

@@ -1,5 +1,6 @@
 package fr.mipih.rh.testcandidats.controllers;
 
+import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.mipih.rh.testcandidats.dtos.EntretienDto;
 import fr.mipih.rh.testcandidats.services.EntretienService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/entretien")
@@ -40,6 +43,12 @@ public class EntretienController {
         } else {
             return new ResponseEntity<>(entretienDto, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<List<EntretienDto>> getAllEntretienx() {
+        List<EntretienDto> entretienDtoList = entretienService.getAll();
+        return new ResponseEntity<List<EntretienDto>>(entretienDtoList, HttpStatus.OK);
     }
 
 }

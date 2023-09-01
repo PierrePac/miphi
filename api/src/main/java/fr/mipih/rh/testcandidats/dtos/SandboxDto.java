@@ -13,8 +13,8 @@ public class SandboxDto {
 
     private Long id;
     private String src;
-    private String categorie;
     private String niveau;
     private String technologie;
-
+    private String nom;
+    private String consigne;
 }

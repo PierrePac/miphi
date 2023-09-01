@@ -11,11 +11,13 @@ import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-create-qcm',
   templateUrl: './create-qcm.component.html',
-  styleUrls: ['./create-qcm.component.scss']
+  styleUrls: ['./create-qcm.component.scss'],
+  providers: [MessageService]
 })
 export class CreateQcmComponent implements OnInit, OnDestroy {
   @Input() qcms$!: Observable<QcmDto[]>;
@@ -35,7 +37,8 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
 
   constructor(private questionService: QuestionService,
               private formBuilder: FormBuilder,
-              private qcmService: QcmService) {
+              private qcmService: QcmService,
+              private messageService: MessageService) {
     const cachedQuestions = localStorage.getItem('questions_cache');
     this.allQuestions$ = cachedQuestions ? of(JSON.parse(cachedQuestions)) : this.questionService.questions$;
    }
@@ -71,6 +74,15 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
 
   }
 
+  show(message: string, type: string) {
+    if(type === 'error')
+    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
+    if(type === 'warning')
+    this.messageService.add({ severity: 'warn', summary: 'warn', detail: message });
+    if(type === 'success')
+    this.messageService.add({ severity: 'success', summary: 'success', detail: message });
+  }
+
   createTechnoNiveauOptions(): OptionDto[] {
     const options: OptionDto[] = [];
     for (let tech of Object.values(Technologie)) {
@@ -84,7 +96,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
 
   onTechnologieChange(event: any) {
     const technologieObj = event.value;
-    if (technologieObj && technologieObj.niveaux) {
+    if (technologieObj?.niveaux) {
       this.niveauxPourTechnologieChoisie = technologieObj.niveaux;
     } else {
         this.niveauxPourTechnologieChoisie = [];
@@ -99,7 +111,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
         return this.allQuestions$.pipe(
           map(questions => {
             let questionsFiltrees = questions;
-            if(row.technologie && row.technologie.technologie) {
+            if(row.technologie?.technologie) {
               questionsFiltrees = questionsFiltrees.filter(q => q.technologie === row.technologie.technologie);
               console.log(questionsFiltrees)
             }
@@ -109,7 +121,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
               console.log(questionsFiltrees)
             }
 
-            if(row.categorie && row.categorie.name) {
+            if(row.categorie?.name) {
               questionsFiltrees = questionsFiltrees.filter(q => q.categorie === row.categorie.name);
               console.log(questionsFiltrees)
             }
@@ -184,6 +196,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
   submitQcm(): void {
     if(this.qcmForm.get('rows')?.hasError('duplicateRows')) {
       console.error('Combinaison de filtre déjà existante');
+      this.show('Combinaison de filtre déjà existante','warning');
       return;
     }
     const formData = this.qcmForm.value;
@@ -194,7 +207,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
     formData.rows.forEach((row: {categorie: { name: string }; technologie: { technologie: string }; niveau: string ; nbreQuestion: {name: string};}) => {
       let filteredQuestions = [...this.latestQuestions];
 
-      if(row.technologie && row.technologie.technologie) {
+      if(row.technologie?.technologie) {
         filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.technologie === row.technologie.technologie);
         console.log(filteredQuestions)
       }
@@ -203,7 +216,7 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
         console.log(row.niveau)
         console.log(filteredQuestions)
       }
-      if(row.categorie && row.categorie.name) {
+      if(row.categorie?.name) {
         filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.categorie === row.categorie.name);
         console.log(filteredQuestions)
       }
@@ -239,16 +252,16 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
               });
           });
           this.qcmService.addQuestionToQcm(newQcmId, allQuestionIds).subscribe((resp: any) => {
-            console.log('Questions ajoutées avec sucés: ', resp);
+            this.show('Questions ajoutées avec sucés','success');
           },
           (error: any) => {
-            console.error('Erreur lors de l\'ajout des questions:', error)
+            this.show('Erreur lors de l\'ajout des questions','error');
           })
           }
-       console.log('Données du QCM envoyées avec succès!', response);
+       this.show('Données du QCM envoyées avec succès!','success');
      },
      error => {
-       console.error('Erreur lors de l\'envoi des données du QCM', error);
+       this.show('Erreur lors de l\'envoi des données du QCM','error');
       }
     )
     this.qcmForm.reset();

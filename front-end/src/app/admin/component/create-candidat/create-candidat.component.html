@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <section class="create-candidat">
   <h1 class="flex align-items-center justify-content-center">Créer un Candidat</h1>
   <form [formGroup]="createCandidatForm" (ngSubmit)="onSubmit()"
@@ -18,23 +19,44 @@
       <p-inputSwitch (click)="EntretienToggle()" class="flex align-items-center justify-content-center"></p-inputSwitch>
     </div>
     <ng-container *ngIf="entretienSwitch === false">
+      <span class="p-float-label mt-4">
+        <input pInputText id="nomEntretien" formControlName="nomEntretien" />
+        <label htmlFor="nomEntretien">Donnez un titre à l'entretien</label>
+      </span>
+
       <p-dropdown class="mt-4" [options]="(allQcms$ | async) || []" formControlName="qcm" optionLabel="nom"
-        [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Qcm" [style]="{'width':'400px'}">
+        [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Qcm" [style]="{'width':'400px'}"
+        (onChange)="onQcmChange($event)">
         <ng-template pTemplate="selectedItem">
           <div class="flex align-items-center gap-2" *ngIf="selectedQcm">
             <div>{{ selectedQcm.nom }}</div>
           </div>
         </ng-template>
       </p-dropdown>
-      <p-dropdown class="mt-4" [options]="sandboxOptions" formControlName="sandbox" optionLabel="name" [filter]="true"
-        filterBy="name" [showClear]="true" placeholder="Sélectionner une Sandbox" [style]="{'width':'400px'}">
+
+      <p-dropdown class="mt-4" [options]="(allSandbox$ | async) || []" formControlName="sandbox" optionLabel="nom"
+        [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner une Sandbox" [style]="{'width':'400px'}"
+        (onChange)="onSandboxChange($event)">
+        <ng-template pTemplate="selectedItem">
+          <div class="flex align-items-center gap-2" *ngIf="selectedSandbox">
+            <div>{{ selectedSandbox.nom }}</div>
+          </div>
+        </ng-template>
       </p-dropdown>
+
     </ng-container>
     <ng-container *ngIf="entretienSwitch === true">
-      <p-dropdown class="mt-4" [options]="entretienOptions" formControlName="entretien" optionLabel="name"
-        [filter]="true" filterBy="name" [showClear]="true" placeholder="Sélectionner un Test"
-        [style]="{'width':'400px'}">
+
+      <p-dropdown class="mt-4" [options]="(allEntretien$ | async) || []" formControlName="entretien" optionLabel="nom"
+        [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Test" [style]="{'width':'400px'}"
+        (onChange)="onEntretienChange($event)">
+        <ng-template pTemplate="selectedItem">
+          <div class="flex align-items-center gap-2" *ngIf="selectedEntretien">
+            <div>{{ selectedEntretien.nom }}</div>
+          </div>
+        </ng-template>
       </p-dropdown>
+
     </ng-container>
     <button type="submit" [disabled]="!createCandidatForm.valid" class="btn mt-4">Créer le candidat</button>
   </form>

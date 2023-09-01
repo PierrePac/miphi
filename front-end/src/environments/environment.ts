@@ -29,9 +29,11 @@ const environment = {
   updateOrdreQcmQuestion: 'http://localhost:8080/question-qcm/update-order',
 
   addSandbox: 'http://localhost:8080/sandbox/add',
+  getAllSandbox: 'http://localhost:8080/sandbox/get-all',
 
   addEntretien: 'http://localhost:8080/entretien/add',
   getEntretien: 'http://localhost:8080/entretien/',
+  getAllEntretien: 'http://localhost:8080/entretien/get-all',
 
   addAdmin: 'http://localhost:8080/personne/add-admin',
   addCandidat: 'http://localhost:8080/personne/add-candidat',
@@ -39,4 +41,5 @@ const environment = {
 
   postQcmReponses: 'http://localhost:8080/reponse-candidat/saveAll',
   getQcmReponsesOfCandidat: 'http://localhost:8080/reponse-candidat/get-by-candidat/',
+
 }

@@ -10,6 +10,9 @@ import fr.mipih.rh.testcandidats.models.Sandbox;
 import fr.mipih.rh.testcandidats.repositories.SandboxRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SandboxService {
@@ -27,5 +30,15 @@ public class SandboxService {
         Sandbox sandbox = sandboxMapper.toSandboxEntity(sandboxDto);
         sandbox = sandboxRepository.save(sandbox);
         return sandboxMapper.toSandboxDto(sandbox);
+    }
+
+    public List<SandboxDto> getAll() {
+        List<Sandbox> sandboxList = sandboxRepository.findAll();
+        List<SandboxDto> sandboxDtoList = new ArrayList<>();
+        for(Sandbox sandbox: sandboxList) {
+            SandboxDto sandboxDto = sandboxMapper.toSandboxDto(sandbox);
+            sandboxDtoList.add(sandboxDto);
+        }
+        return sandboxDtoList;
     }
 }

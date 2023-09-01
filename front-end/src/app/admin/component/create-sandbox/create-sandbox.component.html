@@ -1,0 +1,28 @@
+<section class="create-sandbox">
+  <form [formGroup]="sandboxForm" (ngSubmit)="onSubmit()">
+    <span class="p-float-label">
+      <input pInputText id="src" formControlName="src" class="w-full"/>
+      <label htmlFor="src">Source url</label>
+    </span>
+    <span class="p-float-label">
+      <input pInputText id="nom" formControlName="nom" class="w-full" />
+      <label htmlFor="nom">Nom de l'entretien</label>
+    </span>
+    <span class="p-float-label">
+      <textarea id="float-input" rows="5" cols="30" pInputTextarea formControlName="consignes" class="w-full"></textarea>
+      <label for="float-input">Consignes pour l'exercice</label>
+    </span>
+
+    <span class="p-float-label">
+      <p-dropdown [options]="niveaux" formControlName="niveau" placeholder="Sélectionner un Niveau" class="w-full"></p-dropdown>
+      <label for="niveau">Niveau</label>
+    </span>
+
+    <span class="p-float-label">
+      <p-dropdown [options]="technologies" formControlName="technologie" placeholder="Sélectionner une Technologie" class="w-full"></p-dropdown>
+      <label for="technologie">Technologie</label>
+    </span>
+
+    <button class="btn">Soumettre</button>
+  </form>
+</section>

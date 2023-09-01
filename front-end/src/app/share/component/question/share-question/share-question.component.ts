@@ -5,11 +5,13 @@ import { PropositionDto } from 'src/app/share/dtos/proposition/proposition-dto';
 import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-share-question',
   templateUrl: './share-question.component.html',
-  styleUrls: ['./share-question.component.scss']
+  styleUrls: ['./share-question.component.scss'],
+  providers: [MessageService]
 })
 export class ShareQuestionComponent implements OnInit {
   @Input() mode:'edit' | 'display' = 'display';
@@ -31,7 +33,8 @@ export class ShareQuestionComponent implements OnInit {
     return this.form.get('reponses') as FormArray;
   }
 
-  constructor(private formbuilder: FormBuilder) {}
+  constructor(private formbuilder: FormBuilder,
+              private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -39,6 +42,15 @@ export class ShareQuestionComponent implements OnInit {
       const formData = this.patchFormWithQuestion(this.questionDto);
       this.form.patchValue(formData);
     }
+  }
+
+  show(message: string, type: string) {
+    if(type === 'error')
+    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
+    if(type === 'warning')
+    this.messageService.add({ severity: 'warn', summary: 'warn', detail: message });
+    if(type === 'success')
+    this.messageService.add({ severity: 'success', summary: 'success', detail: message });
   }
 
   initForm() {
@@ -107,6 +119,9 @@ export class ShareQuestionComponent implements OnInit {
     if (this.form.valid) {
       this.onSave.emit(this.form.value);
       this.form.reset();
+    } else {
+      console.log('hello')
+      this.show('Formulaire incomplet', 'warning');
     }
   }
   onDeleteQuestion(): void {

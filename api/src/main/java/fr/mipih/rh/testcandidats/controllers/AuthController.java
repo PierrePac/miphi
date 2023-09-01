@@ -52,12 +52,6 @@ public class AuthController {
 		return ResponseEntity.ok(candidat);
 	}
 	
-	@PostMapping("/add-admin")
-	public ResponseEntity<AdminDto> ajoutAdmin(@RequestBody NewAdminDto newAdminDto) {
-		AdminDto admin = adminService.ajoutAdmin(newAdminDto);
-		return ResponseEntity.created(URI.create("/personne/" + admin.getId())).body(admin);
-	}
-	
 	@PostMapping("/refresh-token")
 	public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenRequestDto request) {
 		String refreshToken = request.getRefreshToken();

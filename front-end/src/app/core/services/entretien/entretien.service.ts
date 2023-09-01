@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map, shareReplay, tap } from 'rxjs';
 import { EntretienDto } from 'src/app/share/dtos/entretien/entretien-dto';
 import { ScoreDto } from 'src/app/share/dtos/entretien/score-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
@@ -15,10 +15,20 @@ import { environment } from 'src/environments/environment';
 })
 export class EntretienService {
   private entretienSubject = new BehaviorSubject<EntretienDto | null>(null);
-  entretien$ = this.entretienSubject.asObservable();
+  entretien$ = this.entretienSubject.asObservable().pipe(
+    shareReplay(1)
+  );
+  private allEntretienSubject = new BehaviorSubject<EntretienDto[]>([]);
+  allEntretien$ = this.allEntretienSubject.asObservable().pipe(
+    shareReplay(1)
+  );
+  private entretien: EntretienDto[] = [];
 
   constructor(private httpClient: HttpClient) {
     this.loadInitialData();
+    this.allEntretien$.subscribe(data => {
+      this.entretien = data
+    })
   }
 
   private loadInitialData() {
@@ -46,6 +56,18 @@ export class EntretienService {
 
   createEntretien(data: EntretienDto): Observable<EntretienDto> {
     return this.httpClient.post<EntretienDto>(environment.addEntretien, data)
+  }
+
+  getAllEntretien(): Observable<EntretienDto[]> {
+    const sortEntretien = (entretiens: EntretienDto[]) =>
+      entretiens.sort((a, b) => (b.id ?? 0 ) - (a.id ?? 0));
+
+      return this.httpClient.get<EntretienDto[]>(environment.getAllEntretien).pipe(
+        map(entretien => sortEntretien(entretien)),
+        tap(sortedEntretiens => {
+          this.allEntretienSubject.next(sortedEntretiens)
+        })
+      );
   }
 
   transformQuestions(qcmQuestion: QuestionDto[]): QuestionTriDto[] {

@@ -14,4 +14,5 @@ export interface EntretienDto {
   sandbox: {
       id: number;
   };
+  nom: string;
 }

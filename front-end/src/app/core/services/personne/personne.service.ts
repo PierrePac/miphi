@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NewAdminDto } from 'src/app/share/dtos/admin/new-admin-dto';
 import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
+import { ServerReponseDto } from 'src/app/share/dtos/server-reponse/server-reponse-dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -20,8 +21,8 @@ export class PersonneService {
     return this.httpClient.get<CandidatDto[]>(environment.getAllCandidats);
   }
 
-  createAdmin(data: NewAdminDto): Observable<NewAdminDto> {
-    return this.httpClient.post<NewAdminDto>(environment.addAdmin, data)
+  createAdmin(data: NewAdminDto): Observable<ServerReponseDto> {
+    return this.httpClient.post<ServerReponseDto>(environment.addAdmin, data)
   }
 
 }

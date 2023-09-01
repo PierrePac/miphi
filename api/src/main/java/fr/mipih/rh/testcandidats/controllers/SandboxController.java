@@ -14,6 +14,8 @@ import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import fr.mipih.rh.testcandidats.services.SandboxService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sandbox")
 @RequiredArgsConstructor
@@ -31,6 +33,12 @@ public class SandboxController {
     public ResponseEntity<SandboxDto> createSandbox(@RequestBody SandboxDto sandboxDto) {
         SandboxDto savedSandbox = sandboxService.save(sandboxDto);
         return new ResponseEntity<>(savedSandbox, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<List<SandboxDto>> getAllSandbox() {
+        List<SandboxDto> sandboxDtoList = sandboxService.getAll();
+        return new ResponseEntity<List<SandboxDto>>(sandboxDtoList, HttpStatus.OK);
     }
 
 }

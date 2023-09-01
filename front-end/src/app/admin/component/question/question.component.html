@@ -19,7 +19,7 @@
     <p-dropdown [(ngModel)]="categorieSelectionnee" [options]="categories"  optionLabel="name" placeholder="Sélectionner une catégorie" (onChange)="updateQuestionsList()"></p-dropdown>
     <p-dropdown [(ngModel)]="technologieSelectionnee" [options]="technologies" optionLabel="name" placeholder="Sélectionner une Technologie" (onChange)="updateQuestionsList()"></p-dropdown>
     <p-dropdown [(ngModel)]="niveauSelectionne" [options]="niveaux" optionLabel="name" placeholder="Sélectionner un Niveaux" (onChange)="updateQuestionsList()"></p-dropdown>
-    <button (click)="reinitialiserFiltres()">Réinitialiser les Filtres</button>
+    <button (click)="reinitialiserFiltres()" class="btn mt-0">Réinitialiser les Filtres</button>
 </div>
   <ng-container *ngFor="let question of filteredQuestions$ | async">
     <app-share-question [questionDto]="question" [mode]="'display'" (onSave)="handleSave($event)" (onDelete)="deleteQuestion($event)"></app-share-question>

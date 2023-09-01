@@ -1,11 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { PersonneService } from 'src/app/core/services/personne/personne.service';
 import { NewAdminDto } from 'src/app/share/dtos/admin/new-admin-dto';
-
-
 
 @Component({
   selector: 'app-add-admin',
@@ -34,12 +33,20 @@ export class AddAdminComponent implements OnInit{
   onSubmit() {
     if(this.addAdminForm.valid){
       this.newAdmin = this.addAdminForm.value;
-      this.personneService.createAdmin(this.newAdmin).subscribe((resp: any) => {
-        console.log(resp)
-        this.show('Admin Ajouté à la BDD', 'success')
+      this.newAdmin.nom = this.newAdmin.nom.toLowerCase();
+      this.personneService.createAdmin(this.newAdmin).subscribe(response => {
+        this.show(response.message, 'success')
         setTimeout(() => {
           this.router.navigate(['/admin'], { queryParams: { section: 'sandbox' } });
         }, 1500);
+      },
+      (error: HttpErrorResponse) => {
+        if(error.status === 400) {
+          this.show(error.error.message, 'error')
+          console.error('Erreur 400 :', error.error.message);
+        } else{
+          this.show(error.error.message, 'error')
+        }
       });
     } else {
       this.show('Formulaire mal rempli.', 'warning')

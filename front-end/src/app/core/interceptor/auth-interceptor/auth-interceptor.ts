@@ -48,7 +48,7 @@ export class AuthInterceptor {
     }
 
     return this.httpClient.post<TokenDto>(environment.refreshToken, { refreshToken }).pipe(
-      retry(1),
+      retry(3),
       switchMap((tokens: TokenDto) => {
         window.localStorage.removeItem('auth_token');
         window.localStorage.setItem('auth_token', tokens.token);

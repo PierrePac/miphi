@@ -1,7 +1,9 @@
 package fr.mipih.rh.testcandidats.controllers;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,11 @@ public class PersonneController {
     private final UserAuthProvider userAuthProvider;
 
     @PostMapping("/add-admin")
-    public ResponseEntity<AdminDto> ajoutAdmin(@RequestBody NewAdminDto newAdminDto) {
+    public ResponseEntity<Map<String, String>> ajoutAdmin(@RequestBody NewAdminDto newAdminDto) {
         AdminDto admin = adminService.ajoutAdmin(newAdminDto);
-        return ResponseEntity.created(URI.create("/personne/" + admin.getId())).body(admin);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Admin Rajouté avec succès");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/add-candidat")
