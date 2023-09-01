@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { Observable, catchError, forkJoin, map, of, switchMap, throwError } from 'rxjs';
 import { QuestionService } from 'src/app/core/services/question/question.service';
 import { ReponseService } from 'src/app/core/services/reponse/reponse.service';
@@ -12,7 +13,8 @@ import { Technologie } from 'src/app/share/enums/technologie.enum';
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss']
+  styleUrls: ['./question.component.scss'],
+  providers: [MessageService]
 })
 export class QuestionComponent implements OnInit {
   allQuestions$: Observable<QuestionDto[]>;
@@ -32,14 +34,23 @@ export class QuestionComponent implements OnInit {
   niveauSelectionne: any;
 
   constructor(private questionService: QuestionService,
-              private reponseService: ReponseService )
-              {
+              private reponseService: ReponseService,
+              private messageService: MessageService) {
     this.allQuestions$ = this.questionService.questions$;
     this.filteredQuestions$ = this.allQuestions$;
   }
 
-  ngOnInit():void {
+  ngOnInit(): void {
     this.questionService.loadAllQuestions().subscribe();
+  }
+
+  show(message: string, type: string) {
+    if(type === 'error')
+    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
+    if(type === 'warning')
+    this.messageService.add({ severity: 'warn', summary: 'warn', detail: message });
+    if(type === 'success')
+    this.messageService.add({ severity: 'success', summary: 'success', detail: message });
   }
 
   onSubmit() {
@@ -58,18 +69,18 @@ export class QuestionComponent implements OnInit {
       niveau: questionValue.niveau
     };
     const reponses: PropositionDto[] = questionValue.reponses?.map((reponse: PropositionDto) => ({
-        id: reponse.id,
-        reponse: reponse.reponse,
-        correct: reponse.correct,
-        question_id: questionValue.id
+      id: reponse.id,
+      reponse: reponse.reponse,
+      correct: reponse.correct,
+      question_id: questionValue.id
     })) || [];
 
-    if(!questionValue.id) {
+    if (!questionValue.id) {
       this.questionService.addQuestion(question).pipe(
         switchMap((reponse) => {
           const newquestionId = reponse.id;
           const reponseObservables = questionValue.reponses?.map(reponse => {
-            if(reponse.reponse) {
+            if (reponse.reponse) {
               const reponseDto: PropositionDto = {
                 reponse: reponse.reponse,
                 correct: reponse.correct,
@@ -82,16 +93,17 @@ export class QuestionComponent implements OnInit {
           return forkJoin(reponseObservables);
         }),
         switchMap(() => this.questionService.loadAllQuestions())
-        ).subscribe(questions => {
-          this.questionService.updateQuestions(questions);
-        });
+      ).subscribe(questions => {
+        this.questionService.updateQuestions(questions);
+        this.show('Question rajouté à la Bdd','success')
+      });
     } else {
       this.updateLocalQuestionsCache(questionValue, reponses);
 
       this.questionService.modifyQuestion(questionValue.id, question).pipe(
         switchMap(() => {
           const reponseObservables = reponses.map(reponse => {
-            if(reponse.id && reponse.reponse) {
+            if (reponse.id && reponse.reponse) {
               this.reponseService.modifyReponse(reponse.id, reponse);
             } else if (reponse.reponse) {
               this.reponseService.addReponse(reponse);
@@ -105,33 +117,36 @@ export class QuestionComponent implements OnInit {
           this.revertLocalQuestionsCache();
           return throwError(error);
         })
-      ).subscribe();
-    }
-  }
-    private updateLocalQuestionsCache(question: QuestionDto, reponses: PropositionDto[]) {
-      this.allQuestions$.subscribe(questions => this.originalQuestionsCache = [...questions]);
-
-      this.allQuestions$ = this.allQuestions$.pipe(
-        map(questions => {
-          const index = questions.findIndex(q => q.id === question.id);
-
-          if (index > -1) {
-            questions[index] = question;
-          } else {
-            questions.push(question);
-          }
-          return questions;
-        })
-      );
-      this.allQuestions$.subscribe(questions => {
-        localStorage.setItem('questions_cache', JSON.stringify(questions));
+      ).subscribe((resp: any) => {
+        this.show('Question modifié avec succès','sucess')
       });
     }
+  }
 
-    private revertLocalQuestionsCache() {
-      this.allQuestions$ = of(this.originalQuestionsCache);
-      localStorage.setItem('questions_cache', JSON.stringify(this.originalQuestionsCache));
-    }
+  private updateLocalQuestionsCache(question: QuestionDto, reponses: PropositionDto[]) {
+    this.allQuestions$.subscribe(questions => this.originalQuestionsCache = [...questions]);
+
+    this.allQuestions$ = this.allQuestions$.pipe(
+      map(questions => {
+        const index = questions.findIndex(q => q.id === question.id);
+
+        if (index > -1) {
+          questions[index] = question;
+        } else {
+          questions.push(question);
+        }
+        return questions;
+      })
+    );
+    this.allQuestions$.subscribe(questions => {
+      localStorage.setItem('questions_cache', JSON.stringify(questions));
+    });
+  }
+
+  private revertLocalQuestionsCache() {
+    this.allQuestions$ = of(this.originalQuestionsCache);
+    localStorage.setItem('questions_cache', JSON.stringify(this.originalQuestionsCache));
+  }
 
   updateQuestionsList() {
     this.filteredQuestions$ = this.allQuestions$.pipe(
@@ -144,7 +159,7 @@ export class QuestionComponent implements OnInit {
   }
 
   deleteQuestion(question: QuestionDto) {
-    if(question.id)
+    if (question.id)
       this.questionService.deleteQuestion(question.id).subscribe(() => {
         this.allQuestions$ = this.allQuestions$.pipe(
           map(questions => questions.filter(q => q.id !== question.id))
@@ -152,6 +167,7 @@ export class QuestionComponent implements OnInit {
         this.allQuestions$.subscribe(questions => {
           localStorage.setItem('questions_cache', JSON.stringify(questions));
         })
+        this.show('Question suprimé avec succès','success')
       })
   }
 
