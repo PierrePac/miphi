@@ -46,7 +46,7 @@ public class QcmController {
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<QcmDto>> getAllQcm() {
-		List<QcmDto> qcms = qcmService.getAllQcms();
+		List<QcmDto> qcms = qcmService.getAllQcm();
 		return new ResponseEntity<>(qcms, HttpStatus.OK);
 	}
 

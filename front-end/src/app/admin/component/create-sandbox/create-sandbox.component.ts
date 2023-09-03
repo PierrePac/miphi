@@ -21,7 +21,7 @@ export class CreateSandboxComponent implements OnInit {
   ngOnInit() {
     this.sandboxForm = this.formBuilder.group({
       src: ['', [Validators.required]],
-      consignes: ['', [Validators.required]],
+      consigne: ['', [Validators.required]],
       nom: ['', [Validators.required]],
       niveau: [null, [Validators.required]],
       technologie: [null, [Validators.required]]

@@ -10,7 +10,7 @@ import { AddAdminComponent } from './component/add-admin/add-admin.component';
 import { CreateQcmComponent } from './component/create-qcm/create-qcm.component';
 import { CreateCandidatComponent } from './component/create-candidat/create-candidat.component';
 import { ViewResultComponent } from './component/view-result/view-result.component';
-import { SandboxComponent } from './component/sandbox/sandbox/sandbox.component';
+import { SandboxComponent } from './component/sandbox/sandbox.component';
 import { CreateSandboxComponent } from './component/create-sandbox/create-sandbox.component';
 import { ListSandboxComponent } from './component/list-sandbox/list-sandbox.component';
 

@@ -31,4 +31,8 @@ export class SandboxService {
         })
       );
    }
+
+   saveSandbox(data: SandboxDto): Observable<SandboxDto> {
+    return this.httpClient.post<SandboxDto>(environment.addSandbox, data);
+   }
 }

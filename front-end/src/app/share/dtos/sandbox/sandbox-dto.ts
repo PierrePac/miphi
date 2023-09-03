@@ -4,7 +4,7 @@ import { Technologie } from "../../enums/technologie.enum";
 export interface SandboxDto {
   id?: number;
   src: string;
-  consignes: string;
+  consigne: string;
   nom: string;
   niveau: Niveau;
   technologie: Technologie;

@@ -5,7 +5,7 @@ import { CandidatsComponent } from './component/candidats/candidats.component';
 import { QuestionComponent } from './component/question/question.component';
 import { RoleGuard } from '../core/guards/role.guard';
 import { AddAdminComponent } from './component/add-admin/add-admin.component';
-import { SandboxComponent } from './component/sandbox/sandbox/sandbox.component';
+import { SandboxComponent } from './component/sandbox/sandbox.component';
 
 
 const routes: Routes = [

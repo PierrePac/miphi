@@ -1,1 +1,35 @@
-<p>list-sandbox works!</p>
+<section >
+    <div class="grid">
+        <div class="col-fixed" style="min-width:20vw">
+          <div class="card flex justify-content-center">
+            <p-orderList class="sandbox-list" [listStyle]="{ 'max-height': '55vh' }" header="Liste des Sandbox" filterBy="nom" filterPlaceholder="Filter by nom" [value]="sandboxes">
+                <ng-template let-sandbox pTemplate="item">
+                    <div class="flex flex-column justify-content-center flex-wrap" (click)="loadSandbox(sandbox)">
+                        <h3 class="mt-0 mb-0 flex align-items-center justify-content-center">{{ sandbox.nom }}</h3>
+                        <p class="mt-0 mb-0 flex align-items-center justify-content-center">{{ sandbox.technologie }}</p>
+                        <p class="mt-0 mb-0 flex align-items-center justify-content-center">{{ sandbox.niveau }}</p>
+                    </div>
+                    <p-divider></p-divider>
+                  </ng-template>
+            </p-orderList>
+          </div>
+        </div>
+        <div class="col qcm-content">
+            <p-card header="{{ selectedSandbox.nom }}" subheader="{{ selectedSandbox.technologie }}" [style]="{ width: '600px' }" *ngIf="selectedSandbox != undefined">
+                <p><em>Technologie :</em>{{ selectedSandbox.technologie | formatEnum }}</p>
+                <p><em>Niveau :</em>{{ selectedSandbox.niveau | formatEnum }}</p>
+                <p><em>Source :</em>{{ selectedSandbox.src }}</p>
+                <p><em>Consigne :</em>{{ selectedSandbox.consigne }}</p>
+                
+                <ng-template pTemplate="footer">
+                    <p-button label="Supprimer" icon="pi pi-times" styleClass="p-button-danger" [style]="{ 'margin-left': '.5em' }"></p-button>
+                </ng-template>
+            </p-card>
+            <div class="no-sandbox" *ngIf="selectedSandbox == undefined">
+                <h2>Selectionner une sandbox</h2>
+            </div>
+            
+        </div>
+    </div>
+
+</section>

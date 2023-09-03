@@ -61,12 +61,6 @@ public class QcmService {
 		questionQcmRepository.save(questionQcm);
 	}
 
-	public List<QcmDto> getAllQcms() {
-		List<Qcm> qcmList = qcmRepository.findAll();
-		QcmMapper qcmMapper = new QcmMapper();
-		return qcmMapper.toDtoList(qcmList);
-	}
-
 	public QcmDto getQcm(Long id) {
 		Optional<Qcm> qcmOpt = qcmRepository.findById(id);
 		if(qcmOpt.isPresent()){
