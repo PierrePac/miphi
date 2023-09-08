@@ -39,10 +39,14 @@ export class ViewResultComponent implements OnInit{
   qcmQuestion!: QuestionDto[];
   reponseCandidat!: ReponseQcmDto[];
   transformedQuestions!: QuestionTriDto[];
+  filteredQuestions!: QuestionTriDto[];
   public transformedReponses: ReponseCandidatQuestionDto[] = [];
   scores!: ScoreDto[];
   globalSuccessRate: number = 0;
   globalRating!: number;
+  allGoodAnswer: number[] = [];
+  partiallyGoodAnswer: number[] = [];
+  noneGoodAnswer: number[] = [];
 
   constructor(private qcmService: QcmService,
               private entretienService: EntretienService,
@@ -83,25 +87,31 @@ export class ViewResultComponent implements OnInit{
     });
 
     this.qcmQuestion$.subscribe(qcmQuestion => {
-      if(qcmQuestion)
+      if(qcmQuestion){
         this.qcmQuestion = qcmQuestion;
         this.transformedQuestions = this.entretienService.transformQuestions(this.qcmQuestion);
+        this.filteredQuestions = this.transformedQuestions;
+        this.allGoodAnswer = this.entretienService.getAllGoodAnswer();
+        this.partiallyGoodAnswer = this.entretienService.getPartiallyGoodAnswer();
+        this.noneGoodAnswer = this.entretienService.getNoneGoodAnswer();
         this.transformedReponses = this.entretienService.transformReponses(this.reponseCandidat, this.qcmQuestion);
         const transformedData: CorrectAnswerDto[] = this.entretienService.transformToCorrectAnswerDto(this.transformedQuestions);
         this.scores= this.entretienService.calculateScores(this.transformedReponses, transformedData);
+        console.log('scores', this.scores)
         let totalpoints = 0;
         let totalCandidatePoints = 0;
 
         this.scores.forEach(score => {
-          totalpoints += score.scoreTotal;
-          totalCandidatePoints += score.scoreCandidat;
+          score.niveaux.forEach(niveau => {
+            totalpoints += niveau.scoreTotal;
+            totalCandidatePoints += niveau.scoreCandidat;
+          })
         });
-        console.log(this.scores)
-
         if (totalpoints != 0) {
           this.globalSuccessRate = (totalCandidatePoints / totalpoints) * 100
         }
         this.updateGlobalRating();
+      }
 
     });
 
@@ -109,8 +119,6 @@ export class ViewResultComponent implements OnInit{
       if(reponseCandidat)
         this.reponseCandidat = reponseCandidat;
     });
-
-
   }
 
   updateGlobalRating() {
@@ -119,6 +127,26 @@ export class ViewResultComponent implements OnInit{
 
   isCandidateAnswer(questionId: number, answerId: number): boolean {
     return this.entretienService.isCandidateAnswer(this.transformedReponses, questionId, answerId);
+  }
+
+  isBorderBlue(questionId: any, reponseId: any): boolean {
+    if (questionId !== undefined && reponseId !== undefined) {
+      return this.isCandidateAnswer(questionId, reponseId);
+    }
+    return false;
+  }
+
+  filterQuestion(filter: number[]){
+    this.filteredQuestions = this.transformedQuestions.map(techObj => {
+      return {
+        ...techObj,
+        questions: techObj.questions?.filter(q => q.id !== undefined && filter.includes(q.id))
+      };
+    });
+  }
+
+  resetFilter(){
+    return this.filteredQuestions = this.transformedQuestions;
   }
 
 }

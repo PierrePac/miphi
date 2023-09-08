@@ -24,6 +24,6 @@
       <label for="niveau">Niveau</label>
     </span>
 
-    <button class="btn mt-4">Soumettre</button>
+    <button class="btn mt-4" *ngIf="sandboxForm.valid">Soumettre</button>
   </form>
 </section>

@@ -111,22 +111,17 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
         return this.allQuestions$.pipe(
           map(questions => {
             let questionsFiltrees = questions;
-            if(row.technologie?.technologie) {
+            if(row.technologie?.technologie && row.niveau) {
               questionsFiltrees = questionsFiltrees.filter(q => q.technologie === row.technologie.technologie);
-              console.log(questionsFiltrees)
-            }
-
-            if(row.niveau) {
               questionsFiltrees = questionsFiltrees.filter(q => q.niveau === row.niveau);
-              console.log(questionsFiltrees)
             }
-
-            if(row.categorie?.name) {
-              questionsFiltrees = questionsFiltrees.filter(q => q.categorie === row.categorie.name);
-              console.log(questionsFiltrees)
+            const questionsFiltreesWithTechnoAndNiveau = questionsFiltrees;
+            if(row.categorie) {
+              questionsFiltrees = questionsFiltreesWithTechnoAndNiveau
+              const categoriesNames = row.categorie.map((c: any) => c.name);
+              questionsFiltrees = questionsFiltreesWithTechnoAndNiveau.filter(q =>
+                categoriesNames.includes(q.categorie));
             }
-
-
             return questionsFiltrees.length
           })
         );
@@ -209,16 +204,12 @@ export class CreateQcmComponent implements OnInit, OnDestroy {
 
       if(row.technologie?.technologie) {
         filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.technologie === row.technologie.technologie);
-        console.log(filteredQuestions)
       }
       if(row.niveau) {
         filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.niveau === row.niveau);
-        console.log(row.niveau)
-        console.log(filteredQuestions)
       }
       if(row.categorie?.name) {
         filteredQuestions = filteredQuestions.filter((q: QuestionDto) => q.categorie === row.categorie.name);
-        console.log(filteredQuestions)
       }
 
       const suffledQuestions = this.shuffleArray(filteredQuestions);

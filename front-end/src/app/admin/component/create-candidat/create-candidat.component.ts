@@ -79,6 +79,10 @@ export class CreateCandidatComponent implements OnInit{
 
     EntretienToggle() {
       this.entretienSwitch = !this.entretienSwitch;
+      this.createCandidatForm.get('nomEntretien')?.reset();
+      this.createCandidatForm.get('qcm')?.reset();
+      this.createCandidatForm.get('sandbox')?.reset();
+      this.createCandidatForm.get('entretien')?.reset();
   }
 
   entretienValidation(control: AbstractControl): { [key: string]: any } | null {

@@ -19,6 +19,6 @@
       <label htmlFor="motDePasse">Mot de passe</label>
     </span>
 
-    <button type="submit" class="btn">Submit</button>
+    <button type="submit" class="btn" *ngIf="addAdminForm.valid">Submit</button>
   </form>
 </section>

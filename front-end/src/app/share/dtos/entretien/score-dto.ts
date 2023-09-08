@@ -1,5 +1,8 @@
 export interface ScoreDto {
   technologie: string;
-  scoreTotal: number;
-  scoreCandidat: number;
+  niveaux: {
+    niveau: string;
+    scoreTotal: number;
+    scoreCandidat: number;
+  }[];
 }

@@ -25,6 +25,12 @@ public class ReponseCandidatService {
     private List<ReponseCandidat> repositoryEntity = new ArrayList<>();
 
     public List<ReponseCandidat> saveAll(List<ReponseCandidatDto> reponseCandidatDtoList) {
+        for(ReponseCandidatDto reponseCandidatDto: reponseCandidatDtoList) {
+            List<ReponseCandidat> reponseCandidatList = reponseCandidatRepository.findAllByReponseCandidatIdIdCandidat(reponseCandidatDto.getIdCandidat());
+            if(!reponseCandidatList.isEmpty()) {
+                reponseCandidatRepository.deleteAll(reponseCandidatList);
+            }
+        }
         List<ReponseCandidat> entities = new ArrayList<>();
         for (ReponseCandidatDto reponseCandidatDto: reponseCandidatDtoList) {
             ReponseCandidat reponseCandidat = reponseCandidatMapper.toEntity(reponseCandidatDto, propositionRepository, candidatRepository);

@@ -22,13 +22,13 @@ export class EntretienService {
   allEntretien$ = this.allEntretienSubject.asObservable().pipe(
     shareReplay(1)
   );
-  private entretien: EntretienDto[] = [];
+  private allGoodAnswer: number[] = [];
+  private partiallyGoodAnswer: number[] = [];
+  private noneGoodAnswer: number[] = [];
 
   constructor(private httpClient: HttpClient) {
     this.loadInitialData();
-    this.allEntretien$.subscribe(data => {
-      this.entretien = data
-    })
+
   }
 
   private loadInitialData() {
@@ -152,53 +152,95 @@ export class EntretienService {
           result.push({
             question_id: question.id!,
             technologie: question.technologie!,
+            niveau: question.niveau!,
             correctAnswer,
             incorrectAnswer,
             point: question.point
           });
         });
       });
-
       return result;
     };
 
-    calculateScores(
-      transformedResponses: ReponseCandidatQuestionDto[],
-      correctAnswers: CorrectAnswerDto[]
-    ): ScoreDto[] {
+    calculateScores(transformedResponses: ReponseCandidatQuestionDto[], correctAnswers: CorrectAnswerDto[]): ScoreDto[] {
       const scores: { [key: string]: ScoreDto } = {};
       correctAnswers.forEach((correctAnswer) => {
-        const { technologie, point } = correctAnswer;
+        const { technologie, point, niveau } = correctAnswer;
         if (!scores[technologie]) {
           scores[technologie] = {
             technologie,
-            scoreTotal: 0,
-            scoreCandidat: 0,
+            niveaux: [],
           };
         }
-        scores[technologie].scoreTotal += point;
+        const niveauScore = scores[technologie].niveaux.find(n => n.niveau === niveau) || {
+          niveau,
+          scoreTotal: 0,
+          scoreCandidat:0,
+        };
+
+        niveauScore.scoreTotal += point;
+        if(!scores[technologie].niveaux.some(n => n.niveau === niveau)) {
+          scores[technologie].niveaux.push(niveauScore);
+        }
       });
+
       transformedResponses.forEach((response) => {
         const { question_id, candidateAnswer, technologie } = response;
         const correctAnswer = correctAnswers.find(
           (answer) => answer.question_id === question_id
         );
 
+        let niveauScore;
+
         if (correctAnswer) {
+          if(technologie && scores[technologie]) {
+            niveauScore = scores[technologie].niveaux.find((n: { niveau: string; scoreTotal: number; scoreCandidat: number }) => n.niveau === correctAnswer.niveau);
+            if(!niveauScore) return;
+          }
+
+          const allCorrect = candidateAnswer.every((ans: number) =>
+            correctAnswer.correctAnswer.includes(ans)
+          );
+          const noneIncorrect = candidateAnswer.every(
+            (ans: number) => !correctAnswer.incorrectAnswer.includes(ans)
+          );
+          const oneCorrect = candidateAnswer.some((ans: number) =>
+            correctAnswer.correctAnswer.includes(ans)
+          );
+
           if (correctAnswer.correctAnswer.length === candidateAnswer.length) {
-            const allCorrect = candidateAnswer.every((ans: number) =>
-              correctAnswer.correctAnswer.includes(ans)
-            );
-            const noneIncorrect = candidateAnswer.every(
-              (ans: number) => !correctAnswer.incorrectAnswer.includes(ans)
-            );
             if (allCorrect && noneIncorrect) {
-              scores[correctAnswer.technologie].scoreCandidat += correctAnswer.point;
+              if(niveauScore) {
+                niveauScore.scoreCandidat += correctAnswer.point;
+              }
+              this.allGoodAnswer.push(question_id);
+            } else if(oneCorrect && !allCorrect) {
+              this.partiallyGoodAnswer.push(question_id);
+            } else {
+              this.noneGoodAnswer.push(question_id);
             }
+
+          } else {
+
+            if((allCorrect && noneIncorrect) || oneCorrect) {
+              this.partiallyGoodAnswer.push(question_id)
+            } else {
+              this.noneGoodAnswer.push(question_id);
+            }
+
           }
         }
       });
-
       return Object.values(scores);
+    }
+
+    getAllGoodAnswer(){
+      return this.allGoodAnswer;
+    }
+    getPartiallyGoodAnswer(){
+      return this.partiallyGoodAnswer;
+    }
+    getNoneGoodAnswer(){
+      return this.noneGoodAnswer;
     }
 }

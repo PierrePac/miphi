@@ -16,9 +16,9 @@
 <div class="list-question">
   <h1 class="card flex justify-content-center">Liste des questions</h1>
   <div class="card flex justify-content-evenly mb-3">
-    <p-dropdown [(ngModel)]="categorieSelectionnee" [options]="categories"  optionLabel="name" placeholder="Sélectionner une catégorie" (onChange)="updateQuestionsList()"></p-dropdown>
-    <p-dropdown [(ngModel)]="technologieSelectionnee" [options]="technologies" optionLabel="name" placeholder="Sélectionner une Technologie" (onChange)="updateQuestionsList()"></p-dropdown>
-    <p-dropdown [(ngModel)]="niveauSelectionne" [options]="niveaux" optionLabel="name" placeholder="Sélectionner un Niveaux" (onChange)="updateQuestionsList()"></p-dropdown>
+    <p-dropdown [(ngModel)]="categorieSelectionnee" [options]="categories"  optionLabel="name" placeholder="Sélectionner une catégorie" (onChange)="updateQuestionsList()" [style]="{'min-width':'270px'}"></p-dropdown>
+    <p-dropdown [(ngModel)]="technologieSelectionnee" [options]="technologies" optionLabel="name" placeholder="Sélectionner une Technologie" (onChange)="updateQuestionsList()" [style]="{'min-width':'270px'}"></p-dropdown>
+    <p-dropdown [(ngModel)]="niveauSelectionne" [options]="niveaux" optionLabel="name" placeholder="Sélectionner un Niveaux" (onChange)="updateQuestionsList()" [style]="{'min-width':'270px'}"></p-dropdown>
     <button (click)="reinitialiserFiltres()" class="btn mt-0">Réinitialiser les Filtres</button>
 </div>
   <ng-container *ngFor="let question of filteredQuestions$ | async">

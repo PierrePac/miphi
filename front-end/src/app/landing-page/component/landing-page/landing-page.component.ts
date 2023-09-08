@@ -6,9 +6,6 @@ import { AuthenticationService } from 'src/app/core/services/authentication/auth
 import { AdminDto } from 'src/app/share/dtos/admin/admin-dto';
 import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
 
-
-
-
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
@@ -69,7 +66,6 @@ export class LandingPageComponent implements OnInit {
           nom: form.value.nom.toLowerCase(),
           motDePasse: form.value.motDePasse
         }).subscribe(response => {
-          console.log(response);
           this.handleLoginResponse(response);
         }, error => {
           if (error.error.message) {

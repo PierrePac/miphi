@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { QcmService } from 'src/app/core/services/qcm/qcm.service';
 import { QuestionService } from 'src/app/core/services/question/question.service';
-import { QcmDto } from 'src/app/share/dtos/qcm/qcm-dto';
 import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
 
 
@@ -21,7 +18,8 @@ export class AdminComponent implements OnInit {
     { title: 'Gérer les QCMs', route: 'admin/qcm', image:'assets/media/list_qcm.jpg' },
     { title: 'Gérer les candidats', route:'admin/candidats', image:'assets/media/candidats.jpg' },
     { title:'Gérer les questions', route:'admin/question', image:'assets/media/add_question.jpg' },
-    { title:'Ajouter un admin', route:'admin/add-admin', image:'assets/media/add_admin.jpg' }
+    { title:'Ajouter un admin', route:'admin/add-admin', image:'assets/media/add_admin.jpg' },
+    { title:'Gérer les Sandbox', route:'admin/sandbox', image:'assets/media/sandbox.jpg' },
   ]
 
   constructor(private questionService: QuestionService,

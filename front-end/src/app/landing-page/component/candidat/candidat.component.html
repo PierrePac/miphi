@@ -10,7 +10,7 @@
     </p-card>
   </div>
   <div class="button">
-    <button class="btn" type="submit" (click)="towardTest()">Commencer le Qcm</button>
+    <button class="btn" type="submit" (click)="towardQcm()">Commencer le Qcm</button>
   </div>
 </section>
 
@@ -23,7 +23,20 @@
     </p-card>
   </div>
   <div class="button">
-    <button class="btn" type="submit" (click)="towardTest()">Commencer le code</button>
+    <button class="btn" type="submit" (click)="towardCode()">Commencer le code</button>
+  </div>
+</section>
+
+<section class="finish" *ngIf="activeSection === 'finish'">
+  <div class="message">
+    <p-card header="Fin du test">
+      <p class="m-0">
+        Félicitation vous venz de finir les tests
+      </p>
+    </p-card>
+  </div>
+  <div class="button">
+    <button class="btn" type="submit" (click)="endTest()">Fin du test</button>
   </div>
 </section>
 

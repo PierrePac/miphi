@@ -58,6 +58,6 @@
       </p-dropdown>
 
     </ng-container>
-    <button type="submit" [disabled]="!createCandidatForm.valid" class="btn mt-4">Créer le candidat</button>
+    <button type="submit" *ngIf="createCandidatForm.valid" class="btn mt-4">Créer le candidat</button>
   </form>
 </section>

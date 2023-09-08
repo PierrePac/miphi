@@ -20,8 +20,12 @@
               </span>
             </div>
             <div [style]="{'width':'250px'}">
-            <span class="p-float-label" *ngIf="row.get('technologie')?.value && row.get('niveau')?.value">
+              <!-- <span class="p-float-label" *ngIf="row.get('technologie')?.value && row.get('niveau')?.value">
                 <p-dropdown formControlName="categorie" [options]="categories"  optionLabel="name" inputId="categories" placeholder="Sélectionner une catégorie" [style]="{'width':'100%'}"></p-dropdown>
+                <label for="categories">Selectionner une catégorie</label>
+              </span> -->
+              <span class="p-float-label" *ngIf="row.get('technologie')?.value && row.get('niveau')?.value">
+                <p-multiSelect [options]="categories" formControlName="categorie" optionLabel="name" inputId="categories" placeholder="Sélectionner une catégorie" [style]="{'width':'100%'}"></p-multiSelect>
                 <label for="categories">Selectionner une catégorie</label>
               </span>
             </div>
@@ -42,7 +46,7 @@
           </button>
       </div>
       <div class="card flex justify-content-center">
-        <button type="submit" class="btn" (click)="submitQcm()">Créer QCM</button>
+        <button type="submit" class="btn" (click)="submitQcm()" *ngIf="qcmForm.valid">Créer QCM</button>
     </div>
       </form>
     </p-fieldset>

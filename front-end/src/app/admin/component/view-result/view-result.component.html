@@ -20,37 +20,45 @@
         <p-tabPanel header="Résultat global">
           <p>Pourcentage de réussite : {{ globalSuccessRate | number: '1.1-1' }}%</p>
           <div *ngFor="let score of scores">
-            <p>Pourcentage de réussite en {{ score.technologie }}:  {{ (score.scoreCandidat / score.scoreTotal) * 100 | number: '1.1-1' }} %</p>
-
+            <p>Pourcentage de réussite en <strong>{{ score.technologie }}</strong>: </p>
+            <ng-container *ngFor="let niveau of score.niveaux">
+              <p class="ml-4">- pour le niveau <strong>{{ niveau.niveau }}</strong> :  {{ (niveau.scoreCandidat / niveau.scoreTotal) * 100 | number: '1.1-1' }} %</p>
+            </ng-container>
           </div>
-
         </p-tabPanel>
         <p-tabPanel header="Le QCM">
-          <ng-container *ngIf="transformedQuestions">
+          <ng-container *ngIf="filteredQuestions">
             <p-accordion [activeIndex]="0">
-              <ng-container *ngFor="let transformedQuestion of transformedQuestions">
-                <p-accordionTab header="Questions à propos de: {{ transformedQuestion.technologie }}">
-                  <div *ngFor="let question of transformedQuestion.questions">
-                    <h3 class="mt-5 mb-3">Question : {{ question.question }}</h3>
-                    <div class="details flex flex-row justify-content-evenly flex-wrap">
-                      <p>niveau : {{ question.niveau }}</p>
-                      <p>Catégorie : {{ question.categorie }}</p>
-                      <p>nombre de point : {{ question.point}} points</p>
-                      <p>Temps : {{ question.temps}} secondes</p>
-                      <p>Technologie : {{ question.technologie }}</p>
-                    </div>
-                    <div class="responses mb-5">
-                      <div class="reponse" *ngFor="let reponse of question.reponses">
-                        <p [ngClass]="{
-                            'classe-true': reponse.correct,
-                            'classe-false': !reponse.correct,
-                            'border-orange': (question.id !== undefined && reponse.id !== undefined) ? isCandidateAnswer(question.id, reponse.id) : false
-                          }">
-                          {{ reponse.reponse }}
-                        </p>
-
+              <div class="flex justify-content-between flex-wrap mt-2 mb-4">
+                <p-button class="flex align-items-center justify-content-center" styleClass="p-button-info" (click)="filterQuestion(this.allGoodAnswer)">Voir les bonnes réponses</p-button>
+                <p-button class="flex align-items-center justify-content-center" styleClass="p-button-info" (click)="filterQuestion(this.noneGoodAnswer)">Voir les mauvaise réponses</p-button>
+                <p-button class="flex align-items-center justify-content-center" styleClass="p-button-info"(click)="filterQuestion(this.partiallyGoodAnswer)">voir les réponses partiels</p-button>
+                <p-button class="flex align-items-center justify-content-center" styleClass="p-button-info" (click)="resetFilter()">Réinitialiser</p-button>
+              </div>
+              <ng-container *ngFor="let filteredQuestion of filteredQuestions">
+                <p-accordionTab header="Questions à propos de: {{ filteredQuestion.technologie }}">
+                  <div *ngFor="let question of filteredQuestion.questions">
+                      <h3 class="mt-5 mb-3">Question : {{ question.question }}</h3>
+                      <div class="details flex flex-row justify-content-evenly flex-wrap">
+                        <p>niveau : {{ question.niveau }}</p>
+                        <p>Catégorie : {{ question.categorie }}</p>
+                        <p>nombre de point : {{ question.point}} points</p>
+                        <p>Temps : {{ question.temps}} secondes</p>
+                        <p>Technologie : {{ question.technologie }}</p>
                       </div>
-                    </div>
+                      <div class="responses mb-5">
+                        <div class="reponse" *ngFor="let reponse of question.reponses">
+                          <p [ngClass]="{
+                              'classe-true': reponse.correct,
+                              'classe-false': !reponse.correct,
+                              'border-blue': isBorderBlue(question.id, reponse.id)
+                            }">
+                            {{ reponse.reponse }}
+                          </p>
+
+                        </div>
+                      </div>
+
                   </div>
                 </p-accordionTab>
               </ng-container>

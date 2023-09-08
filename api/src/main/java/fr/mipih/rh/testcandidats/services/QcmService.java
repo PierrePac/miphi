@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import fr.mipih.rh.testcandidats.models.QuestionQcmId;
+import fr.mipih.rh.testcandidats.models.*;
+import fr.mipih.rh.testcandidats.repositories.ReponseCandidatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
 import fr.mipih.rh.testcandidats.mappers.QcmMapper;
-import fr.mipih.rh.testcandidats.models.Qcm;
-import fr.mipih.rh.testcandidats.models.Question;
-import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
@@ -26,6 +24,7 @@ public class QcmService {
 	private final QcmMapper qcmMapper;
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
+
 
 	
 	public List<QcmDto> getAllQcm(){

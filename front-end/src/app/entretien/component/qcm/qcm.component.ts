@@ -49,6 +49,7 @@ export class QcmComponent implements OnInit {
     this.questions = questionJson ? JSON.parse(questionJson) : null;
 
     let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') ?? '[]');
+    this.currentIndex = storedAnswers.length;
     storedAnswers.forEach(answer => {
       if (answer.question_id !== undefined && answer.proposition_id !== undefined) {
         this.selectedAnswers[answer.question_id] = answer.proposition_id;

@@ -10,9 +10,9 @@
         </div>
 
       <div class="row">
-        <p-dropdown formControlName="categorie" [options]="categories" placeholder="Categorie"></p-dropdown>
-        <p-dropdown formControlName="technologie" [options]="technologies" placeholder="Technologie"></p-dropdown>
-        <p-dropdown formControlName="niveau" [options]="niveaux" placeholder="Niveau"></p-dropdown>
+        <p-dropdown formControlName="categorie" [options]="categories" placeholder="Categorie"  [style]="{'min-width':'200px'}"></p-dropdown>
+        <p-dropdown formControlName="technologie" [options]="technologies" placeholder="Technologie"  [style]="{'min-width':'200px'}"></p-dropdown>
+        <p-dropdown formControlName="niveau" [options]="niveaux" placeholder="Niveau"  [style]="{'min-width':'200px'}"></p-dropdown>
       </div>
 
       <div class="row">
@@ -48,7 +48,7 @@
       </div>
 
       <input type="hidden" placeholder="id" formControlName="id"/>
-      <button class="btn" >Enregistrer</button>
+      <button class="btn" *ngIf="form.valid">Enregistrer</button>
     </form>
   </section>
 </div>

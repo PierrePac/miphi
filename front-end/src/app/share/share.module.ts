@@ -25,6 +25,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
 import { PourcentageToRatingPipe } from './pipes/pourcentageToRating/pourcentage-to-rating.pipe';
 import { RatingModule } from 'primeng/rating';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { RatingModule } from 'primeng/rating';
     TabViewModule,
     AccordionModule,
     RatingModule,
+    MultiSelectModule,
   ],
   exports: [
     CommonModule,
@@ -86,6 +88,7 @@ import { RatingModule } from 'primeng/rating';
     TabViewModule,
     AccordionModule,
     RatingModule,
+    MultiSelectModule,
   ]
 })
 export class ShareModule { }

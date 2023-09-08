@@ -1,16 +1,12 @@
 package fr.mipih.rh.testcandidats.models;
 
-import java.util.HashSet;
+
 import java.util.Set;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
+
 
 @Entity
 @DiscriminatorValue("ADMIN")
@@ -19,7 +15,8 @@ import org.hibernate.annotations.NotFoundAction;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"entretien"})
+@ToString(exclude = {"entretiens"})
+@EqualsAndHashCode(callSuper = false)
 public class Admin extends Personne {
 
 	@Column(name = "motDePasse")

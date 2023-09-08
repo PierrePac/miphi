@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import fr.mipih.rh.testcandidats.dtos.SandboxDto;
+import fr.mipih.rh.testcandidats.models.*;
+import fr.mipih.rh.testcandidats.repositories.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +15,6 @@ import fr.mipih.rh.testcandidats.dtos.EntretienDto;
 import fr.mipih.rh.testcandidats.exceptions.AppException;
 import fr.mipih.rh.testcandidats.mappers.EntretienMapper;
 import fr.mipih.rh.testcandidats.mappers.QcmMapper;
-import fr.mipih.rh.testcandidats.models.Admin;
-import fr.mipih.rh.testcandidats.models.Entretien;
-import fr.mipih.rh.testcandidats.models.Qcm;
-import fr.mipih.rh.testcandidats.models.Sandbox;
-import fr.mipih.rh.testcandidats.repositories.AdminRepository;
-import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
-import fr.mipih.rh.testcandidats.repositories.QcmRepository;
-import fr.mipih.rh.testcandidats.repositories.SandboxRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
