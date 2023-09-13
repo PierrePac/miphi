@@ -1,0 +1,75 @@
+version: '3.1'
+
+services:
+  postgres_test_candidats:
+    image: postgres:latest
+    container_name: postgres_test_candidats
+    environment:
+      POSTGRES_DB: test_candidats
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - reseau_bdd_test_candidats
+
+  api_test_candidats:
+    build: 
+      context: ./api  # Assuming Dockerfile is in the same directory as docker-compose.yml
+      dockerfile: Dockerfile  # Your Dockerfile
+      args:  # Corresponding to --build-arg
+        http_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
+        https_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
+        MAVEN_OPTS: "-Dhttp.proxyHost=proxy -Dhttp.proxyPort=3128 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=3128"
+    image: api_test_candidats
+    container_name: api_test_candidats
+    environment:  # Runtime environment variables
+      http_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
+      https_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
+      no_proxy: dv02.mipih.net
+    ports:
+      - "8282:8080"
+    networks:
+      - reseau_bdd_test_candidats
+      - reseau_front_to_api_test_candidats
+    depends_on:
+      - postgres_test_candidats
+
+  front_test_candidats:
+    build: 
+      context: ./front-end  # Assuming Dockerfile is in the same directory as docker-compose.yml
+      dockerfile: Dockerfile  # Your Dockerfile
+    image: front_test_candidats
+    container_name: front_test_candidats
+    ports:
+      - "9090:80"
+    networks:
+      - reseau_front_to_api_test_candidats
+    depends_on:
+      - api_test_candidats
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_test_candidats
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - reseau_bdd_test_candidats
+    depends_on:
+      - postgres_test_candidats
+
+volumes:
+  postgres_data:
+
+networks:
+  reseau_bdd_test_candidats:
+    name: reseau_bdd_test_candidats
+    driver: bridge
+  reseau_front_to_api_test_candidats:
+    name: reseau_front_to_api_test_candidats
+    driver: bridge
