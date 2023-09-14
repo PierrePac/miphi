@@ -56,10 +56,8 @@ public class ReponseCandidatServiceTest {
             assertEquals(1, savedEntities.size());
             assertEquals(entity1, savedEntities.get(0));
 
-            // Réinitialiser le mock
             mocked.reset();
 
-            // Définir un nouveau comportement pour le mock
             mocked.when(() -> ReponseCandidatMapper.toEntity(eq(dto1), any(), any())).thenReturn(null);
 
             savedEntities = reponseCandidatService.saveAll(dtoList);
@@ -77,7 +75,7 @@ public class ReponseCandidatServiceTest {
             existingEntities.add(existingEntity1);
 
             ReponseCandidatDto dto1 = new ReponseCandidatDto();
-            
+
             when(reponseCandidatRepository.findAllByReponseCandidatIdIdCandidat(1L)).thenReturn(existingEntities);
 
             mocked.when(() -> ReponseCandidatMapper.toDto(existingEntity1)).thenReturn(dto1);
