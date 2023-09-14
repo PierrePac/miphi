@@ -36,7 +36,7 @@ public class UserAuthProvider {
 	private final CandidatService candidatService;
 	
 	@PostConstruct
-	protected void init() {
+	public void init() {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 	}
 	

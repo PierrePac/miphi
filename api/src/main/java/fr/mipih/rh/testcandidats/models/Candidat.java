@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("CANDIDAT")
-@Table(name = "CANDIDAT")
+//@Table(name = "CANDIDAT")
 @Getter
 @Setter
 @SuperBuilder

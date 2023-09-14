@@ -1,0 +1,7 @@
+*.log
+workspace
+extensions/
+!extensions/extensions.json
+.m2/
+data/
+config/

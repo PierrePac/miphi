@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @DiscriminatorValue("ADMIN")
-@Table(name = "ADMIN")
+//@Table(name = "ADMIN")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

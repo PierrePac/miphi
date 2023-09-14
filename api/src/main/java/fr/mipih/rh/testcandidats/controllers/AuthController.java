@@ -21,6 +21,8 @@ import fr.mipih.rh.testcandidats.dtos.NewAdminDto;
 import fr.mipih.rh.testcandidats.dtos.RefreshTokenRequestDto;
 import fr.mipih.rh.testcandidats.services.AdminService;
 import fr.mipih.rh.testcandidats.services.CandidatService;
+import fr.mipih.rh.testcandidats.services.SandboxService;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,6 +33,7 @@ public class AuthController {
 	private final AdminService adminService;
 	private final CandidatService candidatService;
 	private final UserAuthProvider userAuthProvider;
+	private final SandboxService sandboxService;
 	
 	
 	@PostMapping("/admin")
@@ -46,6 +49,7 @@ public class AuthController {
 	@PostMapping("/candidat")
 	public ResponseEntity<CandidatDto> loginCandidat(@RequestBody  CredentialsCandidatDto credentialsDto){
 		CandidatDto candidat = candidatService.loginCandidat(credentialsDto);
+		sandboxService.dockerComposeLauncher(credentialsDto);
 		Map<String, String> tokens = userAuthProvider.createTokens(candidat);
 		candidat.setToken(tokens.get("accessToken"));
 		candidat.setRole("CANDIDAT");

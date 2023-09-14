@@ -1,0 +1,7 @@
+*
+!config/.bashrc
+!config/.profile
+!config/.ssh
+!config/.config/code-server
+!config/extensions/extensions.json
+!start-script.sh
