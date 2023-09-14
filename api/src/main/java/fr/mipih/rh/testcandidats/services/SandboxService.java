@@ -24,7 +24,6 @@ public class SandboxService {
 
     private final SandboxRepository sandboxRepository;
     private final SandboxMapper sandboxMapper;
-    private final CandidatRepository candidatRepository;
 
     public SandboxDto findById(Long id) {
         Sandbox sandbox = sandboxRepository.findById(id)

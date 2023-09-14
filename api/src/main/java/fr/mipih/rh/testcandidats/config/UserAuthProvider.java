@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class UserAuthProvider {
 
-	
 	@Value("${security.jwt.token.secret-key:secret-key}")
 	private String secretKey;
 	
@@ -63,7 +62,7 @@ public class UserAuthProvider {
         return tokens;
     }
 	
-	private String createAccessToken(Object userDto) {
+	String createAccessToken(Object userDto) {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + 3600 * 1000); //1 heure
 		Algorithm algorithm = Algorithm.HMAC256(secretKey);
