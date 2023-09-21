@@ -8,13 +8,21 @@ ENV no_proxy dv02.mipih.net
 # WORKDIR
 WORKDIR /config/workspace
 
+# WORKDIR
+ENV WORKD="config/workspace"
+
 # Installer les dépendances nécessaires (si elles ne sont pas déjà installées)
 RUN apt-get update && \
-    apt-get install -y git openssh-client \
+    apt-get install -y git \
+    openssh-client \
+    ca-certificates \
     dnsutils \
     wget \
-    openjdk-8-jdk maven &&\
+    openjdk-8-jdk \
+    curl &&\
     rm -rf /var/lib/apt/lists/*
+
+ENV MAVEN_VER="3.8.6"
 
 # Définissez la variable d'environnement JAVA_HOME
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
@@ -42,7 +50,23 @@ RUN update-ca-certificates
 COPY config /config
 
 # Copier la clé SSH privée dans l'image
-COPY /config/.ssh/id_rsa /root/.ssh/id_rsa
+COPY config/.ssh/id_rsa /root/.ssh/id_rsa
+
+# COPY config/https-crt /config/https-crt
+
+RUN mkdir -p ${MAVEN_HOME}
+
+COPY config/maven/3.8.6 ${MAVEN_HOME}
+
+# Make ./mvn executable
+RUN chmod +x "${MAVEN_HOME}/bin/mvn"
+
+# Add the paths to the existing PATH variable
+ENV PATH="${MAVEN_HOME}/bin:${PATH}"
+
+ENV MAVEN ${MAVEN_HOME}/bin/mvn
+
+
 
 # Configurer SSH pour ignorer la vérification de l'hôte
 # RUN echo "Host gitlab.mipih.net\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config

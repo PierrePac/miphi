@@ -16,7 +16,9 @@ import jakarta.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class QuestionQcmServiceTest {
 
     private QuestionQcmService questionQcmService;

@@ -1,9 +1,6 @@
 package fr.mipih.rh.testcandidats.services;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import fr.mipih.rh.testcandidats.models.*;
@@ -63,8 +60,9 @@ public class EntretienService {
 
             entretienDto.setQcm(qcmMapper.toDto(entretien.getQcm()));
 
+            return entretienDto;
         }
-        return null;
+        throw new NoSuchElementException("Entretien avec l'id " + id + " n'existe pas");
     }
 
     public List<EntretienDto> getAll() {

@@ -10,7 +10,7 @@ import { Technologie } from 'src/app/share/enums/technologie.enum';
 })
 export class CreateSandboxComponent implements OnInit {
   sandboxForm!: FormGroup;
-
+  consigne: string = '';
   niveaux = Object.values(Niveau);
   technologies = Object.values(Technologie);
 
@@ -21,15 +21,23 @@ export class CreateSandboxComponent implements OnInit {
   ngOnInit() {
     this.sandboxForm = this.formBuilder.group({
       src: ['', [Validators.required]],
-      consigne: ['', [Validators.required]],
+      consigne: [''],
       nom: ['', [Validators.required]],
       niveau: [null, [Validators.required]],
       technologie: [null, [Validators.required]]
     });
   }
 
+  addConsigne() {
+    const currentConsigne = this.sandboxForm.get('consigne')?.value || '';
+    this.consigne = this.consigne ? `${this.consigne} -- ${currentConsigne}` : currentConsigne;
+    this.sandboxForm.get('consigne')?.setValue('');
+  }
+
   onSubmit() {
-    if (this.sandboxForm.valid) {
+    if (this.sandboxForm.valid && this.consigne != '') {
+      console.log(this.consigne)
+      this.sandboxForm.get('consigne')?.patchValue(this.consigne);
       this.onSave.emit(this.sandboxForm.value);
     }
   }

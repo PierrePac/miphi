@@ -37,6 +37,7 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
+  // Méthode pour afficher des messages toast.
   show(message: string, type: string) {
     if(type === 'error')
     this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
@@ -46,6 +47,8 @@ export class LandingPageComponent implements OnInit {
     this.messageService.add({ severity: 'success', summary: 'success', detail: message });
   }
 
+  // Méthode exécutée après l'initialisation de la vue.
+  // Elle ajoute des écouteurs d'événements pour les boutons.
   ngAfterViewInit(): void {
     this.adminBtn.nativeElement.addEventListener('click', () => {
       this.container.nativeElement.classList.remove('right-panel-active');
@@ -56,6 +59,7 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
+  // Méthode appelée lors de la soumission du formulaire.
   onSubmit(form: FormGroup) {
     if(this.authService.getAuthToken() !== null) {
       window.localStorage.removeItem("auth_token");
@@ -89,8 +93,9 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
+  // redirection selon le rôle de l'utilisateur
   handleLoginResponse(reponse: AdminDto | CandidatDto) {
-    this.authService.setAuthToken(reponse.token || "", reponse.refreshToken || "");
+    this.authService.setAuthToken(reponse.token ?? "", reponse.refreshToken ?? "");
     sessionStorage.setItem("personne", JSON.stringify(reponse));
     this.authService.isLoggedIn.next(true);
     if(reponse.role === 'ADMIN') {

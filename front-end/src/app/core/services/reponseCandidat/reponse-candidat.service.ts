@@ -11,6 +11,8 @@ export class ReponseCandidatService {
 
   constructor(private httpClient: HttpClient) { }
 
+  // Fonction permettant à un candidat de soumettre ses réponses pour un QCM.
+  // Elle utilise une requête POST pour envoyer les réponses du candidat à l'API backend.
   postQcmAnswer(reponsesQcm: ReponseQcmDto[]): Observable<ReponseQcmDto[]> {
     return this.httpClient.post<ReponseQcmDto[]>(environment.postQcmReponses, reponsesQcm);
   }

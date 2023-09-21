@@ -41,7 +41,7 @@ public class Sandbox {
 	@Column(name = "nom")
 	private String nom;
 
-	@Column(name = "consigne")
+	@Column(name = "consigne", length = 2000)
 	private String consigne;
 
 	@Enumerated(EnumType.STRING)

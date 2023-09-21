@@ -14,14 +14,13 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class EntretienService {
+  // Déclaration de variables pour suivre l'état des entretiens
   private entretienSubject = new BehaviorSubject<EntretienDto | null>(null);
-  entretien$ = this.entretienSubject.asObservable().pipe(
-    shareReplay(1)
-  );
+  entretien$ = this.entretienSubject.asObservable().pipe(shareReplay(1));
   private allEntretienSubject = new BehaviorSubject<EntretienDto[]>([]);
-  allEntretien$ = this.allEntretienSubject.asObservable().pipe(
-    shareReplay(1)
-  );
+  allEntretien$ = this.allEntretienSubject.asObservable().pipe(shareReplay(1));
+
+  // Variables pour stocker les scores et réponses
   private allGoodAnswer: number[] = [];
   private partiallyGoodAnswer: number[] = [];
   private noneGoodAnswer: number[] = [];
@@ -31,6 +30,7 @@ export class EntretienService {
 
   }
 
+  // Charge les données initiales depuis la session
   private loadInitialData() {
     const personneStr = sessionStorage.getItem('personne');
     if (personneStr) {
@@ -38,11 +38,11 @@ export class EntretienService {
       const personneId = personne.entretienId;
       if (personneId) {
         this.getEntretienById(Number(personneId)).subscribe(
-          (data) => {
+          (data) => { // En cas de succès, mise à jour du BehaviorSubject
             this.entretienSubject.next(data);
             sessionStorage.setItem('entretien', JSON.stringify(data));
           },
-          (error) => {
+          (error) => { // Gestion d'erreur
             console.error('Failed to fetch data', error);
           }
         );
@@ -50,14 +50,17 @@ export class EntretienService {
     }
   }
 
+  // Récupération d'un entretien par son ID
   getEntretienById(id: number) {
     return this.httpClient.get<EntretienDto>(`${environment.getEntretien}${id}`);
   }
 
+  // Création d'un nouvel entretien
   createEntretien(data: EntretienDto): Observable<EntretienDto> {
     return this.httpClient.post<EntretienDto>(environment.addEntretien, data)
   }
 
+  // Récupération de tous les entretiens
   getAllEntretien(): Observable<EntretienDto[]> {
     const sortEntretien = (entretiens: EntretienDto[]) =>
       entretiens.sort((a, b) => (b.id ?? 0 ) - (a.id ?? 0));
@@ -70,6 +73,7 @@ export class EntretienService {
       );
   }
 
+  // trie des questions par technologie
   transformQuestions(qcmQuestion: QuestionDto[]): QuestionTriDto[] {
     const groupedByTech: { [key: string]: QuestionDto[] } = {};
 
@@ -93,26 +97,33 @@ export class EntretienService {
   }
 
   transformReponses = (reponseCandidat: ReponseQcmDto[], qcmQuestion: QuestionDto[]): ReponseCandidatQuestionDto[] => {
+    // Initialisation d'un objet pour regrouper les réponses par question
     const groupedAnswers: { [key: number]: { answers: number[], technologie?: string } } = {};
 
     if (reponseCandidat) {
+       // Parcours de chaque réponse du candidat et recherche de la question correspondante à la réponse du candidat dans qcmQuestion
       reponseCandidat.forEach((reponse) => {
         const correspondingQuestion = qcmQuestion.find(q => {
           return q.reponses?.some(p => p.id === reponse.idProposition);
         });
 
+        // Extraction de l'ID et de la technologie de la question correspondante
         const questionId = correspondingQuestion?.id;
         const questionTechnologie = correspondingQuestion?.technologie;
 
+        // Si l'ID de la question est trouvé (n'est pas undefined)
+        // Initialisation de la clé correspondante dans groupedAnswers si elle n'existe pas déjà
         if (questionId !== undefined) {
           if (!groupedAnswers[questionId]) {
             groupedAnswers[questionId] = { answers: [], technologie: questionTechnologie };
           }
+          // Ajout de l'ID de la réponse du candidat à la liste des réponses pour cette question
           groupedAnswers[questionId].answers.push(reponse.idProposition);
         }
       });
     }
 
+    // Transformation de l'objet groupedAnswers en un tableau de type ReponseCandidatQuestionDto
     const result: ReponseCandidatQuestionDto[] = Object.keys(groupedAnswers).map((key) => {
       return {
         question_id: Number(key),
@@ -124,43 +135,48 @@ export class EntretienService {
     return result;
   };
 
-    isCandidateAnswer(transformedReponses: ReponseCandidatQuestionDto[], questionId: number, answerId: number): boolean {
-      const foundQuestion = transformedReponses.find(q => q.question_id === questionId);
-      return foundQuestion ? foundQuestion.candidateAnswer.includes(answerId) : false;
-    }
+  // Vérifie si la réponse d'un candidat à une question donnée est correcte ou non
+  isCandidateAnswer(transformedReponses: ReponseCandidatQuestionDto[], questionId: number, answerId: number): boolean {
+    // Recherche la question correspondant à questionId dans le tableau des réponses transformées
+    const foundQuestion = transformedReponses.find(q => q.question_id === questionId);
+    // Vérifie si la réponse trouvée contient l'ID de la réponse du candidat
+    // Retourne true si c'est le cas, sinon false
+    return foundQuestion ? foundQuestion.candidateAnswer.includes(answerId) : false;
+  }
 
-    transformToCorrectAnswerDto = (questionArray: QuestionTriDto[]): CorrectAnswerDto[] => {
-      const result: CorrectAnswerDto[] = [];
+  // trie les questions correct et incorrect 
+  transformToCorrectAnswerDto = (questionArray: QuestionTriDto[]): CorrectAnswerDto[] => {
+    const result: CorrectAnswerDto[] = [];
 
-      questionArray.forEach((questionGroup) => {
-        questionGroup.questions?.forEach((question) => {
-          const correctAnswer: number[] = [];
-          const incorrectAnswer: number[] = [];
+    questionArray.forEach((questionGroup) => {
+      questionGroup.questions?.forEach((question) => {
+        const correctAnswer: number[] = [];
+        const incorrectAnswer: number[] = [];
 
 
-          question.reponses?.forEach((reponse) => {
-            if(reponse.id) {
-              if (reponse.correct) {
-                correctAnswer.push(reponse.id);
-              } else {
-                incorrectAnswer.push(reponse.id);
-              }
+        question.reponses?.forEach((reponse) => {
+          if(reponse.id) {
+            if (reponse.correct) {
+              correctAnswer.push(reponse.id);
+            } else {
+              incorrectAnswer.push(reponse.id);
             }
-          });
+          }
+        });
 
 
-          result.push({
-            question_id: question.id!,
-            technologie: question.technologie!,
-            niveau: question.niveau!,
-            correctAnswer,
-            incorrectAnswer,
-            point: question.point
-          });
+        result.push({
+          question_id: question.id!,
+          technologie: question.technologie!,
+          niveau: question.niveau!,
+          correctAnswer,
+          incorrectAnswer,
+          point: question.point
         });
       });
-      return result;
-    };
+    });
+    return result;
+  };
 
     calculateScores(transformedResponses: ReponseCandidatQuestionDto[], correctAnswers: CorrectAnswerDto[]): ScoreDto[] {
       const scores: { [key: string]: ScoreDto } = {};

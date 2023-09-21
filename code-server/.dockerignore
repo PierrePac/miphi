@@ -5,3 +5,4 @@
 !config/.config/code-server
 !config/extensions/extensions.json
 !start-script.sh
+!config/maven

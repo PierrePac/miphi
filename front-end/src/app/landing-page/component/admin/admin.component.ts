@@ -11,9 +11,11 @@ import { QuestionDto } from 'src/app/share/dtos/question/question-dto';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  // Observable pour récupérer la liste des questions via le service
   allQuestion$: Observable<QuestionDto[]> = this.questionService.questions$;
   filteredQuestions$!: Observable<QuestionDto[]>;
 
+  // Liste des cartes avec des titres, routes et images pour la navigation dans le panneau d'administration
   cards = [
     { title: 'Gérer les QCMs', route: 'admin/qcm', image:'assets/media/list_qcm.jpg' },
     { title: 'Gérer les candidats', route:'admin/candidats', image:'assets/media/candidats.jpg' },
@@ -29,6 +31,7 @@ export class AdminComponent implements OnInit {
     this.questionService.loadAllQuestions();
   }
 
+  // Méthode pour naviguer vers une route spécifiée
   navigateTo(route: string) {
     this.router.navigate([route]);
   }

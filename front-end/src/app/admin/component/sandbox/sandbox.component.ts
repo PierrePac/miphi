@@ -1,5 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { CreateSandboxComponent } from '../create-sandbox/create-sandbox.component';
+import { Component } from '@angular/core';
 import { SandboxDto } from 'src/app/share/dtos/sandbox/sandbox-dto';
 import { SandboxService } from 'src/app/core/services/sandbox/sandbox.service';
 
@@ -20,7 +19,6 @@ export class SandboxComponent {
 
   handleSave(sandboxFormValue: SandboxDto) {
     this.sandboxData = sandboxFormValue;
-    console.log(this.sandboxData)
     this.sandboxService.saveSandbox(this.sandboxData).subscribe((resp: SandboxDto) => {
       console.log(resp)
     })

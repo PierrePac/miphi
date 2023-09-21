@@ -14,7 +14,9 @@ import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import fr.mipih.rh.testcandidats.services.SandboxService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sandbox")
@@ -39,6 +41,13 @@ public class SandboxController {
     public ResponseEntity<List<SandboxDto>> getAllSandbox() {
         List<SandboxDto> sandboxDtoList = sandboxService.getAll();
         return new ResponseEntity<List<SandboxDto>>(sandboxDtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-consignes/{idEntretien}")
+    public ResponseEntity<Map<String, String>> getConsignes(@PathVariable Long idEntretien) {
+        Map<String, String> reponse = new HashMap<>();
+        reponse.put("consignes", sandboxService.getConsignes(idEntretien));
+        return ResponseEntity.ok(reponse);
     }
 
 }

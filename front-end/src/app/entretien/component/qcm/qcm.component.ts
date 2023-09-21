@@ -33,9 +33,11 @@ export class QcmComponent implements OnInit {
               private messageService: MessageService) { }
 
   ngOnInit(): void {
+    // Récupération de l'objet 'personne' de la session et de l'id de la personne
     const personneJSON = sessionStorage.getItem('personne');
     const personne = personneJSON ? JSON.parse(personneJSON) : null;
     this.currentCandidatId = personne.id;
+    //récupération du qcm par l'id de la personne
     this.qcmService.getQcmByEntretien(personne.entretienId).subscribe(
       (data: QcmDto) => {
         this.qcm = data;
@@ -61,6 +63,7 @@ export class QcmComponent implements OnInit {
     });
   }
 
+  // Affichage des messages selon le type (erreur, avertissement, succès)
   show(message: string, type: string) {
     if(type === 'error')
     this.messageService.add({ severity: 'error', summary: 'Erreur', detail: message });
@@ -70,11 +73,13 @@ export class QcmComponent implements OnInit {
     this.messageService.add({ severity: 'success', summary: 'success', detail: message });
   }
 
+  // affiche la question suivante
   nextQuestion() {
     if (this.currentIndex < (this.questions.length || 0) - 1) {
       this.currentIndex++;
     }
     const currentQuestionId = this.questions[this.currentIndex]?.id;
+    // vérifie si une réponse à déjà été enregistré pour cette question
     if(currentQuestionId !== undefined) {
       const storedAnswer = this.getStoredAnswer(currentQuestionId);
       if(storedAnswer !== undefined) {
@@ -85,6 +90,7 @@ export class QcmComponent implements OnInit {
     }
   }
 
+  // Récupère toutes les réponses du candidat
   getStoredAnswer(questionId: number): number | undefined {
     const storedAnswer: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') ?? '[]');
     const answer = storedAnswer.find(a => a.question_id ==questionId);
@@ -107,6 +113,7 @@ export class QcmComponent implements OnInit {
     }
   }
 
+  // Valider et stocker la réponse du candidat à la question actuelle
   validateAnswer() {
     if (!this.questions) return;
     const currentQuestion = this.questions[this.currentIndex];
@@ -138,7 +145,7 @@ export class QcmComponent implements OnInit {
     this.nextQuestion();
     }
 
-
+  // Enregistre les réponses en BDD
   ValidateQcm() {
     this.validateAnswer()
     const storedAnswersJSON = sessionStorage.getItem('candidatAnswers');

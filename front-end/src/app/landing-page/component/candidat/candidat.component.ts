@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { ReponseCandidatDto } from 'src/app/share/dtos/reponse/reponse-candidat-
   templateUrl: './candidat.component.html',
   styleUrls: ['./candidat.component.scss']
 })
-export class CandidatComponent implements OnInit, OnDestroy {
+export class CandidatComponent implements OnInit {
   questionsList!: QuestionDto[];
   filteredQuestion!: QuestionDto[];
   questionQcm!: QuestionQcmDto[];
@@ -25,34 +25,36 @@ export class CandidatComponent implements OnInit, OnDestroy {
               private questionService: QuestionService,
               private qcmService: QcmService,
               private authService: AuthenticationService,) {
-    this.activeSection = this.route.snapshot.queryParamMap.get('section') || 'qcm';
-               }
+                // Obtention de la section active depuis les queryParams
+    this.activeSection = this.route.snapshot.queryParamMap.get('section') ?? 'qcm';
+  }
 
   ngOnInit(): void {
+    // Récupère les informations de la personne depuis sessionStorage
     const personneJSON = sessionStorage.getItem('personne');
     const personne = personneJSON ? JSON.parse(personneJSON) : null;
+    // Récupération de toutes les questions (avec toutes les réponses à false)
     this.questionService.loadAllQuestionsWr().subscribe(
       (data: QuestionDto[]) => {
         this.questionsList = data;
+        // Récupération des questions QCm associées à un entretien
         this.qcmService.getQcmQuestionByEntretien(personne.entretienId).subscribe(
           (data: QuestionQcmDto[]) => {
             this.questionQcm = data;
             this.loadQuestions()
+            // Récupération des réponses stockées
             let storedAnswers: ReponseCandidatDto[] = JSON.parse(sessionStorage.getItem('candidatAnswers') ?? '[]');
-            console.log(this.questionQcm.length)
-            console.log(storedAnswers.length)
+            // Si le nombre de réponses stockées est égal au nombre de questions QCM et que la section active est 'qcm'
             if(storedAnswers.length == this.questionQcm.length && this.activeSection === 'qcm') {
-              this.towardCode();
+              this.towardCode(); // Redirige vers le code
             } else if (this.questionQcm.length > 0 &&  this.activeSection === 'qcm') {
-              this.towardQcm();
+              this.towardQcm(); // Redirige vers le QCM
             }
           }
         )
       }
     )
   }
-
-
 
   loadQuestions() {
     of(this.questionsList).pipe(
@@ -89,13 +91,11 @@ export class CandidatComponent implements OnInit, OnDestroy {
     this.router.navigate(['/entretien/sandbox']);
   }
 
+  // Fin du test : nettoie les données de session et locales puis redirige vers la page d'accueil
   endTest(){
     sessionStorage.clear();
     window.localStorage.clear();
     this.authService.isLoggedIn.next(false);
     this.router.navigateByUrl('');
-  }
-
-  ngOnDestroy(): void {
   }
 }

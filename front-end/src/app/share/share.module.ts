@@ -26,6 +26,8 @@ import { AccordionModule } from 'primeng/accordion';
 import { PourcentageToRatingPipe } from './pipes/pourcentageToRating/pourcentage-to-rating.pipe';
 import { RatingModule } from 'primeng/rating';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConsigneFormatPipe } from './pipes/consigneFormat/consigne-format.pipe';
+import { SplitterModule } from 'primeng/splitter';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     FormatEnumPipe,
     SecondsToTimePipe,
     PourcentageToRatingPipe,
+    ConsigneFormatPipe,
   ],
   imports: [
     CommonModule,
@@ -59,6 +62,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     AccordionModule,
     RatingModule,
     MultiSelectModule,
+    SplitterModule,
   ],
   exports: [
     CommonModule,
@@ -89,6 +93,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     AccordionModule,
     RatingModule,
     MultiSelectModule,
+    ConsigneFormatPipe,
+    SplitterModule,
   ]
 })
 export class ShareModule { }

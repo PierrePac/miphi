@@ -1,29 +1,40 @@
-<section class="create-sandbox">
-  <h2>Ajouter une nouvelle Sandbox</h2>
-  <form [formGroup]="sandboxForm" (ngSubmit)="onSubmit()">
-    <span class="p-float-label mt-4">
-      <input pInputText id="src" formControlName="src" class="w-full"/>
-      <label htmlFor="src">Source url</label>
-    </span>
-    <span class="p-float-label mt-4">
-      <input pInputText id="nom" formControlName="nom" class="w-full" />
-      <label htmlFor="nom">Nom de l'entretien</label>
-    </span>
-    <span class="p-float-label mt-4">
-      <textarea id="float-input" rows="5" cols="30" pInputTextarea formControlName="consigne" class="w-full"></textarea>
-      <label for="float-input">Consignes pour l'exercice</label>
-    </span>
+<div class="sandbox-body">
+  <section class="create-sandbox">
+    <h2>Ajouter une nouvelle Sandbox</h2>
+    <form [formGroup]="sandboxForm" (ngSubmit)="onSubmit()">
+      <span class="p-float-label mt-4">
+        <input pInputText id="src" formControlName="src" class="w-full"/>
+        <label htmlFor="src">Source url</label>
+      </span>
+      <span class="p-float-label mt-4">
+        <input pInputText id="nom" formControlName="nom" class="w-full" />
+        <label htmlFor="nom">Nom de l'entretien</label>
+      </span>
+      <span class="p-float-label mt-4">
+        <textarea id="float-input" rows="5" cols="30" pInputTextarea formControlName="consigne" class="w-full"></textarea>
+        <button pButton type="button" (click)="addConsigne()">
+          <i class="pi pi-plus mr-2" style="font-size: 1rem"></i>
+          Rajouter la consigne</button>
+        <label for="float-input">Consignes pour l'exercice</label>
+      </span>
 
-    <span class="p-float-label mt-4">
-      <p-dropdown [options]="technologies" formControlName="technologie" placeholder="Sélectionner une Technologie" [style]="{'width':'100%'}"></p-dropdown>
-      <label for="technologie">Technologie</label>
-    </span>
+      <span class="p-float-label mt-4">
+        <p-dropdown [options]="technologies" formControlName="technologie" placeholder="Sélectionner une Technologie" [style]="{'width':'100%'}"></p-dropdown>
+        <label for="technologie">Technologie</label>
+      </span>
 
-    <span class="p-float-label mt-4">
-      <p-dropdown [options]="niveaux" formControlName="niveau" placeholder="Sélectionner un Niveau" [style]="{'width':'100%'}"></p-dropdown>
-      <label for="niveau">Niveau</label>
-    </span>
+      <span class="p-float-label mt-4">
+        <p-dropdown [options]="niveaux" formControlName="niveau" placeholder="Sélectionner un Niveau" [style]="{'width':'100%'}"></p-dropdown>
+        <label for="niveau">Niveau</label>
+      </span>
 
-    <button class="btn mt-4" *ngIf="sandboxForm.valid">Soumettre</button>
-  </form>
-</section>
+      <button class="btn mt-4" *ngIf="sandboxForm.valid && this.consigne != ''">Soumettre</button>
+    </form>
+  </section>
+  <section class="visuel">
+    <div *ngIf="consigne">
+      <h3>Consignes</h3>
+      <div class="consigne" [innerHTML]="consigne | consigneFormat"></div>
+    </div>
+  </section>
+</div>

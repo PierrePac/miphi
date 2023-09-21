@@ -17,4 +17,7 @@ public class SandboxDto {
     private String technologie;
     private String nom;
     private String consigne;
+
+    public SandboxDto(long l) {
+    }
 }

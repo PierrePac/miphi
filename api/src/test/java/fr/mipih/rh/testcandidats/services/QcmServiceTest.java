@@ -18,7 +18,9 @@ import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class QcmServiceTest {
 
     private QcmService qcmService;
@@ -47,19 +49,6 @@ public class QcmServiceTest {
         assertEquals(qcmDto, returnedDtos.get(0));
     }
 
-//    @Test
-//    public void testSaveQcm() {
-//        QcmDto dto = new QcmDto();
-//        Qcm entity = new Qcm();
-//
-//        when(qcmMapper.toEntity(dto)).thenReturn(entity);
-//        when(qcmRepository.save(entity)).thenReturn(entity);
-//        when(qcmMapper.toDto(entity)).thenReturn(dto);
-//
-//        QcmDto savedDto = qcmService.saveQcm(dto);
-//
-//        assertEquals(dto, savedDto);
-//    }
 
     @Test
     public void testAddQuestionToQcm() {

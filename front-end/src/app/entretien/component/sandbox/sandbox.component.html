@@ -1,1 +1,20 @@
-<p>sandbox works!</p>
+<section>
+  <p-splitter [panelSizes]="[25, 75]" [style]="{ height: '79vh' }" styleClass="mb-5">
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+          <div>
+            <h3>Consignes :</h3>
+            <div *ngIf="consignes.consignes.length > 0">
+              <p>{{ consignes.consignes[currentConsigneIndex] }}</p>
+              <p-button  (click)="nextConsigne()">Suivante</p-button>
+            </div>
+          </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+            <iframe sandbox="allow-same-origin allow-scripts allow-forms" [src]="url" [style]="{ height: '79vh', width: '100%' }"></iframe>
+        </div>
+    </ng-template>
+  </p-splitter>
+</section>

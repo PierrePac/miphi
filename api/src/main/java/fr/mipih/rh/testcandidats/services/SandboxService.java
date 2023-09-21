@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,9 +49,20 @@ public class SandboxService {
         return sandboxDtoList;
     }
 
+    public String getConsignes(Long idEntretien) {
+        Optional<Sandbox> sandboxOpt = sandboxRepository.findById(idEntretien);
+        if(sandboxOpt.isPresent()){
+            Sandbox sandbox = sandboxOpt.get();
+            String consignes = sandbox.getConsigne();
+            return consignes;
+        }
+        return null;
+    }
+
     public void dockerComposeLauncher(CredentialsCandidatDto credentialsDto) {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", "docker-compose up -d");
+        processBuilder.command("bash", "-c", "cd /code-server/ && docker compose up -d");
+        System.out.println("hello");
         try{
             Process process = processBuilder.start();
             StringBuilder output = new StringBuilder();
@@ -76,4 +89,6 @@ public class SandboxService {
             e.printStackTrace();
         }
     }
+
+
 }

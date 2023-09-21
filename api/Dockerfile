@@ -1,5 +1,5 @@
 # Use an image that includes the Docker client (Docker CLI)
-FROM docker:20.10.9 as docker-cli
+FROM docker:24.0.6 as docker-cli
 
 ENV http_proxy ""
 ENV https_proxy ""
@@ -32,12 +32,6 @@ RUN mvn clean package -DskipTests
 # Utilisation de l'image Tomcat avec OpenJDK 17 pour la phase de déploiement
 FROM tomcat:10-jdk17-openjdk-slim
 
-ENV http_proxy ""
-ENV https_proxy ""
-ENV HTTP_PROXY ""
-ENV HTTPS_PROXY ""
-ENV no_proxy "*"
-ENV NO_PROXY "*"
 
 # Suppression des applications par défaut de Tomcat
 RUN rm -rf /usr/local/tomcat/webapps/*
@@ -47,6 +41,20 @@ COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
 # Copy the Docker CLI from the docker-cli image to the final image
 COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
+
+# Installation de docker-compose plugin
+RUN /usr/bin/apt-get update && /usr/bin/apt-get install -y curl
+RUN DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+RUN mkdir -p $DOCKER_CONFIG/cli-plugins
+RUN curl -SL https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+RUN chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose                                                                                              
+
+ENV http_proxy ""
+ENV https_proxy ""
+ENV HTTP_PROXY ""
+ENV HTTPS_PROXY ""
+ENV no_proxy "*"
+ENV NO_PROXY "*"
 
 # Exposition du port 8080
 EXPOSE 8080

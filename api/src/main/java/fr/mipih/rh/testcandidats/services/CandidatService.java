@@ -92,33 +92,4 @@ public class CandidatService {
 				.map(candidatMapper::toCandidatDto)
 				.collect(Collectors.toList());
 	}
-
-	public void createReponseCandidat(NewCandidatDto newCandidatDto){
-//		Optional<Entretien> entretienOpt = entretienRepository.findById(newCandidatDto.getEntretienId());
-//		if(entretienOpt.isPresent()) {
-//			Entretien entretien = entretienOpt.get();
-//			Optional<Qcm> qcmOpt = qcmRepository.findById(entretien.getQcm().getId());
-//			if(qcmOpt.isPresent()) {
-//				Qcm qcm = qcmOpt.get();
-//				Optional<List<QuestionQcm>> questionsQcmOpt = questionQcmRepository.findAllByQcmId(qcm.getId());
-//				if(questionsQcmOpt.isPresent()){
-//					List<QuestionQcm> questionQcmList = questionsQcmOpt.get();
-//					Optional<Candidat> candidatOpt = candidatRepository.findByNomAndPrenom(newCandidatDto.getNom(), newCandidatDto.getPrenom());
-//					if(candidatOpt.isPresent()){
-//						Candidat candidat = candidatOpt.get();
-//						for (QuestionQcm questionQcm: questionQcmList) {
-//							Optional<Question> questionOpt = questionRepository.findById(questionQcm.getQuestion().getId());
-//							if (questionOpt.isPresent()){
-//								Question question = questionOpt.get();
-//								ReponseCandidat reponseCandidat = new ReponseCandidat();
-//								reponseCandidat.setCandidat(candidat);
-//								reponseCandidatRepository.save(reponseCandidat);
-//							}
-//
-//						}
-//					}
-//				}
-//			}
-//		}
-	}
 }

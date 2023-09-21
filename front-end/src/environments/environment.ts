@@ -30,6 +30,7 @@ const environment = {
 
   addSandbox: 'http://localhost:8080/sandbox/add',
   getAllSandbox: 'http://localhost:8080/sandbox/get-all',
+  getConsignes: 'http://localhost:8080/sandbox/get-consignes/',
 
   addEntretien: 'http://localhost:8080/entretien/add',
   getEntretien: 'http://localhost:8080/entretien/',

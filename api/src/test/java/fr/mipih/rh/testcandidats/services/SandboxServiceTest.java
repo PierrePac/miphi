@@ -6,6 +6,7 @@ import fr.mipih.rh.testcandidats.mappers.SandboxMapper;
 import fr.mipih.rh.testcandidats.models.Sandbox;
 import fr.mipih.rh.testcandidats.repositories.SandboxRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 public class SandboxServiceTest {
 
     private final SandboxRepository sandboxRepository = mock(SandboxRepository.class);

@@ -5,6 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SecondsToTimePipe implements PipeTransform {
 
+  // Transform un number en seconde en un temps en 'h', 'min' et 'sec'
   transform(value: number): string {
     if (!Number.isInteger(value)) {
       return value.toString();

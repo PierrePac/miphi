@@ -30,6 +30,7 @@ const environment = {
 
   addSandbox: 'http://p2lxtdkear01.mipih.net:8282/sandbox/add',
   getAllSandbox: 'http://p2lxtdkear01.mipih.net:8282/sandbox/get-all',
+  getConsignes: 'http://p2lxtdkear01.mipih.net:8282/sandbox/get-consignes/',
 
   addEntretien: 'http://p2lxtdkear01.mipih.net:8282/entretien/add',
   getEntretien: 'http://p2lxtdkear01.mipih.net:8282/entretien/',

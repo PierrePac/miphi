@@ -16,4 +16,7 @@ public class AdminDto {
 	private String role;
 	private String token;
 	private String refreshToken;
+
+    public AdminDto(long l) {
+    }
 }
