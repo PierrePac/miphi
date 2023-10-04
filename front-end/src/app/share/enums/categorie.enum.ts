@@ -1,5 +1,5 @@
 export enum Categorie {
-  ALGORYTHME = 'ALGORITHME',
+  ALGORITHME = 'ALGORITHME',
   LOGIQUE = 'LOGIQUE',
   FONCTION = 'FONCTION',
 }

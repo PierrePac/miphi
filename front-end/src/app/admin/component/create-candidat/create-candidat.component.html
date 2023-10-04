@@ -24,6 +24,11 @@
         <label htmlFor="nomEntretien">Donnez un titre à l'entretien</label>
       </span>
 
+      <span class="p-float-label mt-4">
+        <p-calendar formControlName="dateEnd" [style]="{'width':'400px'}"></p-calendar>
+        <label htmlFor="dateEnd">date d'expiration de l'entretien</label>
+      </span>
+
       <p-dropdown class="mt-4" [options]="(allQcms$ | async) || []" formControlName="qcm" optionLabel="nom"
         [filter]="true" filterBy="nom" [showClear]="true" placeholder="Sélectionner un Qcm" [style]="{'width':'400px'}"
         (onChange)="onQcmChange($event)">

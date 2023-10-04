@@ -14,14 +14,14 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-	
-	private final UserAuthProvider userAuthProvider;
-	
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		
-		String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-		
+
+    private final UserAuthProvider userAuthProvider;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+
         if (header != null) {
             String[] authElements = header.split(" ");
 
@@ -30,10 +30,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 try {
                     if ("GET".equals(request.getMethod())) {
                         SecurityContextHolder.getContext().setAuthentication(
-                        		userAuthProvider.validateToken(authElements[1]));
+                                userAuthProvider.validateToken(authElements[1]));
                     } else {
                         SecurityContextHolder.getContext().setAuthentication(
-                        		userAuthProvider.validateTokenStrongly(authElements[1]));
+                                userAuthProvider.validateTokenStrongly(authElements[1]));
                     }
                 } catch (RuntimeException e) {
                     SecurityContextHolder.clearContext();
@@ -42,8 +42,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
-		filterChain.doFilter(request, response);
-		
-	}
+        filterChain.doFilter(request, response);
+
+    }
 
 }

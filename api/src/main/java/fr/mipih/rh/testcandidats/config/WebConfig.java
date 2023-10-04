@@ -39,7 +39,7 @@ public class WebConfig {
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
 
-        
+
         bean.setOrder(CORS_FILTER_ORDER);
         return bean;
     }

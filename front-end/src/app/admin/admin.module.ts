@@ -13,6 +13,8 @@ import { ViewResultComponent } from './component/view-result/view-result.compone
 import { SandboxComponent } from './component/sandbox/sandbox.component';
 import { CreateSandboxComponent } from './component/create-sandbox/create-sandbox.component';
 import { ListSandboxComponent } from './component/list-sandbox/list-sandbox.component';
+import { AdminComponent } from './component/admin/admin.component';
+import { ViewAdminComponent } from './component/view-admin/view-admin.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { ListSandboxComponent } from './component/list-sandbox/list-sandbox.comp
     ViewResultComponent,
     SandboxComponent,
     CreateSandboxComponent,
-    ListSandboxComponent
+    ListSandboxComponent,
+    AdminComponent,
+    ViewAdminComponent
   ],
   imports: [
     AdminRoutingModule,

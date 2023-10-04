@@ -50,7 +50,6 @@ public class AuthController {
 	public ResponseEntity<CandidatDto> loginCandidat(@RequestBody  CredentialsCandidatDto credentialsDto){
 		CandidatDto candidat = candidatService.loginCandidat(credentialsDto);
 		sandboxService.dockerComposeLauncher(credentialsDto);
-		System.out.println("Hello");
 		Map<String, String> tokens = userAuthProvider.createTokens(candidat);
 		candidat.setToken(tokens.get("accessToken"));
 		candidat.setRole("CANDIDAT");

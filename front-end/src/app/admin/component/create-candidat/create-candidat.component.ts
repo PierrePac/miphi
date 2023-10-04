@@ -54,7 +54,8 @@ export class CreateCandidatComponent implements OnInit{
       nomEntretien: [''],
       qcm: [''],
       sandbox: [''],
-      entretien: ['']
+      entretien: [''],
+      dateEnd: ['']
     }, { validator: this.entretienValidation });
   }
 
@@ -83,6 +84,7 @@ export class CreateCandidatComponent implements OnInit{
       this.createCandidatForm.get('qcm')?.reset();
       this.createCandidatForm.get('sandbox')?.reset();
       this.createCandidatForm.get('entretien')?.reset();
+      this.createCandidatForm.get('dateEnd')?.reset();
   }
 
   entretienValidation(control: AbstractControl): { [key: string]: any } | null {
@@ -109,20 +111,18 @@ export class CreateCandidatComponent implements OnInit{
 
   onSubmit() {
     const formValues = this.createCandidatForm.value;
-      if (formValues.qcm && formValues.sandbox && formValues.nomEntretien) {
+      if (formValues.qcm && formValues.sandbox && formValues.nomEntretien && formValues.dateEnd) {
         const currentDate = new Date();
-        const date_end = new Date(currentDate);
-        date_end.setDate(currentDate.getDate() + 30);
 
         const date_start = currentDate.toISOString();
-        const dateEndFormatted = date_end.toISOString();
+        const dateEndFormatted = formValues.dateEnd.toISOString();
 
         const personneStr = sessionStorage.getItem('personne');
         if (personneStr) {
           const personne = JSON.parse(personneStr);
           this.idAdmin = personne.id;
         }
-
+        
         const entretienData = {
           admin: {
             id: this.idAdmin

@@ -1,5 +1,7 @@
 package fr.mipih.rh.testcandidats.services;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import fr.mipih.rh.testcandidats.dtos.SandboxDto;
@@ -73,5 +75,12 @@ public class EntretienService {
             entretienDtoList.add(entretienDto);
         }
         return entretienDtoList;
+    }
+
+    public void deleteExpiredEntretien() {
+        LocalDateTime now = LocalDateTime.now();
+        Date nowDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+        List<Entretien> expiredEntretien = entretienRepository.findByDateEndBefore(nowDate);
+        entretienRepository.deleteAll(expiredEntretien);
     }
 }

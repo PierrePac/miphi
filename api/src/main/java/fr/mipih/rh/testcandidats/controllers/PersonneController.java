@@ -47,5 +47,11 @@ public class PersonneController {
         return new ResponseEntity<>(candidatDtos, HttpStatus.OK);
     }
 
+    @GetMapping("get-admin")
+    public ResponseEntity<List<AdminDto>> getAllAdmin() {
+        List<AdminDto> adminDtos = adminService.getAllAdmins();
+        return new ResponseEntity<>(adminDtos, HttpStatus.OK);
+    }
+
 
 }

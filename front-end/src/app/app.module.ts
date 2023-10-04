@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ToastModule } from 'primeng/toast';
     BrowserAnimationsModule,
     HttpClientModule,
     ToastModule,
+    EditorModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

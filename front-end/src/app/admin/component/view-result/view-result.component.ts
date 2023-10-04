@@ -56,6 +56,7 @@ export class ViewResultComponent implements OnInit{
 
   ngOnInit(): void {
     this.fetchAllCandidats();
+    console.log(this.allCandidats$)
   }
 
   fetchAllCandidats() {

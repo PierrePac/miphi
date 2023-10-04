@@ -23,7 +23,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
+
 	private final UserAuthProvider userAuthProvider;
 	private final UserAuthEntryPoint userAuthEntryPoint;
 
@@ -57,7 +57,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers(orRequestMatcher).permitAll()
 						.anyRequest().authenticated()
-		);
+				);
 		return http.build();
 	}
 }

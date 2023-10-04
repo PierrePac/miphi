@@ -9,7 +9,6 @@ import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
 import { MessageService } from 'primeng/api';
 
-
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
@@ -24,6 +23,9 @@ export class QuestionComponent implements OnInit {
   technologies = Object.values(Technologie).map(tech => ({ name: tech }));
   niveaux = Object.values(Niveau).map(niv => ({ name: this.formatEnumValue(niv) }));
   toggleAddQuestion: boolean = false;
+  first: number = 0;
+  rows: number = 10;
+  currentQuestionsPage$!: Observable<QuestionDto[]>;
 
   formatEnumValue(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
@@ -43,6 +45,7 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit():void {
     this.questionService.loadAllQuestions().subscribe();
+    this.updateCurrentPageQuestions();
   }
 
   show(message: string, type: string) {
@@ -56,7 +59,7 @@ export class QuestionComponent implements OnInit {
 
   onSubmit() {
     this.questionService.loadAllQuestions();
-    this.updateQuestionsList();
+    this.updateCurrentPageQuestions();
   }
 
   handleSave(questionValue: QuestionDto) {
@@ -106,10 +109,16 @@ export class QuestionComponent implements OnInit {
       this.questionService.modifyQuestion(questionValue.id, question).pipe(
         switchMap(() => {
           const reponseObservables = reponses.map(reponse => {
+            console.log(reponse)
+            console.log(reponse.id)
+            console.log(reponse.reponse)
+            console.log(reponse.id && reponse.reponse)
             if(reponse.id && reponse.reponse) {
-              this.reponseService.modifyReponse(reponse.id, reponse);
+              console.log('Modifié', reponse)
+              this.reponseService.modifyReponse(reponse.id, reponse).subscribe();
             } else if (reponse.reponse) {
-              this.reponseService.addReponse(reponse);
+              console.log('New', reponse)
+              this.reponseService.addReponse(reponse).subscribe();
             }
             return of(null);
           });
@@ -157,6 +166,7 @@ export class QuestionComponent implements OnInit {
         (!this.niveauSelectionne || question.niveau === this.niveauSelectionne.name.toUpperCase())
       ))
     );
+    this.updateCurrentPageQuestions();
   }
 
   deleteQuestion(question: QuestionDto) {
@@ -179,4 +189,17 @@ export class QuestionComponent implements OnInit {
     this.niveauSelectionne = null;
     this.updateQuestionsList();
   }
+
+  updateCurrentPageQuestions(): void {
+    this.currentQuestionsPage$ = this.filteredQuestions$.pipe(
+      map(questions => questions.slice(this.first, this.first + this.rows))
+    );
+  }
+
+  onPageChange(event: any): void {
+    this.first = event.first;
+    this.rows = event.rows;
+    this.updateCurrentPageQuestions();
+  }
+
 }

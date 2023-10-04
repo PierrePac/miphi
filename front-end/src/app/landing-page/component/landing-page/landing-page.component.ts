@@ -13,11 +13,11 @@ import { CandidatDto } from 'src/app/share/dtos/candidat/candidat-dto';
   providers: [MessageService]
 })
 export class LandingPageComponent implements OnInit {
+  candidatForm!: FormGroup;
+  adminForm!: FormGroup;
   @ViewChild('adminBtn', { static: false }) adminBtn!: ElementRef;
   @ViewChild('candidatBtn', {static: false}) candidatBtn!: ElementRef;
   @ViewChild('container', {static: false}) container!: ElementRef;
-  candidatForm!: FormGroup;
-  adminForm!: FormGroup;
 
   constructor( private formBuilder: FormBuilder,
               private router: Router,

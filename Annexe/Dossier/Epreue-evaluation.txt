@@ -1,0 +1,47 @@
+
+2022-CDA-Epreuve d'évaluation
+
+I - Présentation d'un projet réalisé en amont de la session (oral 40 minutes)
+1. Contexte
+
+En amont de la session, le candidat a réalisé un projet en entreprise concernant le développement d’une application et a préparé un dossier de projet ainsi qu’un support de présentation.
+
+L’entreprise fournit au candidat le cahier des charges du projet. Le candidat s’assure au moyen des référentiels d'emploi et de certification que le projet répond aux attendus concernant la mise en oeuvre des compétences des trois activités types.
+
+Au moins dix jours ouvrés avant la session d’examen, le candidat a remis à l’organisateur un résumé en français de son projet.
+
+Au moins un jour ouvré avant la session d’examen, le candidat a remis à l'organisateur son dossier de projet.
+
+Lors de la session d’examen, le candidat commence sa présentation au jury par un résumé en anglais de son projet. Il présente ensuite son projet à l’aide d’un support de présentation.
+2. Contenu de la présentation orale
+
+Le candidat commence sa présentation au jury par un résumé en anglais de son projet.
+
+Il présente ensuite son projet à l’aide d’un support de présentation réalisé en amont de l’épreuve, et selon ce canevas :
+
+            Présentation de l’entreprise et/ou du service
+
+            Contexte du projet (cahier des charges, contraintes, livrables attendus)
+
+            Gestion de projet (planning et suivi, environnement humain et technique, objectifs de qualité)
+
+            Analyse du besoin
+
+            Conception et codage
+
+            Présentation des éléments les plus significatifs de l’interface de l’application
+
+            Présentation du jeu d’essai de la fonctionnalité la plus représentative (données en entrée, données attendues, données obtenues) et analyse des écarts éventuels
+
+            Présentation d’un exemple de recherche effectuée à partir de site anglophone
+
+            Synthèse et conclusion (satisfactions et difficultés rencontrées)
+
+II - Entretien technique (oral 45 minutes)
+
+Le jury questionne le candidat sur la base de son Dossier de Projet et de sa présentation, afin de s’assurer de la maîtrise des compétences couvertes par le projet. Un questionnement complémentaire lui permet d’évaluer les compétences qui ne sont pas couvertes par le projet.
+
+L'entretien technique se déroule obligatoirement à l'issue de la présentation du projet réalisé en amont de la session.
+III - Entretien final (oral 20 minutes)
+
+Comprend le temps d’échange avec le candidat sur le Dossier Professionnel. Le jury vérifie la capacité du candidat à enchaîner les trois activités du titre. Il revient notamment sur la gestion des projets, sur la qualité des développements et sur l’aspect sécurité.

@@ -28,6 +28,9 @@ import { RatingModule } from 'primeng/rating';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConsigneFormatPipe } from './pipes/consigneFormat/consigne-format.pipe';
 import { SplitterModule } from 'primeng/splitter';
+import { CalendarModule } from 'primeng/calendar';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -63,6 +66,9 @@ import { SplitterModule } from 'primeng/splitter';
     RatingModule,
     MultiSelectModule,
     SplitterModule,
+    CalendarModule,
+    EditorModule,
+    PaginatorModule,
   ],
   exports: [
     CommonModule,
@@ -95,6 +101,12 @@ import { SplitterModule } from 'primeng/splitter';
     MultiSelectModule,
     ConsigneFormatPipe,
     SplitterModule,
+    CalendarModule,
+    EditorModule,
+    PaginatorModule,
+  ],
+  providers: [
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ]
 })
 export class ShareModule { }

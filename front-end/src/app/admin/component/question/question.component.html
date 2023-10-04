@@ -21,7 +21,14 @@
     <p-dropdown [(ngModel)]="niveauSelectionne" [options]="niveaux" optionLabel="name" placeholder="Sélectionner un Niveaux" (onChange)="updateQuestionsList()" [style]="{'min-width':'270px'}"></p-dropdown>
     <button (click)="reinitialiserFiltres()" class="btn mt-0">Réinitialiser les Filtres</button>
 </div>
-  <ng-container *ngFor="let question of filteredQuestions$ | async">
+<p-paginator
+(onPageChange)="onPageChange($event)"
+[first]="first"
+[rows]="rows"
+[totalRecords]="(filteredQuestions$ | async)?.length ?? 0"
+[rowsPerPageOptions]="[10, 20, 30]">
+</p-paginator>
+<ng-container *ngFor="let question of currentQuestionsPage$ | async">
     <app-share-question [questionDto]="question" [mode]="'display'" (onSave)="handleSave($event)" (onDelete)="deleteQuestion($event)"></app-share-question>
   </ng-container>
 </div>
