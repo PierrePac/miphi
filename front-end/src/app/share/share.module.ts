@@ -29,8 +29,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ConsigneFormatPipe } from './pipes/consigneFormat/consigne-format.pipe';
 import { SplitterModule } from 'primeng/splitter';
 import { CalendarModule } from 'primeng/calendar';
-import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { PaginatorModule } from 'primeng/paginator';
+import { EditorModule } from 'primeng/editor';
 
 @NgModule({
   declarations: [
@@ -104,9 +104,6 @@ import { PaginatorModule } from 'primeng/paginator';
     CalendarModule,
     EditorModule,
     PaginatorModule,
-  ],
-  providers: [
-    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ]
 })
 export class ShareModule { }

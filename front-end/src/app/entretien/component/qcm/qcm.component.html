@@ -3,7 +3,8 @@
   header="Question {{ currentIndex + 1 }} sur {{ questions.length }}"
   [style]="{ width: '80vw', margin: '50px auto', minHeight: '45vh' }">
   <p class="question">
-    <strong>Question :</strong> {{ questions[currentIndex].question }}
+    <strong>Question :</strong>
+    <p-editor [(ngModel)]="questions[currentIndex].question" [readonly]="true" [style]="{ height: '320px' }"></p-editor>
   </p>
   <p><strong>Sélectionnez la ou les réponses vrai :</strong></p>
   <form class="form">

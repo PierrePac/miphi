@@ -170,5 +170,4 @@ export class QcmComponent implements OnInit {
       }, 1500);
     });
   }
-
 }

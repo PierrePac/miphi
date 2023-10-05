@@ -27,13 +27,7 @@
           decrementButtonClass="p-button-secondary" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"></p-inputNumber>
         </div>
       </div>
-
-      <editor formControlName="question" [init]="{base_url: '/tinymce', suffix: '.min'}"></editor>
-
-      <!-- <p-editor formControlName="question" [style]="{ height: '320px' }"></p-editor> -->
-      <!-- <textarea rows="5" cols="30" pInputTextarea formControlName="question" placeholder="Question" required></textarea> -->
-
-
+      <p-editor formControlName="question" [style]="{ height: '320px' }"></p-editor>
       <div class="list-reponses" formArrayName="reponses">
         <ng-container *ngFor="let reponseFormGroup of reponses.controls; let i = index">
           <div [formGroupName]="i" *ngIf="i === 0 || (reponses.at(i-1)?.get('reponse')?.value)" class="inputt-reponse">
@@ -63,8 +57,7 @@
             <i class="pi pi-trash" style="font-size: 2rem; color: red" (click)="onDeleteQuestion()"></i>
             <i class="pi pi-cog" style="font-size: 2rem" (click)="toggleMode()"></i>
           </div>
-          <editor [ngModel]="questionDto.question" [init]="{base_url: '/tinymce', suffix: '.min', readonly: true}"></editor>
-          <!-- <p-editor [(ngModel)]="questionDto.question" [readonly]="true" [style]="{ height: '320px' }"></p-editor> -->
+          <p-editor [(ngModel)]="questionDto.question" [readonly]="true" [style]="{ height: '320px' }"></p-editor>
           <h3>Les paramètres :</h3>
           <div class="details-question">
             <p *ngIf="questionDto.niveau">niveau : {{questionDto.niveau | formatEnum}}</p>
