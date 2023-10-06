@@ -5,13 +5,12 @@ import { PropositionDto } from 'src/app/share/dtos/proposition/proposition-dto';
 import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
-import { MessageService } from 'primeng/api';
-
+import { ConfirmEventType, ConfirmationService, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-share-question',
   templateUrl: './share-question.component.html',
   styleUrls: ['./share-question.component.scss'],
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class ShareQuestionComponent implements OnInit {
   // Mode d'affichage : soit 'edit' pour modification, soit 'display' pour visualisation
@@ -39,7 +38,8 @@ export class ShareQuestionComponent implements OnInit {
   }
 
   constructor(private formbuilder: FormBuilder,
-              private messageService: MessageService) {}
+              private messageService: MessageService,
+              private confirmationService: ConfirmationService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -137,7 +137,26 @@ export class ShareQuestionComponent implements OnInit {
 
   // Émet l'événement de suppression pour la question
   onDeleteQuestion(): void {
-    this.onDelete.emit(this.questionDto);
+    this.confirmationService.confirm({
+      message: 'Supprimer une question entraînera sa suppression des QCMs et des résultats des candidats.',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+        this.onDelete.emit(this.questionDto);
+      },
+      reject: (type: ConfirmEventType) => {
+          switch (type) {
+              case ConfirmEventType.REJECT:
+                  this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+                  break;
+              case ConfirmEventType.CANCEL:
+                  this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+                  break;
+          }
+      }
+  });
+
+
   }
 
   // Validateur pour s'assurer qu'il y a au moins un certain nombre de réponses remplies
@@ -181,6 +200,6 @@ export class ShareQuestionComponent implements OnInit {
     }
   }
 
-  
+
 
 }

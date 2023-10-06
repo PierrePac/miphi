@@ -5,7 +5,13 @@
     <h1>Rajouter une question</h1>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="icon-edit" *ngIf="questionDto">
-          <i class="pi pi-trash" style="font-size: 2rem; color: red" (click)="onDeleteQuestion()"></i>
+
+
+          <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+          <p-button (click)="onDeleteQuestion()" icon="pi pi-trash" label="" styleClass="p-button-danger p-button-text"></p-button>
+
+
+          <!-- <i class="pi pi-trash" style="font-size: 2rem; color: red" (click)="onDeleteQuestion()"></i> -->
           <i class="pi pi-cog" style="font-size: 2rem" (click)="toggleMode()"></i>
         </div>
 
@@ -54,7 +60,9 @@
   <section class="list-question">
         <p-fieldset legend="{{questionDto.technologie}}" [toggleable]="true" [collapsed]="true">
           <div class="icon">
-            <i class="pi pi-trash" style="font-size: 2rem; color: red" (click)="onDeleteQuestion()"></i>
+            <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+            <p-button (click)="onDeleteQuestion()" icon="pi pi-trash" label="" styleClass="p-button-danger p-button-text p-button-lg"></p-button>
+            <!-- <i class="pi pi-trash" style="font-size: 2rem; color: red" (click)="onDeleteQuestion()"></i> -->
             <i class="pi pi-cog" style="font-size: 2rem" (click)="toggleMode()"></i>
           </div>
           <p-editor [(ngModel)]="questionDto.question" [readonly]="true" [style]="{ height: '320px' }"></p-editor>

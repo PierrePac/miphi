@@ -6,8 +6,12 @@ import java.util.Optional;
 
 import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
+import fr.mipih.rh.testcandidats.models.Proposition;
 import fr.mipih.rh.testcandidats.models.QuestionQcm;
+import fr.mipih.rh.testcandidats.models.ReponseCandidat;
+import fr.mipih.rh.testcandidats.repositories.PropositionRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
+import fr.mipih.rh.testcandidats.repositories.ReponseCandidatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,8 @@ public class QuestionService {
 	
 	private final QuestionRepository questionRepository;
 	private final QuestionQcmRepository questionQcmRepository;
+	private final PropositionRepository propositionRepository;
+	private final ReponseCandidatRepository reponseCandidatRepository;
 
 	public QuestionDto saveQuestion(QuestionDto questionDto) {
 		return QuestionMapper.toDto(questionRepository.save(QuestionMapper.toEntity(questionDto)));
@@ -38,7 +44,23 @@ public class QuestionService {
 	}
 
 	public void deleteQuestion(Long id) {
-		questionRepository.deleteById(id);
+		Question question = questionRepository.findById(id).orElse(null);
+		if (question != null) {
+			List<Proposition> propositions = propositionRepository.findAllByQuestionId(id);
+			for (Proposition proposition : propositions) {
+				Optional<ReponseCandidat> reponseCandidatOptional = reponseCandidatRepository.findByReponseCandidatId_IdProposition(proposition.getId());
+				if(reponseCandidatOptional.isPresent()){
+					ReponseCandidat reponseCandidat = reponseCandidatOptional.get();
+					reponseCandidatRepository.delete(reponseCandidat);
+				}
+				propositionRepository.delete(proposition);
+			}
+			List<QuestionQcm> questionQcmList = questionQcmRepository.findByQuestionQcmId_IdQuestion(id);
+			for(QuestionQcm questionQcm: questionQcmList){
+				questionQcmRepository.delete(questionQcm);
+			}
+			questionRepository.deleteById(id);
+		}
 	}
 
 	public List<QuestionDto> getAllQuestionOfQcm(Long id) {

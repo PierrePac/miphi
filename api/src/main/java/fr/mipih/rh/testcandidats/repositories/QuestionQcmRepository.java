@@ -16,4 +16,7 @@ public interface QuestionQcmRepository extends JpaRepository<QuestionQcm, Questi
 
     List<QuestionQcm> findAllByQuestionQcmIdIdQcm(Long idQcm);
 
+    void deleteByQuestionQcmId_IdQuestion(Long idQuestion);
+
+    List<QuestionQcm> findByQuestionQcmId_IdQuestion(Long idQuestion);
 }

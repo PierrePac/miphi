@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import fr.mipih.rh.testcandidats.models.Proposition;
+import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
+import fr.mipih.rh.testcandidats.repositories.ReponseCandidatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +32,6 @@ import fr.mipih.rh.testcandidats.services.PropositionService;
 public class QuestionController {
 
 	private final QuestionService questionService;
-	private final QuestionRepository questionRepository;
-	private final PropositionRepository propositionRepository;
 	private final PropositionService propositionService;
 
 	@PostMapping("/add")
@@ -83,14 +83,7 @@ public class QuestionController {
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteQuestion(@PathVariable("id") Long id) {
-		Question question = questionRepository.findById(id).orElse(null);
-		if(question != null) {
-			List<Proposition> propositions = propositionRepository.findAllByQuestionId(id);
-			for(Proposition proposition: propositions) {
-				propositionRepository.delete(proposition);
-			}
-			questionService.deleteQuestion(id);			
-		}
+		questionService.deleteQuestion(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

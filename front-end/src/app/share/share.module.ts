@@ -31,6 +31,7 @@ import { SplitterModule } from 'primeng/splitter';
 import { CalendarModule } from 'primeng/calendar';
 import { PaginatorModule } from 'primeng/paginator';
 import { EditorModule } from 'primeng/editor';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { EditorModule } from 'primeng/editor';
     CalendarModule,
     EditorModule,
     PaginatorModule,
+    ConfirmDialogModule,
   ],
   exports: [
     CommonModule,
@@ -104,6 +106,7 @@ import { EditorModule } from 'primeng/editor';
     CalendarModule,
     EditorModule,
     PaginatorModule,
+    ConfirmDialogModule,
   ]
 })
 export class ShareModule { }
