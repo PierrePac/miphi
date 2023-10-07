@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import fr.mipih.rh.testcandidats.dtos.EntretienDto;
 import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import fr.mipih.rh.testcandidats.services.SandboxService;
 import lombok.RequiredArgsConstructor;

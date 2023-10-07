@@ -1,6 +1,5 @@
 package fr.mipih.rh.testcandidats.controllers;
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,6 @@ import fr.mipih.rh.testcandidats.dtos.AdminDto;
 import fr.mipih.rh.testcandidats.dtos.CandidatDto;
 import fr.mipih.rh.testcandidats.dtos.CredentialsAdminDto;
 import fr.mipih.rh.testcandidats.dtos.CredentialsCandidatDto;
-import fr.mipih.rh.testcandidats.dtos.NewAdminDto;
 import fr.mipih.rh.testcandidats.dtos.RefreshTokenRequestDto;
 import fr.mipih.rh.testcandidats.services.AdminService;
 import fr.mipih.rh.testcandidats.services.CandidatService;

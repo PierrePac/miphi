@@ -2,10 +2,6 @@ package fr.mipih.rh.testcandidats.controllers;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import fr.mipih.rh.testcandidats.models.Proposition;
-import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
-import fr.mipih.rh.testcandidats.repositories.ReponseCandidatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import fr.mipih.rh.testcandidats.dtos.PropositionDto;
-import fr.mipih.rh.testcandidats.models.Question;
-import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
-import fr.mipih.rh.testcandidats.repositories.PropositionRepository;
 import fr.mipih.rh.testcandidats.services.QuestionService;
 import fr.mipih.rh.testcandidats.services.PropositionService;
 
@@ -56,7 +49,8 @@ public class QuestionController {
 				.collect(Collectors.groupingBy(PropositionDto::getQuestion_id));
 
 		for (QuestionDto questionDto : questionDtos) {
-			List<PropositionDto> reponseDtosForQuestion = questionIdToReponseDtosMap.getOrDefault(questionDto.getId(), Collections.emptyList());
+			List<PropositionDto> reponseDtosForQuestion =
+					questionIdToReponseDtosMap.getOrDefault(questionDto.getId(), Collections.emptyList());
 			questionDto.setReponses(reponseDtosForQuestion.toArray(new PropositionDto[0]));
 		}
 		return new ResponseEntity<>(questionDtos, HttpStatus.OK);

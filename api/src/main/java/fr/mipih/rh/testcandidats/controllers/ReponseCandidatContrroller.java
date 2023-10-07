@@ -1,7 +1,6 @@
 package fr.mipih.rh.testcandidats.controllers;
 
 import fr.mipih.rh.testcandidats.dtos.ReponseCandidatDto;
-import fr.mipih.rh.testcandidats.models.ReponseCandidat;
 import fr.mipih.rh.testcandidats.services.ReponseCandidatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

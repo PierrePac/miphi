@@ -3,12 +3,9 @@ package fr.mipih.rh.testcandidats.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import fr.mipih.rh.testcandidats.dtos.EntretienDto;
 import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.models.Entretien;
 import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
-import fr.mipih.rh.testcandidats.services.QcmService;
 import fr.mipih.rh.testcandidats.services.QuestionQcmService;
 import fr.mipih.rh.testcandidats.services.QuestionService;
 import lombok.RequiredArgsConstructor;

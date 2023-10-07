@@ -21,7 +21,6 @@ public class PropositionMapper {
 
         if (proposition.getQuestion() != null) {
             dto.setQuestion_id(proposition.getQuestion().getId());
-            //dto.setQuestion(QuestionMapper.toDto(proposition.getQuestion()));
         }
 
         return dto;
@@ -38,7 +37,6 @@ public class PropositionMapper {
         proposition.setCorrect(dto.isCorrect());
 
         if (dto.getQuestion() != null) {
-            // You may want to call your QuestionMapperManual here, assuming you have one
             proposition.setQuestion(QuestionMapper.toEntity(dto.getQuestion()));
         }
 

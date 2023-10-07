@@ -1,22 +1,17 @@
 package fr.mipih.rh.testcandidats.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fr.mipih.rh.testcandidats.dtos.EntretienDto;
 import fr.mipih.rh.testcandidats.models.Entretien;
 import fr.mipih.rh.testcandidats.repositories.EntretienRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import fr.mipih.rh.testcandidats.dtos.AddQuestionToQcmDto;
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
-import fr.mipih.rh.testcandidats.repositories.QcmRepository;
 import fr.mipih.rh.testcandidats.services.QcmService;
 
 @RestController

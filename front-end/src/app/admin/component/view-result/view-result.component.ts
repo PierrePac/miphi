@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { EntretienService } from 'src/app/core/services/entretien/entretien.service';
 import { PersonneService } from 'src/app/core/services/personne/personne.service';
@@ -86,7 +85,7 @@ export class ViewResultComponent implements OnInit{
       if(qcmCandidat)
         this.qcmCandidat = qcmCandidat;
     });
-
+    
     this.qcmQuestion$.subscribe(qcmQuestion => {
       if(qcmQuestion){
         this.qcmQuestion = qcmQuestion;

@@ -1,17 +1,13 @@
 package fr.mipih.rh.testcandidats.mappers;
 
-import fr.mipih.rh.testcandidats.dtos.QcmDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.models.Qcm;
 import fr.mipih.rh.testcandidats.models.Question;
 import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.models.QuestionQcmId;
 import fr.mipih.rh.testcandidats.repositories.QcmRepository;
-import fr.mipih.rh.testcandidats.repositories.QuestionQcmRepository;
 import fr.mipih.rh.testcandidats.repositories.QuestionRepository;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

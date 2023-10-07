@@ -1,8 +1,5 @@
 package fr.mipih.rh.testcandidats.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
 import fr.mipih.rh.testcandidats.dtos.AdminDto;
 import fr.mipih.rh.testcandidats.dtos.NewAdminDto;
 import fr.mipih.rh.testcandidats.models.Admin;
@@ -35,7 +32,6 @@ public class AdminMapper {
 		Admin admin = new Admin();
 		admin.setNom(newAdminDto.getNom());
 		admin.setPrenom(newAdminDto.getPrenom());
-		// motDePasse should be encoded and set elsewhere, as per your original MapStruct Mapper
 
 		return admin;
 	}

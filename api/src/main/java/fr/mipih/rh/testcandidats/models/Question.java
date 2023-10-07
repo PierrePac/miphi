@@ -1,23 +1,14 @@
 package fr.mipih.rh.testcandidats.models;
 
-
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import lombok.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import fr.mipih.rh.testcandidats.models.enums.Categorie;
 import fr.mipih.rh.testcandidats.models.enums.Niveau;
 import fr.mipih.rh.testcandidats.models.enums.Technologie;
-
-
 
 @Getter
 @Setter

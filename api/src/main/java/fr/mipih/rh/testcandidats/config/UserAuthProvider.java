@@ -44,12 +44,10 @@ public class UserAuthProvider {
 		String refreshToken = createRefreshToken(userDto);
 
 
-		if(userDto instanceof AdminDto) {
-			AdminDto admin = (AdminDto) userDto;
+		if(userDto instanceof AdminDto admin) {
 			admin.setRefreshToken(refreshToken);
 			adminService.save(admin);
-		} else if (userDto instanceof CandidatDto) {
-			CandidatDto candidat = (CandidatDto) userDto;
+		} else if (userDto instanceof CandidatDto candidat) {
 			candidat.setRefreshToken(refreshToken);
 
 			candidatService.save(candidat);

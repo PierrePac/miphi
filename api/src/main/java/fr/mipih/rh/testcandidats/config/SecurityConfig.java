@@ -31,8 +31,6 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		List<RequestMatcher> requestMatchers = new ArrayList<>();
 
-		//MvcRequestMatcher mvcRequestMatcher = new MvcRequestMatcher(new HandlerMappingIntrospector(), "/login/admin", "/login/candidat", "/login/refresh-token");
-
 		MvcRequestMatcher matcher1 = new MvcRequestMatcher(new HandlerMappingIntrospector(), "/login/admin");
 		matcher1.setMethod(HttpMethod.POST);
 		requestMatchers.add(matcher1);
@@ -46,12 +44,9 @@ public class SecurityConfig {
 		requestMatchers.add(matcher3);
 
 		OrRequestMatcher orRequestMatcher = new OrRequestMatcher(requestMatchers);
-
-
 		http
 				.exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthEntryPoint))
 				.addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
-				//TODO: csrf enable
 				.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests((requests) -> requests

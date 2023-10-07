@@ -1,17 +1,10 @@
 package fr.mipih.rh.testcandidats.mappers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import fr.mipih.rh.testcandidats.dtos.QuestionDto;
 import org.springframework.stereotype.Component;
-
 import fr.mipih.rh.testcandidats.dtos.QcmDto;
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
 import fr.mipih.rh.testcandidats.models.Qcm;
-import fr.mipih.rh.testcandidats.models.QuestionQcm;
 
 @Component
 public class QcmMapper {

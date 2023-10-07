@@ -130,7 +130,6 @@ export class ShareQuestionComponent implements OnInit {
       this.onSave.emit(this.form.value);
       this.form.reset();
     } else {
-      console.log('hello')
       this.show('Formulaire incomplet', 'warning');
     }
   }

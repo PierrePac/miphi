@@ -133,6 +133,7 @@ export class QuestionComponent implements OnInit {
       ).subscribe();
     }
   }
+  
     private updateLocalQuestionsCache(question: QuestionDto, reponses: PropositionDto[]) {
       this.allQuestions$.subscribe(questions => this.originalQuestionsCache = [...questions]);
 

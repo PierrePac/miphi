@@ -2,8 +2,6 @@ package fr.mipih.rh.testcandidats.mappers;
 
 import fr.mipih.rh.testcandidats.models.enums.Niveau;
 import fr.mipih.rh.testcandidats.models.enums.Technologie;
-import org.mapstruct.Mapper;
-
 import fr.mipih.rh.testcandidats.dtos.SandboxDto;
 import fr.mipih.rh.testcandidats.models.Sandbox;
 import org.springframework.stereotype.Component;

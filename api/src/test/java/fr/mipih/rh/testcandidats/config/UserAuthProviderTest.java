@@ -33,37 +33,27 @@ public class UserAuthProviderTest {
 
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
-
     @Mock
     private AdminService adminService;
-
     @Mock
     private CandidatService candidatService;
-
     @InjectMocks
     private UserAuthProvider userAuthProvider;
-
     JWTVerifier mockVerifier = mock(JWTVerifier.class);
     DecodedJWT mockDecodedJWT = mock(DecodedJWT.class);
-
     @BeforeEach
     public void setUp() {
         userAuthProvider = new UserAuthProvider(adminService, candidatService);
         ReflectionTestUtils.setField(userAuthProvider, "secretKey", "MaCleSecrete123");
         userAuthProvider.init();
-
     }
-
     @Test
     public void testCreateTokensForAdmin() {
         AdminDto adminDto = new AdminDto();
         adminDto.setNom("AdminNom");
         adminDto.setPrenom("AdminPrenom");
-
         when(adminService.save(adminDto)).thenReturn(adminDto);
-
         Map<String, String> tokens = userAuthProvider.createTokens(adminDto);
-
         assertNotNull(tokens.get("accessToken"));
         assertNotNull(tokens.get("refreshToken"));
         assertEquals(adminDto.getRefreshToken(), tokens.get("refreshToken"));

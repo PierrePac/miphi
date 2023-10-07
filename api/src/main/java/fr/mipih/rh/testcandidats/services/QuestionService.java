@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fr.mipih.rh.testcandidats.dtos.QuestionQcmDto;
-import fr.mipih.rh.testcandidats.mappers.QuestionQcmMapper;
 import fr.mipih.rh.testcandidats.models.Proposition;
 import fr.mipih.rh.testcandidats.models.QuestionQcm;
 import fr.mipih.rh.testcandidats.models.ReponseCandidat;

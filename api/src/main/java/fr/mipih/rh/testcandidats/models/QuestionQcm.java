@@ -2,8 +2,6 @@ package fr.mipih.rh.testcandidats.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
 @Getter
 @Setter

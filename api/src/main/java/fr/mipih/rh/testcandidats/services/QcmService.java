@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import fr.mipih.rh.testcandidats.models.*;
-import fr.mipih.rh.testcandidats.repositories.ReponseCandidatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

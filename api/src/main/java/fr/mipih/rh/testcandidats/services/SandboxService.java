@@ -1,7 +1,6 @@
 package fr.mipih.rh.testcandidats.services;
 
 import fr.mipih.rh.testcandidats.dtos.CredentialsCandidatDto;
-import fr.mipih.rh.testcandidats.repositories.CandidatRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 import java.util.Optional;
 
 @Service

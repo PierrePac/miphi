@@ -2,7 +2,6 @@ package fr.mipih.rh.testcandidats.services;
 
 import fr.mipih.rh.testcandidats.dtos.ReponseCandidatDto;
 import fr.mipih.rh.testcandidats.mappers.ReponseCandidatMapper;
-import fr.mipih.rh.testcandidats.models.Proposition;
 import fr.mipih.rh.testcandidats.models.ReponseCandidat;
 import fr.mipih.rh.testcandidats.repositories.CandidatRepository;
 import fr.mipih.rh.testcandidats.repositories.PropositionRepository;

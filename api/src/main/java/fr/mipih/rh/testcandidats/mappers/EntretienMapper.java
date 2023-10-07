@@ -1,8 +1,6 @@
 package fr.mipih.rh.testcandidats.mappers;
 
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
-
 import fr.mipih.rh.testcandidats.dtos.EntretienDto;
 import fr.mipih.rh.testcandidats.models.Entretien;
 import org.springframework.stereotype.Component;
