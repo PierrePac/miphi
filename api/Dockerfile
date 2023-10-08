@@ -28,10 +28,8 @@ ARG MAVEN_OPTS
 # Run build
 RUN mvn clean package -DskipTests
 
-
 # Utilisation de l'image Tomcat avec OpenJDK 17 pour la phase de déploiement
 FROM tomcat:10-jdk17-openjdk-slim
-
 
 # Suppression des applications par défaut de Tomcat
 RUN rm -rf /usr/local/tomcat/webapps/*

@@ -17,15 +17,15 @@ services:
 
   api_test_candidats:
     build: 
-      context: ./api  # Assuming Dockerfile is in the same directory as docker-compose.yml
-      dockerfile: Dockerfile  # Your Dockerfile
-      args:  # Corresponding to --build-arg
+      context: ./api  
+      dockerfile: Dockerfile  
+      args: 
         http_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
         https_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
         MAVEN_OPTS: "-Dhttp.proxyHost=proxy -Dhttp.proxyPort=3128 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=3128"
     image: api_test_candidats
     container_name: api_test_candidats
-    environment:  # Runtime environment variables
+    environment: 
       http_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
       https_proxy: http://bouzaggou.a:Rep.135tazor@proxy.mipih.local:3128
       no_proxy: dv02.mipih.net
@@ -40,7 +40,6 @@ services:
       - postgres_test_candidats
     volumes:
       - ./code-server:/code-server
-
 
   front_test_candidats:
     build: 

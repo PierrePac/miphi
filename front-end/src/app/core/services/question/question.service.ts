@@ -135,6 +135,8 @@ export class QuestionService {
   // Mettre à jour questionSubject et le cache local
   updateQuestions(questions: QuestionDto[]) {
     this.questionSubject.next(questions);
+    localStorage.removeItem('questions_cache');
+    console.log(questions)
     localStorage.setItem('questions_cache', JSON.stringify(questions));
   }
 

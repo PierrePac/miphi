@@ -8,6 +8,8 @@ import { Categorie } from 'src/app/share/enums/categorie.enum';
 import { Niveau } from 'src/app/share/enums/niveau.enum';
 import { Technologie } from 'src/app/share/enums/technologie.enum';
 import { MessageService } from 'primeng/api';
+import { take } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-question',
@@ -105,24 +107,19 @@ export class QuestionComponent implements OnInit {
         });
     } else {
       this.updateLocalQuestionsCache(questionValue, reponses);
-
+      
       this.questionService.modifyQuestion(questionValue.id, question).pipe(
         switchMap(() => {
           const reponseObservables = reponses.map(reponse => {
-            console.log(reponse)
-            console.log(reponse.id)
-            console.log(reponse.reponse)
-            console.log(reponse.id && reponse.reponse)
             if(reponse.id && reponse.reponse) {
-              console.log('Modifié', reponse)
               this.reponseService.modifyReponse(reponse.id, reponse).subscribe();
             } else if (reponse.reponse) {
-              console.log('New', reponse)
               this.reponseService.addReponse(reponse).subscribe();
             }
             return of(null);
           });
           this.show('Question modifiée avec succès', 'success');
+          console.log()
           return forkJoin(reponseObservables);
         }),
         catchError((error) => {
@@ -134,30 +131,35 @@ export class QuestionComponent implements OnInit {
     }
   }
   
-    private updateLocalQuestionsCache(question: QuestionDto, reponses: PropositionDto[]) {
-      this.allQuestions$.subscribe(questions => this.originalQuestionsCache = [...questions]);
+  private updateLocalQuestionsCache(question: QuestionDto, reponses: PropositionDto[]) {
 
-      this.allQuestions$ = this.allQuestions$.pipe(
-        map(questions => {
-          const index = questions.findIndex(q => q.id === question.id);
+    this.allQuestions$.subscribe(questions => this.originalQuestionsCache = [...questions]);
 
-          if (index > -1) {
-            questions[index] = question;
-          } else {
-            questions.push(question);
-          }
-          return questions;
-        })
-      );
-      this.allQuestions$.subscribe(questions => {
-        localStorage.setItem('questions_cache', JSON.stringify(questions));
-      });
-    }
+    this.allQuestions$ = this.allQuestions$.pipe(
+      map(questions => {
+        const index = questions.findIndex(q => q.id === question.id);
+        question.reponses = reponses;
+        if (index > -1) {
+          questions[index] = question;
+          questions[index].reponses = reponses
+        } else {
+          questions.push(question);
+        }
+        return questions;
+      })
+    );
+    this.allQuestions$.subscribe(questions => {
+      localStorage.setItem('questions_cache', JSON.stringify(questions));
+    });
+    this.updateQuestionsList();
+  }
 
-    private revertLocalQuestionsCache() {
-      this.allQuestions$ = of(this.originalQuestionsCache);
-      localStorage.setItem('questions_cache', JSON.stringify(this.originalQuestionsCache));
-    }
+
+
+  private revertLocalQuestionsCache() {
+    this.allQuestions$ = of(this.originalQuestionsCache);
+    localStorage.setItem('questions_cache', JSON.stringify(this.originalQuestionsCache));
+  }
 
   updateQuestionsList() {
     this.filteredQuestions$ = this.allQuestions$.pipe(
